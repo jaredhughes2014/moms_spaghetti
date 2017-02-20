@@ -1,1 +1,4 @@
 .idea/
+moms_spaghetti/__pycache__/
+server/__pycache__/
+db.sqlite3
