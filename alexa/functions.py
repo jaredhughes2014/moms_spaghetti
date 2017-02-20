@@ -61,7 +61,7 @@ class AlexaResponse:
         }
 
 
-def build_response(title, output, reprompt, should_end_session):
+def build_response(title, output, reprompt, should_end_session, attrs={}):
     """
     Template response function from Amazon modified to use the Alexa response helper
     class
@@ -71,9 +71,13 @@ def build_response(title, output, reprompt, should_end_session):
     alexa_resp = AlexaResponse(title=title, output=output, reprompt=reprompt, end_session=should_end_session)
     return {
         'version': '1.0',
-        'sessionAttributes': {},
+        'sessionAttributes': attrs,
         'response': alexa_resp.export()
     }
+    
+# ---------- Config -----------
+
+exitPhrases = ["goodbye", "bye", "quit", "exit", "stop", "cancel"];
 
 # ---------- Functions -----------
 
@@ -102,7 +106,14 @@ def handle_conversation(intent, session):
     """
 
     # TODO: while testing, simply repeat what the user said
-    body = get_slot(intent, 'HaveConversation')
+    body = get_slot(intent, 'HaveConversation').lower()
+    if (body in exitPhrases):
+        return build_response('Conversation', 'Goodbye!', None, True)
+    if ("help" in body):
+        return build_response('Conversation',
+            'You can ask to leave, ask for this help, or ask to start the mini game',
+            None, False
+        )
     return build_response('Conversation', body, None, False)
 
 
