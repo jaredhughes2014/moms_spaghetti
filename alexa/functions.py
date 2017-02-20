@@ -79,6 +79,33 @@ def build_response(title, output, reprompt, should_end_session, attrs={}):
 
 exitPhrases = ["goodbye", "bye", "quit", "exit", "stop", "cancel"];
 
+my_tree = [
+    {
+        'text':'You come to a fork in the road. A troll invites you to a fighting festival down the right path. He\'s betting on last year\'s champion - Right Hook Steve. Which path do you take?',
+        'retext':'Right for fighting festival, left to continue past',
+        'left':1,
+        'right':2
+    },
+    {
+        'text':'You continue on, content with your life as it is. Congrats on being fulfilled. You win.',
+        'retext':None,
+    },
+    {
+        'text':'You enter the festival and quickly progress to the finals! Your opponent Steve throws a punch - which way do you dodge?',
+        'retext':'Dodge right or left?',
+        'left':3,
+        'right':4
+    },
+    {
+        'text':'You dodge to your left - Steve\'s right. His famous right hook hits you squarely in the jaw, and you\'re down for the count! You lose.',
+        'retext':None
+    },
+    {
+        'text':'You dodge to your right - Steve\'s left. You nimbly avoid his famous right hook, and swipe his legs! He goes down like a ton of bricks, and you win fame and riches beyond your wildest dreams. You win!',
+        'retext':None
+    }
+]
+
 # ---------- Functions -----------
 
 
@@ -96,6 +123,14 @@ def get_slot(intent, slot_name):
 # Define all functions here
 
 
+def moved_to(tree_index):
+    node = my_tree[tree_index]
+    if 'left' in node:
+        attrs = {'game_state':tree_index}
+    else:
+        attrs = {}
+    return build_response('Game', node['text'], node['retext'], False, attrs)
+
 def handle_conversation(intent, session):
     """
     Handles a user intending to have a conversation
@@ -107,6 +142,21 @@ def handle_conversation(intent, session):
 
     # TODO: while testing, simply repeat what the user said
     body = get_slot(intent, 'HaveConversation').lower()
+    if ('game_state' in session['attributes']):
+	place = session['attributes']['game_state']
+	node = session[place];
+	l = "left" in body;
+	r = "right" in body;
+	if l and r:
+	    return build_response('Game', 'Pick one. '+node['retext'], node['retext'], False, {'game_state':place})
+	if not (l or r):
+	    return build_response('Game', node['retext'], node['retext'], False, {'game_state':place})
+	if l:
+	    return moved_to(node['left'])
+	else:
+	    return moved_to(node['right'])
+    if ("game" in body):
+	return moved_to(0);
     if (body in exitPhrases):
         return build_response('Conversation', 'Goodbye!', None, True)
     if ("help" in body):
