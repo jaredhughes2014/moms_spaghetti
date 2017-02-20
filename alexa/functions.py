@@ -143,20 +143,20 @@ def handle_conversation(intent, session):
     # TODO: while testing, simply repeat what the user said
     body = get_slot(intent, 'HaveConversation').lower()
     if ('game_state' in session['attributes']):
-	place = session['attributes']['game_state']
-	node = session[place];
-	l = "left" in body;
-	r = "right" in body;
-	if l and r:
-	    return build_response('Game', 'Pick one. '+node['retext'], node['retext'], False, {'game_state':place})
-	if not (l or r):
-	    return build_response('Game', node['retext'], node['retext'], False, {'game_state':place})
-	if l:
-	    return moved_to(node['left'])
-	else:
-	    return moved_to(node['right'])
+        place = session['attributes']['game_state']
+        node = my_tree[place];
+        l = "left" in body;
+        r = "right" in body;
+        if l and r:
+            return build_response('Game', 'Pick one. '+node['retext'], node['retext'], False, {'game_state':place})
+        if not (l or r):
+            return build_response('Game', node['retext'], node['retext'], False, {'game_state':place})
+        if l:
+            return moved_to(node['left'])
+        else:
+            return moved_to(node['right'])
     if ("game" in body):
-	return moved_to(0);
+        return moved_to(0);
     if (body in exitPhrases):
         return build_response('Conversation', 'Goodbye!', None, True)
     if ("help" in body):
