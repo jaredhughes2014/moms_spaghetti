@@ -10,4 +10,4 @@ If you had mom's spaghetti, would you capture it, or just let it slip. Yo.
 1. Clone repository
 2. From the root folder of the project: `python manage.py migrate`
 3. From the root folder of the project: `python manage.py runserver`
-4. Navigate to your [localhost](localhost:8000) to make sure it is working
+4. Navigate to your [localhost](http://localhost:8000) to make sure it is working
