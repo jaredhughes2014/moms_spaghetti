@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'moms_spaghetti.wsgi.application'
 
 DATABASES = {
    'default': {
-      'ENGINE': 'django_mongodb_engine',
+      'ENGINE': 'django.db.backends.sqlite3',
       'NAME': 'moms_spaghettti'
    }
 }

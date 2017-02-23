@@ -17,3 +17,4 @@ artifacts:
   files:
     - manage.py
     - server/*.py
+    - moms_spaghetti/*.py
