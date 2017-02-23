@@ -19,3 +19,4 @@ artifacts:
     - server/*.py
     - moms_spaghetti/*.py
     - .ebextensions/django.config
+    - requirements.txt
