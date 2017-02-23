@@ -18,3 +18,4 @@ artifacts:
     - manage.py
     - server/*.py
     - moms_spaghetti/*.py
+    - .ebextensions/django.config
