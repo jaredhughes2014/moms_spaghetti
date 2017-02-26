@@ -11,9 +11,13 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+from os.path import abspath, basename, dirname, join, normpath
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+#BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DJANGO_ROOT = dirname(dirname(abspath(__file__)))  
+SITE_ROOT = dirname(DJANGO_ROOT)  
+SITE_NAME = basename(DJANGO_ROOT)
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,7 +29,7 @@ SECRET_KEY = '_ekf0b!gs**gx8cn#j4s*b&053yny@2ogm=+37efdm#oh4+rgn'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['sample-env.ecnc6ysp32.us-east-1.elasticbeanstalk.com']
+ALLOWED_HOSTS = ['localhost', 'sample-env.ecnc6ysp32.us-east-1.elasticbeanstalk.com']
 
 
 # Application definition
@@ -37,6 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Pipeline
+    'pipeline',
+    # DRF
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -54,8 +62,7 @@ ROOT_URLCONF = 'moms_spaghetti.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -119,3 +126,46 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = normpath(join(SITE_ROOT, 'static'))  
+STATICFILES_DIRS = ()
+
+# Django Pipeline (and browserify)
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+
+STATICFILES_FINDERS = (  
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'pipeline.finders.PipelineFinder',
+)
+
+# browserify-specific
+PIPELINE_COMPILERS = (  
+    'pipeline_browserify.compiler.BrowserifyCompiler',
+)
+
+PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.NoopCompressor'  
+PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
+
+if DEBUG:  
+    PIPELINE_BROWSERIFY_ARGUMENTS = '-t babelify'
+
+PIPELINE_CSS = {  
+    'momsspaghetti_css': {
+        'source_filenames': (
+            'css/style.css',
+        ),
+        'output_filename': 'css/momsspaghetti_css.css',
+    },
+}
+
+PIPELINE_JS = {  
+    'momsspaghetti_js': {
+        'source_filenames': (
+            'js/bower_components/jquery/dist/jquery.min.js',
+            'js/bower_components/react/JSXTransformer.js',
+            'js/bower_components/react/react-with-addons.js',
+            'js/app.browserify.js',
+        ),
+        'output_filename': 'js/momsspaghetti_js.js',
+    }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "moms_spaghetti",
+  "description": "If you had mom's spaghetti, would you capture it, or just let it slip. Yo.",
+  "main": "index.js",
+  "authors": [
+    "Brian Neldon <brian.neldon@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/jaredhughes2014/moms_spaghetti",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "react": "^15.4.2",
+    "jquery": "^3.1.1"
+  }
+}

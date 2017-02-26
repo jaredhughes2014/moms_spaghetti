@@ -1,0 +1,23 @@
+{
+  "name": "moms_spaghetti",
+  "version": "1.0.0",
+  "description": "If you had mom's spaghetti, would you capture it, or just let it slip. Yo.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaredhughes2014/moms_spaghetti.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jaredhughes2014/moms_spaghetti/issues"
+  },
+  "homepage": "https://github.com/jaredhughes2014/moms_spaghetti#readme",
+  "dependencies": {
+    "babelify": "^7.3.0",
+    "browserify": "^14.1.0"
+  }
+}
