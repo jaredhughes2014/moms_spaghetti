@@ -8,15 +8,13 @@ phases:
     commands:
       - echo Nothing to do in the pre_build phase...
   build:
-    commands:
+    commands:np
       - echo Build started on `date`
   post_build:
     commands:
       - echo Build completed on `date`
 artifacts:
   files:
-    - manage.py
-    - server/*.py
-    - moms_spaghetti/*.py
-    - .ebextensions/django.config
-    - requirements.txt
+    - index.js
+    - package.json
+    - .ebextensions/*.config

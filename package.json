@@ -1,16 +1,26 @@
 {
   "name": "moms_spaghetti",
   "version": "1.0.0",
-  "description": "If you had mom's spaghetti, would you capture it, or just let it slip. Yo.",
+  "description": "Make Alexa Great Again",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "startBuild": "echo No build specified"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jaredhughes2014/moms_spaghetti.git"
+    "url": "git+https://jaredhughes2014@github.com/jaredhughes2014/moms_spaghetti.git"
   },
-  "author": "",
+  "keywords": [
+    "Node",
+    "React",
+    "Express",
+    "Alexa",
+    "AWS",
+    "ElasticBeanstalk"
+  ],
+  "author": "Jared Hughes and Friends (and Braden)",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/jaredhughes2014/moms_spaghetti/issues"
@@ -18,6 +28,8 @@
   "homepage": "https://github.com/jaredhughes2014/moms_spaghetti#readme",
   "dependencies": {
     "babelify": "^7.3.0",
-    "browserify": "^14.1.0"
+    "browserify": "^14.1.0",
+    "body-parser": "^1.16.1",
+    "express": "^4.14.1"
   }
 }
