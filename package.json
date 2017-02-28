@@ -1,0 +1,33 @@
+{
+  "name": "moms_spaghetti",
+  "version": "1.0.0",
+  "description": "Make Alexa Great Again",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "startBuild": "echo No build specified"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://jaredhughes2014@github.com/jaredhughes2014/moms_spaghetti.git"
+  },
+  "keywords": [
+    "Node",
+    "React",
+    "Express",
+    "Alexa",
+    "AWS",
+    "ElasticBeanstalk"
+  ],
+  "author": "Jared Hughes and Friends (and Braden)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jaredhughes2014/moms_spaghetti/issues"
+  },
+  "homepage": "https://github.com/jaredhughes2014/moms_spaghetti#readme",
+  "dependencies": {
+    "body-parser": "^1.16.1",
+    "express": "^4.14.1"
+  }
+}
