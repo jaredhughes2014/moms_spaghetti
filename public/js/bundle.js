@@ -20487,25 +20487,84 @@ module.exports = traverseAllChildren;
 module.exports = require('./lib/React');
 
 },{"./lib/React":155}],178:[function(require,module,exports){
-var React = require('react');
-
-module.exports = React.createClass({
-  displayName: "exports",
-
-  render: function () {
-    return React.createElement(
-      "p",
-      null,
-      "What uppp"
-    );
-  }
-});
-
-},{"react":177}],179:[function(require,module,exports){
 var ReactDOM = require('react-dom');
 var React = require('react');
-var Component = require('./component.js');
+var Tree = require('./tree.js');
 
-ReactDOM.render(React.createElement(Component, null), document.getElementById('app'));
+var data = {
+  title: "Oregon Trail",
+  childNodes: [{ title: "Cross the river" }, { title: "Go through the mountains", childNodes: [{ title: "Cholera", childNodes: [{ title: "Dead" }] }, { title: "Freeze to death" }] }]
+};
 
-},{"./component.js":178,"react":177,"react-dom":26}]},{},[179]);
+ReactDOM.render(React.createElement(Tree, { node: data }), document.getElementById('app'));
+
+},{"./tree.js":179,"react":177,"react-dom":26}],179:[function(require,module,exports){
+var React = require('react');
+var TreeNode = require('./treeNode.js');
+
+var Tree = React.createClass({
+	displayName: 'Tree',
+
+	render: function () {
+		return React.createElement(
+			'div',
+			null,
+			React.createElement(TreeNode, { node: this.props.node })
+		);
+	}
+});
+module.exports = Tree;
+
+},{"./treeNode.js":180,"react":177}],180:[function(require,module,exports){
+var React = require('react');
+
+var TreeNode = React.createClass({
+	displayName: "TreeNode",
+
+	getInitialState: function () {
+		return {
+			visible: true
+		};
+	},
+
+	toggle: function () {
+		this.setState({ visible: !this.state.visible });
+	},
+
+	render: function () {
+		var childNodes;
+		if (this.props.node.childNodes != null) {
+			childNodes = this.props.node.childNodes.map(function (node, index) {
+				return React.createElement(
+					"li",
+					{ key: index },
+					React.createElement(TreeNode, { node: node })
+				);
+			});
+		}
+
+		var style = {};
+		if (!this.state.visible) {
+			style.display = "none";
+		}
+
+		return React.createElement(
+			"div",
+			null,
+			React.createElement(
+				"h5",
+				{ onClick: this.toggle },
+				this.props.node.title
+			),
+			React.createElement(
+				"ul",
+				{ style: style },
+				childNodes
+			)
+		);
+	}
+});
+
+module.exports = TreeNode;
+
+},{"react":177}]},{},[178]);
