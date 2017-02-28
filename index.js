@@ -8,12 +8,13 @@ var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.text());
 app.use(bodyParser.raw());
+app.use(express.static('public'));
 
 /**
  * Landing page. This is where the front-end is served from
  */
 app.get('/', (req, res) => {
-    res.send('<div><h1>Braden Suxxxxx</h1><h2>Like he reeeeeally sucks</h2></div>');
+    res.sendFile('public/index.html', { root: __dirname });
 });
 
 /**
