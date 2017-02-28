@@ -19,7 +19,6 @@ DJANGO_ROOT = dirname(dirname(abspath(__file__)))
 SITE_ROOT = dirname(DJANGO_ROOT)  
 SITE_NAME = basename(DJANGO_ROOT)
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
@@ -127,6 +126,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = normpath(join(SITE_ROOT, 'static'))  
+#STATIC_ROOT = 'static/'
 STATICFILES_DIRS = ()
 
 # Django Pipeline (and browserify)
@@ -149,23 +149,46 @@ PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.uglifyjs.UglifyJSCompressor'
 if DEBUG:  
     PIPELINE_BROWSERIFY_ARGUMENTS = '-t babelify'
 
-PIPELINE_CSS = {  
-    'momsspaghetti_css': {
-        'source_filenames': (
-            'css/style.css',
-        ),
-        'output_filename': 'css/momsspaghetti_css.css',
-    },
-}
+# PIPELINE_CSS = {  
+#     'momsspaghetti_css': {
+#         'source_filenames': (
+#             'css/style.css',
+#         ),
+#         'output_filename': 'css/momsspaghetti_css.css',
+#     },
+# }
 
-PIPELINE_JS = {  
-    'momsspaghetti_js': {
-        'source_filenames': (
-            'js/bower_components/jquery/dist/jquery.min.js',
-            'js/bower_components/react/JSXTransformer.js',
-            'js/bower_components/react/react-with-addons.js',
-            'js/app.browserify.js',
-        ),
-        'output_filename': 'js/momsspaghetti_js.js',
+# PIPELINE_JS = {  
+#     'momsspaghetti_js': {
+#         'source_filenames': (
+#             'js/bower_components/jquery/dist/jquery.min.js',
+#             'js/bower_components/react/JSXTransformer.js',
+#             'js/bower_components/react/react-with-addons.js',
+#             'js/app.browserify.js',
+#         ),
+#         'output_filename': 'js/momsspaghetti_js.js',
+#     }
+# }
+
+PIPELINE = {
+    'PIPELINE_ENABLED': True,
+    'JAVASCRIPT': {
+        'momsspaghetti_js': {
+            'source_filenames': (
+                'js/bower_components/jquery/dist/jquery.min.js',
+                'js/bower_components/react/JSXTransformer.js',
+                'js/bower_components/react/react-with-addons.js',
+                'js/app.browserify.js',
+            ),
+            'output_filename': 'js/momsspaghetti_js.js',
+        }
+    },
+    'STYLESHEETS': {
+        'momsspaghetti_css': {
+            'source_filenames': (
+              'css/style.css'
+            ),
+            'output_filename': 'css/momsspaghetti_css.css',
+        },
     }
 }
