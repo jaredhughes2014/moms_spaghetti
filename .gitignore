@@ -1,9 +1,2 @@
 .idea/
-moms_spaghetti/__pycache__/
-server/__pycache__/
-db.sqlite3
-moms_spaghetti/__init__.pyc
-moms_spaghetti/settings.pyc
-moms_spaghettti
-venv/
-ms_venv/
+node_modules/
