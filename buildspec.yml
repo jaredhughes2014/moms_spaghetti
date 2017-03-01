@@ -8,7 +8,7 @@ phases:
     commands:
       - echo Nothing to do in the pre_build phase...
   build:
-    commands:np
+    commands:
       - echo Build started on `date`
   post_build:
     commands:
