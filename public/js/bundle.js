@@ -20492,8 +20492,20 @@ var React = require('react');
 var Tree = require('./tree.js');
 
 var data = {
-  title: "Oregon Trail",
-  childNodes: [{ title: "Cross the river" }, { title: "Go through the mountains", childNodes: [{ title: "Cholera", childNodes: [{ title: "Dead" }] }, { title: "Freeze to death" }] }]
+	title: "Oregon Trail",
+	childNodes: [{
+		title: "Cross the river"
+	}, {
+		title: "Go through the mountains",
+		childNodes: [{
+			title: "Cholera",
+			childNodes: [{
+				title: "Dead"
+			}]
+		}, {
+			title: "Freeze to death"
+		}]
+	}]
 };
 
 ReactDOM.render(React.createElement(Tree, { node: data }), document.getElementById('app'));
@@ -20523,18 +20535,41 @@ var TreeNode = React.createClass({
 
 	getInitialState: function () {
 		return {
-			visible: true
+			visible: true,
+			editing: this.props.node.title == null,
+			title: this.props.node.title,
+			childNodes: this.props.node.childNodes
 		};
 	},
-
 	toggle: function () {
 		this.setState({ visible: !this.state.visible });
 	},
-
+	add: function () {
+		if (this.state.childNodes != null) {
+			this.setState({ childNodes: this.state.childNodes.concat([{ title: null }]) });
+		} else {
+			this.setState({ childNodes: [{ title: null }] });
+		}
+	},
+	edit: function () {
+		this.setState({ editing: true });
+	},
+	CurrentTitle: function () {
+		if (this.state.editing) {
+			return React.createElement("input", { onChange: e => this.setState({ title: e.target.value }),
+				onDoubleClick: () => this.setState({ editing: false }) });
+		} else {
+			return React.createElement(
+				"h5",
+				{ className: "title", onDoubleClick: this.edit },
+				this.state.title
+			);
+		}
+	},
 	render: function () {
 		var childNodes;
-		if (this.props.node.childNodes != null) {
-			childNodes = this.props.node.childNodes.map(function (node, index) {
+		if (this.state.childNodes != null) {
+			childNodes = this.state.childNodes.map(function (node, index) {
 				return React.createElement(
 					"li",
 					{ key: index },
@@ -20551,14 +20586,20 @@ var TreeNode = React.createClass({
 		return React.createElement(
 			"div",
 			null,
+			React.createElement(this.CurrentTitle, null),
 			React.createElement(
-				"h5",
-				{ onClick: this.toggle },
-				this.props.node.title
+				"button",
+				{ onClick: this.toggle, className: "toggle" },
+				this.state.visible ? "Hide" : "Show"
+			),
+			React.createElement(
+				"button",
+				{ onClick: this.add },
+				"Add"
 			),
 			React.createElement(
 				"ul",
-				{ style: style },
+				{ className: "child-list", style: style },
 				childNodes
 			)
 		);
