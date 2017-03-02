@@ -9,7 +9,7 @@ phases:
       - echo Nothing to do in the pre_build phase...
   build:
     commands:
-      - npm run build
+      - echo No Build Stuff
   post_build:
     commands:
       - echo Build completed on `date`
