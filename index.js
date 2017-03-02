@@ -8,12 +8,13 @@ var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.text());
 app.use(bodyParser.raw());
+app.use(express.static('public'));
 
 /**
  * Landing page. This is where the front-end is served from
  */
 app.get('/', (req, res) => {
-    res.send('<div><h1>Braden Suxxxxx</h1><h2>Like he reeeeeally sucks</h2></div>');
+    res.sendFile('public/index.html', { root: __dirname });
 });
 
 /**
@@ -33,5 +34,5 @@ app.get('/speak', (req, res) => {
  * Listen on port 8080 if a port isn't already defined by the environment
  */
 app.listen(process.env.PORT || 8080, () => {
-    console.log('Iz Working');
+    console.log('Iz Working at 8080');
 });
