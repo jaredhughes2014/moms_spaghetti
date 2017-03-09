@@ -1,6 +1,7 @@
 
 var express = require('express');
 var bodyParser = require('body-parser');
+var dungeon = require('./dungeon.js');
 
 var app = express();
 
@@ -19,10 +20,10 @@ app.get('/', (req, res) => {
 /**
  * Endpoint for alexa. This is where the user's text will be input for processing
  */
-app.get('/speak', (req, res) => {
+app.post('/speak', (req, res) => {
     if (req.body) {
         console.log(req.body);
-        res.send(req.body);
+        res.send(dungeon(req.body));
     }
     else {
         res.send('There is an error with this skill');
