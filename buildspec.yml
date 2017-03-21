@@ -3,19 +3,20 @@ version: 0.1
 phases:
   install:
     commands:
-      - echo Jared wuz here
+      - npm run globalize
+      - npm install
   pre_build:
     commands:
       - echo Nothing to do in the pre_build phase...
   build:
     commands:
-      - echo No Build Stuff
+      - npm run build
   post_build:
     commands:
       - echo Build completed on `date`
 artifacts:
   files:
-    - index.js
+    - ./*.js
     - package.json
     - .ebextensions/*.config
     - public/*.html

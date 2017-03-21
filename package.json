@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "build": "browserify -t [ babelify --presets [ react ] ] src/js/index.js -o public/js/bundle.js"
+    "build": "browserify -t [ babelify --presets [ react ] ] src/js/index.js -o public/js/bundle.js",
+    "globalize": "npm install -g browserify"
   },
   "repository": {
     "type": "git",
@@ -27,14 +28,14 @@
   },
   "homepage": "https://github.com/jaredhughes2014/moms_spaghetti#readme",
   "dependencies": {
-    "babel-preset-react": "^6.23.0",
-    "babelify": "^7.3.0",
     "body-parser": "^1.16.1",
     "express": "^4.14.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2"
   },
   "devDependencies": {
+    "babel-preset-react": "^6.23.0",
+    "babelify": "^7.3.0",
     "browserify": "^14.1.0"
   }
 }
