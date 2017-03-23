@@ -1,4 +1,4 @@
-var React = require('react');
+import React from 'react';
 
 var TreeNode = React.createClass({
 	getInitialState: function() {
@@ -62,4 +62,4 @@ var TreeNode = React.createClass({
 	}
 });
 
-module.exports = TreeNode;
+export default TreeNode;
