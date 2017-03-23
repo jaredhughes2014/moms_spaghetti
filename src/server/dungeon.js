@@ -1,5 +1,7 @@
 module.exports = handler;
 
+var inventory = require("./trailInventory.js")
+
 function handler(body) {
     //body = JSON.parse(body);
     return lambda_handler(body);
@@ -122,7 +124,7 @@ function handle_conversation(intent, session) {
     }
     if (body.includes('count')){
         return mk_reply('Conversation',
-            'The count is now at ' + incr_count(),
+            'The count is now at ' + inventory.incr_count(),
             null, false)
     }
     return mk_reply('Conversation', body, null, false);
