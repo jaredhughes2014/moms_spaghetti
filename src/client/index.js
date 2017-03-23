@@ -1,36 +1,24 @@
-import {render} from 'react-dom';
+
 import React from 'react';
+import {Router, Route, IndexRoute, browserHistory} from 'react-router';
+import {render} from 'react-dom';
+
+//Import views here
+import AppSkeleton from './views/presentation/AppSkeleton';
 import Tree from './tree';
- 
-var data = {
-  	title: "Oregon Trail",
-  	childNodes: [
-		{
-			title: "Cross the river"
-		},
-		{
-			title: "Go through the mountains", 
-			childNodes: [
-		  		{
-		  			title: "Dysentery",
-		  			childNodes: [
-						{
-							title: "Dead"
-						}
-		  			]
-		  		},
-			  	{
-			  		title: "Freeze to death"
-			  	}
-			]
-		}
-  	]
+
+const MomsSpaghettiRouter = () =>
+{
+    return (
+        <Router history={browserHistory}>
+            <Route path="/" component={AppSkeleton} title="Title">
+                <IndexRoute component={Tree}/>
+            </Route>
+        </Router>
+    );
 };
 
-/**
- * Let there be Tree
- */
 render(
-  <Tree node={data}/>,
-  document.getElementById('app')
+    <MomsSpaghettiRouter/>,
+    document.getElementById('root')
 );
