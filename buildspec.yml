@@ -3,18 +3,21 @@ version: 0.1
 phases:
   install:
     commands:
-      - echo Nothing to do in the install phase...
+      - npm run globalize
+      - npm install
   pre_build:
     commands:
-      - echo Nothing to do in the pre_build phase...
+      - npm run test
   build:
-    commands:np
-      - echo Build started on `date`
+    commands:
+      - webpack -d
   post_build:
     commands:
-      - echo Build completed on `date`
+      - echo Nothing to do in the post_build phase
 artifacts:
   files:
-    - index.js
+    - index.client
     - package.json
     - .ebextensions/*.config
+    - public/*.html
+    - public/client/*.client

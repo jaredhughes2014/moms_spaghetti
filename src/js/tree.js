@@ -12,7 +12,6 @@ var Tree = React.createClass({
      	if(node.tree_id == id){
           	return node;
      	} else if (node.childNodes != null){
-          	//var i;
           	var result = null;
           	for(var i = 0; result == null && i < node.childNodes.length; i++){
                	result = this.get_node_by_id(node.childNodes[i], id);
