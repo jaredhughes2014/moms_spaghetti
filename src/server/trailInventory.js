@@ -17,7 +17,12 @@ function init_inventory(){
     count = 0;
 }
 
+
 function incr_count(){
     count++;
     return count;
+}
+
+module.exports = {
+    incr_count : incr_count
 }
