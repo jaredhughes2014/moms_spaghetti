@@ -7,18 +7,17 @@ phases:
       - npm install
   pre_build:
     commands:
-      - echo Nothing to do in the pre_build phase...
+      - npm run test
   build:
     commands:
-      - npm run build
+      - webpack -d
   post_build:
     commands:
-      - echo Build completed on `date`
+      - echo Nothing to do in the post_build phase
 artifacts:
   files:
-    - ./*.js
+    - index.client
     - package.json
     - .ebextensions/*.config
     - public/*.html
-    - public/js/*.js
-    - public/css/*.css
+    - public/client/*.client
