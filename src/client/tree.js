@@ -1,5 +1,5 @@
-var React = require('react');
-var TreeNode = require('./treeNode.js');
+import React from 'react';
+import TreeNode from './treeNode';
 
 var Tree = React.createClass({
 	render: function(){
@@ -10,4 +10,4 @@ var Tree = React.createClass({
 		);
 	}
 });
-module.exports = Tree;
+export default Tree;

@@ -1,6 +1,6 @@
-var ReactDOM = require('react-dom');
-var React = require('react');
-var Tree = require('./tree.js');
+import {render} from 'react-dom';
+import React from 'react';
+import Tree from './tree';
  
 var data = {
   	title: "Oregon Trail",
@@ -26,8 +26,11 @@ var data = {
 		}
   	]
 };
- 
-ReactDOM.render(
+
+/**
+ * Let there be Tree
+ */
+render(
   <Tree node={data}/>,
   document.getElementById('app')
 );
