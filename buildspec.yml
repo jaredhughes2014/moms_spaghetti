@@ -17,6 +17,7 @@ phases:
 artifacts:
   files:
     - ./*.js
+    - src/server/*.js
     - package.json
     - .ebextensions/*.config
     - public/*.html
