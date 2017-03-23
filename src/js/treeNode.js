@@ -1,47 +1,50 @@
 var React = require('react');
+var TreeData = require('./treeData.js');
 
 var TreeNode = React.createClass({
 	getInitialState: function() {
 		return {
 			visible: true,
 			editing: (this.props.node.title == null),
-			title: this.props.node.title,
-			childNodes: this.props.node.childNodes
 		};
 	},
 	toggle: function() {
     	this.setState({visible: !this.state.visible});
   	},
   	add: function(){
-  		if(this.state.childNodes != null){
-  			this.setState({childNodes: this.state.childNodes.concat([{title: null}])});
-  		} else {
-  			this.setState({childNodes: [{title: null}]});
-  		}
+  		this.props.add(this.props.node.tree_id);
   	},
   	edit: function(){
   		this.setState({editing: true});
   	},
   	CurrentTitle: function(){
   		if(this.state.editing){
-  			return (
-  				<input onChange={(e) => this.setState({title: e.target.value})} 
+  			// return (
+  			// 	<input onChange={(e) => this.setState({title: e.target.value})} 
+  			// 		onDoubleClick={() => this.setState({editing: false})} />
+  			// );
+			return (
+  				<input onChange={(e) => this.props.edit(this.props.node.tree_id, e.target.value)} 
   					onDoubleClick={() => this.setState({editing: false})} />
   			);
   		} else {
   			return (
   				<h5 className="title" onDoubleClick={this.edit}>
-					{this.state.title}
+					{this.props.node.title}
 				</h5>
 			);
   		}
   	},
 	render: function() {
 		var childNodes;
-		if (this.state.childNodes != null) {
-			childNodes = this.state.childNodes.map(function(node, index) {
-				return <li key={index}><TreeNode node={node} /></li>
-			});
+		if (this.props.node.childNodes != null) {
+			childNodes = this.props.node.childNodes.map(function(child, index) {
+				return (
+					<li key={index}>
+						<TreeNode node={child} add={this.props.add} edit={this.props.edit}/>
+					</li>
+				);
+			}.bind(this));
 		}
 
 		var style = {};

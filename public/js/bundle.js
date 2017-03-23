@@ -20490,92 +20490,148 @@ module.exports = require('./lib/React');
 var ReactDOM = require('react-dom');
 var React = require('react');
 var Tree = require('./tree.js');
+var TreeData = require('./treeData.js');
 
-var data = {
-	title: "Oregon Trail",
-	childNodes: [{
-		title: "Cross the river"
-	}, {
-		title: "Go through the mountains",
-		childNodes: [{
-			title: "Cholera",
-			childNodes: [{
-				title: "Dead"
-			}]
-		}, {
-			title: "Freeze to death"
-		}]
-	}]
-};
+ReactDOM.render(React.createElement(Tree, { node: TreeData.tree }), document.getElementById('app'));
 
-ReactDOM.render(React.createElement(Tree, { node: data }), document.getElementById('app'));
-
-},{"./tree.js":179,"react":177,"react-dom":26}],179:[function(require,module,exports){
+},{"./tree.js":179,"./treeData.js":180,"react":177,"react-dom":26}],179:[function(require,module,exports){
 var React = require('react');
 var TreeNode = require('./treeNode.js');
 
 var Tree = React.createClass({
-	displayName: 'Tree',
+  displayName: 'Tree',
 
-	render: function () {
-		return React.createElement(
-			'div',
-			null,
-			React.createElement(TreeNode, { node: this.props.node })
-		);
-	}
+  getInitialState: function () {
+    return {
+      tree: this.props.node,
+      id: 6
+    };
+  },
+  get_node_by_id: function (node, id) {
+    if (node.tree_id == id) {
+      return node;
+    } else if (node.childNodes != null) {
+      //var i;
+      var result = null;
+      for (var i = 0; result == null && i < node.childNodes.length; i++) {
+        result = this.get_node_by_id(node.childNodes[i], id);
+      }
+      return result;
+    }
+    return null;
+  },
+  get_tree_id: function () {
+    var newId = this.state.id + 1;
+    this.setState({ id: newId });
+    return newId;
+  },
+  add: function (id) {
+    var updatedTree = Object.assign({}, this.state.tree);
+    var node = this.get_node_by_id(updatedTree, id);
+    if (node.childNodes != null) {
+      node.childNodes.push({ title: null, tree_id: this.get_tree_id() });
+    } else {
+      node.childNodes = [{ title: null, tree_id: this.get_tree_id() }];
+    }
+    this.setState({ tree: updatedTree });
+  },
+  edit: function (id, value) {
+    var updatedTree = Object.assign({}, this.state.tree);
+    var node = this.get_node_by_id(updatedTree, id);
+    node.title = value;
+    this.setState({ tree: updatedTree });
+  },
+  render: function () {
+    return React.createElement(
+      'div',
+      null,
+      React.createElement(TreeNode, { node: this.state.tree, add: this.add, edit: this.edit }),
+      React.createElement(
+        'p',
+        null,
+        JSON.stringify(this.state.tree)
+      )
+    );
+  }
 });
 module.exports = Tree;
 
-},{"./treeNode.js":180,"react":177}],180:[function(require,module,exports){
+},{"./treeNode.js":181,"react":177}],180:[function(require,module,exports){
+var treeData = {
+	tree: {
+		title: "Oregon Trail",
+		tree_id: 1,
+		childNodes: [{
+			title: "Cross the river",
+			tree_id: 2
+		}, {
+			title: "Go through the mountains",
+			tree_id: 3,
+			childNodes: [{
+				title: "Cholera",
+				tree_id: 4,
+				childNodes: [{
+					title: "Dead",
+					tree_id: 5
+				}]
+			}, {
+				title: "Freeze to death",
+				tree_id: 6
+			}]
+		}]
+	}
+};
+
+module.exports = treeData;
+
+},{}],181:[function(require,module,exports){
 var React = require('react');
+var TreeData = require('./treeData.js');
 
 var TreeNode = React.createClass({
-	displayName: "TreeNode",
+	displayName: 'TreeNode',
 
 	getInitialState: function () {
 		return {
 			visible: true,
-			editing: this.props.node.title == null,
-			title: this.props.node.title,
-			childNodes: this.props.node.childNodes
+			editing: this.props.node.title == null
 		};
 	},
 	toggle: function () {
 		this.setState({ visible: !this.state.visible });
 	},
 	add: function () {
-		if (this.state.childNodes != null) {
-			this.setState({ childNodes: this.state.childNodes.concat([{ title: null }]) });
-		} else {
-			this.setState({ childNodes: [{ title: null }] });
-		}
+		this.props.add(this.props.node.tree_id);
 	},
 	edit: function () {
 		this.setState({ editing: true });
 	},
 	CurrentTitle: function () {
 		if (this.state.editing) {
-			return React.createElement("input", { onChange: e => this.setState({ title: e.target.value }),
+			// return (
+			// 	<input onChange={(e) => this.setState({title: e.target.value})} 
+			// 		onDoubleClick={() => this.setState({editing: false})} />
+			// );
+			return React.createElement('input', { onChange: e => this.props.edit(this.props.node.tree_id, e.target.value),
 				onDoubleClick: () => this.setState({ editing: false }) });
 		} else {
 			return React.createElement(
-				"h5",
-				{ className: "title", onDoubleClick: this.edit },
-				this.state.title
+				'h5',
+				{ className: 'title', onDoubleClick: this.edit },
+				this.props.node.title
 			);
 		}
 	},
 	render: function () {
 		var childNodes;
-		if (this.state.childNodes != null) {
-			childNodes = this.state.childNodes.map(function (node, index) {
+		if (this.props.node.childNodes != null) {
+			childNodes = this.props.node.childNodes.map(function (child, index) {
 				return React.createElement(
-					"li",
+					'li',
 					{ key: index },
-					React.createElement(TreeNode, { node: node })
+					React.createElement(TreeNode, { node: child, add: this.props.add, edit: this.props.edit })
 				);
-			});
+			}.bind(this));
 		}
 
 		var style = {};
@@ -20584,22 +20640,22 @@ var TreeNode = React.createClass({
 		}
 
 		return React.createElement(
-			"div",
+			'div',
 			null,
 			React.createElement(this.CurrentTitle, null),
 			React.createElement(
-				"button",
-				{ onClick: this.toggle, className: "toggle" },
+				'button',
+				{ onClick: this.toggle, className: 'toggle' },
 				this.state.visible ? "Hide" : "Show"
 			),
 			React.createElement(
-				"button",
+				'button',
 				{ onClick: this.add },
-				"Add"
+				'Add'
 			),
 			React.createElement(
-				"ul",
-				{ className: "child-list", style: style },
+				'ul',
+				{ className: 'child-list', style: style },
 				childNodes
 			)
 		);
@@ -20608,4 +20664,4 @@ var TreeNode = React.createClass({
 
 module.exports = TreeNode;
 
-},{"react":177}]},{},[178]);
+},{"./treeData.js":180,"react":177}]},{},[178]);

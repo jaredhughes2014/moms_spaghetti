@@ -1,33 +1,9 @@
 var ReactDOM = require('react-dom');
 var React = require('react');
 var Tree = require('./tree.js');
- 
-var data = {
-  	title: "Oregon Trail",
-  	childNodes: [
-		{
-			title: "Cross the river"
-		},
-		{
-			title: "Go through the mountains", 
-			childNodes: [
-		  		{
-		  			title: "Cholera", 
-		  			childNodes: [
-						{
-							title: "Dead"
-						}
-		  			]
-		  		},
-			  	{
-			  		title: "Freeze to death"
-			  	}
-			]
-		}
-  	]
-};
+var TreeData = require('./treeData.js');
  
 ReactDOM.render(
-  <Tree node={data}/>,
+  <Tree node={TreeData.tree}/>,
   document.getElementById('app')
 );
