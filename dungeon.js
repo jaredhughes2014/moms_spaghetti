@@ -119,6 +119,11 @@ function handle_conversation(intent, session) {
             null, false
         )
     }
+    if (body.includes('count')){
+        init_inventory();
+        return mk_reply('Conversation', 'Counter is now at ' + incr_count(),
+            null, false)
+    }
     return mk_reply('Conversation', body, null, false)
 }
 
