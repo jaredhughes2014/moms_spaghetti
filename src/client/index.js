@@ -12,7 +12,7 @@ var data = {
 			title: "Go through the mountains", 
 			childNodes: [
 		  		{
-		  			title: "Cholera", 
+		  			title: "Dysentery",
 		  			childNodes: [
 						{
 							title: "Dead"
