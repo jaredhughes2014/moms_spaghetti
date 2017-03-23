@@ -120,6 +120,11 @@ function handle_conversation(intent, session) {
             null, false
         );
     }
+    if (body.includes('count')){
+        return mk_reply('Conversation',
+            'The count is now at ' + incr_count(),
+            null, false)
+    }
     return mk_reply('Conversation', body, null, false);
 }
 
