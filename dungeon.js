@@ -99,7 +99,7 @@ function moved_to(tree_index, attrs) {
 function handle_conversation(intent, session) {
     body = get_slot(intent, 'HaveConversation').toLowerCase();
     attrs = session.attributes;
-    if (attrs.game_state != undefined) {
+    if (attrs && attrs.game_state) {
         place = attrs.game_state
         node = my_tree[place];
         for (opt of node.opts) {
