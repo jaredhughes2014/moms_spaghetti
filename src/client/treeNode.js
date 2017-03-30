@@ -1,5 +1,7 @@
 var React = require('react');
 var TreeData = require('./treeData.js');
+var FormControl = require('react-bootstrap/lib/FormControl');
+var Button = require('react-bootstrap/lib/Button');
 
 var TreeNode = React.createClass({
 	getInitialState: function() {
@@ -19,19 +21,15 @@ var TreeNode = React.createClass({
   	},
   	CurrentTitle: function(){
   		if(this.state.editing){
-  			// return (
-  			// 	<input onChange={(e) => this.setState({title: e.target.value})} 
-  			// 		onDoubleClick={() => this.setState({editing: false})} />
-  			// );
 			return (
-  				<input onChange={(e) => this.props.edit(this.props.node.tree_id, e.target.value)} 
-  					onDoubleClick={() => this.setState({editing: false})} />
+  				<span className="input-node"><FormControl onChange={(e) => this.props.edit(this.props.node.tree_id, e.target.value)} 
+  					onDoubleClick={() => this.setState({editing: false})} /></span>
   			);
   		} else {
   			return (
-  				<h5 className="title" onDoubleClick={this.edit}>
+  				<h4 className="title" onDoubleClick={this.edit}>
 					{this.props.node.title}
-				</h5>
+				</h4>
 			);
   		}
   	},
@@ -55,8 +53,8 @@ var TreeNode = React.createClass({
 		return (
 			<div>
 				<this.CurrentTitle />
-				<button onClick={this.toggle} className="toggle">{this.state.visible ? "Hide" : "Show"}</button>
-				<button onClick={this.add}>Add</button>
+				<Button onClick={this.toggle} bsStyle="default" className="toggle">{this.state.visible ? "Hide" : "Show"}</Button>
+				<Button onClick={this.add} bsStyle="default">Add</Button>
 				<ul className="child-list"style={style}>
 					{childNodes}
 				</ul>
