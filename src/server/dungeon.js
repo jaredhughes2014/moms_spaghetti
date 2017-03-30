@@ -125,7 +125,10 @@ function handle_conversation(intent, session) {
 
     // Handle counting
     if (body.includes('count'))
-        return inventory.handle_inventory(body)
+        return mk_reply('Conversation',
+            inventory.handle_inventory(body),
+            null, false
+        );
 
     return mk_reply('Conversation', body, null, false);
 }
