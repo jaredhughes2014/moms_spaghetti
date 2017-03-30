@@ -122,11 +122,11 @@ function handle_conversation(intent, session) {
             null, false
         );
     }
-    if (body.includes('count')){
-        return mk_reply('Conversation',
-            'The count is now at ' + inventory.incr_count(),
-            null, false)
-    }
+
+    // Handle counting
+    if (body.includes('count'))
+        return inventory.handle_inventory(body)
+
     return mk_reply('Conversation', body, null, false);
 }
 
