@@ -1,6 +1,6 @@
 tree = [
     {
-        text:'You come to a fork in the road. A troll invites you to a fighting festival down the right path. He\'s betting on last year\'s champion - Right Hook Steve. Which path do you take?',
+        text:'You come to a fork in the road. A troll invites you to a fighting festival down the right path. He\'s betting on last year\'s champion, the legendary Right Hook Steve. Which path do you take?',
         retext:'Right for fighting festival, left to continue past',
         opts: {
             left:1,
@@ -18,13 +18,13 @@ tree = [
             'name is [name]':3,
             'names [name]':3,
             'name\'s [name]':3,
-	    'i\'m [name]':3,
+	    "i'm [name]":3,
 	    'im [name]':3,
             '[name]':3
         }
     },
     {
-        text:'You enter the festival and quickly progress to the finals! Your opponent Steve throws a punch - which way do you dodge?',
+        text:'You enter the festival and quickly progress to the finals! Your opponent, the legendary Right Hook Steve, throws a punch - which way do you dodge?',
         retext:'Dodge right or left?',
         opts: {
             left:4,
@@ -32,11 +32,11 @@ tree = [
         }
     },
     {
-        text:'You dodge to your left - Steve\'s right. His famous right hook hits you squarely in the jaw, and you\'re down for the count! You lose.',
+        text:'You dodge to your left, the legendary Right Hook Steve\'s right. The legendary Right Hook Steve\'s legendary right hook hits you squarely in the jaw, and you\'re down for the count! You lose.',
         retext:null
     },
     {
-        text:'You dodge to your right - Steve\'s left. You nimbly avoid his famous right hook, and swipe his legs! He goes down like a ton of bricks, and you get first place. Congratulations [name]! You win!',
+        text:'You dodge to your right, the legendary Right Hook Steve\'s left. You nimbly avoid the legendary Right Hook Steve\'s legendary right hook, and swipe at the legendary Right Hook Steve\'s legs! He goes down like a legendary ton of bricks, and you get first place. Congratulations [name]! You win!',
         retext:null
     }
 ]

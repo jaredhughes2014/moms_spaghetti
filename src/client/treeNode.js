@@ -1,47 +1,48 @@
-import React from 'react';
+var React = require('react');
+var TreeData = require('./treeData.js');
+var FormControl = require('react-bootstrap/lib/FormControl');
+var Button = require('react-bootstrap/lib/Button');
 
 var TreeNode = React.createClass({
 	getInitialState: function() {
 		return {
 			visible: true,
 			editing: (this.props.node.title == null),
-			title: this.props.node.title,
-			childNodes: this.props.node.childNodes
 		};
 	},
 	toggle: function() {
     	this.setState({visible: !this.state.visible});
   	},
   	add: function(){
-  		if(this.state.childNodes != null){
-  			this.setState({childNodes: this.state.childNodes.concat([{title: null}])});
-  		} else {
-  			this.setState({childNodes: [{title: null}]});
-  		}
+  		this.props.add(this.props.node.tree_id);
   	},
   	edit: function(){
   		this.setState({editing: true});
   	},
   	CurrentTitle: function(){
   		if(this.state.editing){
-  			return (
-  				<input onChange={(e) => this.setState({title: e.target.value})} 
-  					onDoubleClick={() => this.setState({editing: false})} />
+			return (
+  				<span className="input-node"><FormControl onChange={(e) => this.props.edit(this.props.node.tree_id, e.target.value)} 
+  					onDoubleClick={() => this.setState({editing: false})} /></span>
   			);
   		} else {
   			return (
-  				<h5 className="title" onDoubleClick={this.edit}>
-					{this.state.title}
-				</h5>
+  				<h4 className="title" onDoubleClick={this.edit}>
+					{this.props.node.title}
+				</h4>
 			);
   		}
   	},
 	render: function() {
 		var childNodes;
-		if (this.state.childNodes != null) {
-			childNodes = this.state.childNodes.map(function(node, index) {
-				return <li key={index}><TreeNode node={node} /></li>
-			});
+		if (this.props.node.childNodes != null) {
+			childNodes = this.props.node.childNodes.map(function(child, index) {
+				return (
+					<li key={index}>
+						<TreeNode node={child} add={this.props.add} edit={this.props.edit}/>
+					</li>
+				);
+			}.bind(this));
 		}
 
 		var style = {};
@@ -52,8 +53,8 @@ var TreeNode = React.createClass({
 		return (
 			<div>
 				<this.CurrentTitle />
-				<button onClick={this.toggle} className="toggle">{this.state.visible ? "Hide" : "Show"}</button>
-				<button onClick={this.add}>Add</button>
+				<Button onClick={this.toggle} bsStyle="default" className="toggle">{this.state.visible ? "Hide" : "Show"}</Button>
+				<Button onClick={this.add} bsStyle="default">Add</Button>
 				<ul className="child-list"style={style}>
 					{childNodes}
 				</ul>
@@ -62,4 +63,4 @@ var TreeNode = React.createClass({
 	}
 });
 
-export default TreeNode;
+module.exports = TreeNode;
