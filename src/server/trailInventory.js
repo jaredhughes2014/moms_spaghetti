@@ -9,6 +9,7 @@ var ox = 0;
 
 var count = 0;
 
+
 function init_inventory(){
     budget = 100;
     medicine = 0;
@@ -17,12 +18,29 @@ function init_inventory(){
     count = 0;
 }
 
-
 function incr_count(){
     count++;
     return count;
 }
 
+function handle_inventory(body){
+    var response;
+
+    if (body.includes('reset')) {
+        init_inventory();
+        response = mk_reply('Conversation',
+            'The count is now at ' + incr_count(),
+            null, false)
+    }
+    else
+        response = mk_reply('Conversation',
+            'The count has been reset',
+            null, false)
+
+    return response;
+}
+
 module.exports = {
-    incr_count : incr_count
+    incr_count,
+    handle_inventory
 }
