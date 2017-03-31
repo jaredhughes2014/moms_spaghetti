@@ -13,24 +13,9 @@ const methods = {
 /**
  * Builds a handler that will process the server response when it is completed
  */
-const buildResponseHandler = (handler) =>
+const handleError = (handler) =>
 {
-    return (request) => {
-        if (request.readyState == XMLHttpRequest.DONE) {
-            switch (request.status) {
-                case(200):
-                    handler(JSON.parse(request.responseText));
-                    break;
-
-                default:
-                    console.error('Unhandled response code: ' + request.status);
-                    break;
-            }
-        }
-        else {
-            // Not sure what to do here
-        }
-    };
+    console.error("TODO error handling");
 };
 
 /**
@@ -39,11 +24,13 @@ const buildResponseHandler = (handler) =>
  */
 const sendRequest = (method, path, handler, data=null) =>
 {
-    let req = new XMLHttpRequest();
-
-    req.onreadystatechange = buildResponseHandler(handler);
-    req.open(method, path, true);
-    req.send(data);
+    $.ajax({
+        success: handler,
+        data: data,
+        method: method,
+        url: path,
+        error: handleError
+    });
 };
 
 
@@ -61,7 +48,7 @@ const getConversations = (onLoaded) =>
  */
 const addConversation = (name, onLoaded) =>
 {
-    sendRequest(methods.post, paths.conversations.add, onLoaded, {name});
+    sendRequest(methods.post, paths.conversations.add, onLoaded, {name: name});
 };
 
 export default {

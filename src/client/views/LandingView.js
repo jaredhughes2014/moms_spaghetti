@@ -22,7 +22,7 @@ class LandingView extends React.Component
      */
     newConversation()
     {
-        api.addConversation("New Conversation", (conversation) => {
+        api.addConversation("New Conversation " + this.props.conversations.length + 1, (conversation) => {
             this.props.addConversation(conversation);
         });
     }

@@ -12,6 +12,7 @@ let app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.text());
 app.use(bodyParser.raw());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('public'));
 
 /**
@@ -56,7 +57,7 @@ app.post(paths.conversations.save, (req, res) => {
  * Adds a new conversation to the "database"
  */
 app.post(paths.conversations.add, (req, res) => {
-    api.addConversation(req.body, (conversation) => {
+    api.addConversation(req.body.name, (conversation) => {
         res.send(conversation);
     });
 });
@@ -65,7 +66,7 @@ app.post(paths.conversations.add, (req, res) => {
  * Removes a conversation from the database
  */
 app.delete(paths.conversations.delete, (req, res) => {
-    api.removeConversation(req.body, (response) => {
+    api.removeConversation(req.body.name, (response) => {
         res.send(response);
     });
 });
