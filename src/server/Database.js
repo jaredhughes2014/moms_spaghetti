@@ -1,5 +1,5 @@
 
-const Conversation = require("./Conversation");
+const Conversation = require("../data/Conversation");
 
 /**
  * Totally a real database. Totally.
@@ -40,6 +40,22 @@ class Database
     {
         let matches = this.conversations.filter(p => p.name === name);
         return matches.length > 0 ? matches[0] : {};
+    }
+
+    /**
+     * Replaces the existing conversation with the given name
+     */
+    saveConversation(conversation)
+    {
+        let c = this.getConversation(conversation.name);
+
+        if (c) {
+            Object.assign(c, conversation);
+            return {success: true};
+        }
+        else {
+            return {error: 'No conversation with name ' + conversation.name + ' exists.'};
+        }
     }
 }
 

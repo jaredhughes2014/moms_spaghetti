@@ -26,8 +26,6 @@ class LandingView extends React.Component
         // Bind functions because React
         this.newConversation = this.newConversation.bind(this);
         this.setConversation = this.setConversation.bind(this);
-        this.renderNotLoaded = this.renderNotLoaded.bind(this);
-        this.generateConversationList = this.generateConversationList.bind(this);
     }
 
     /**
@@ -94,7 +92,6 @@ class LandingView extends React.Component
      */
     generateConversationList()
     {
-        let conversationList = null;
         if (this.props.conversations.length === 0) {
             return (
                 <FlowList horizontal={true}>
