@@ -10,7 +10,8 @@ const paths = {
         add: "/conversations/add",
         delete: "/conversations/delete",
         save: "/conversations/save",
-        get: "/conversations"
+        get: "/conversations",
+        edit: "/conversations/edit",
     }
 };
 

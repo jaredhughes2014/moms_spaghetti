@@ -3,7 +3,8 @@ import util from '../stateTools';
 import events from './events';
 
 const defaultState = {
-    conversations: []
+    conversations: [],
+    active: null
 };
 
 /**
@@ -21,6 +22,9 @@ const reducer = (state=defaultState, event) =>
             conversations = state.conversations.map(p => p);
             conversations.push(event.conversation);
             return Object.assign({}, state, {conversations});
+
+        case (events.setActiveConversation.type):
+            return Object.assign({}, state, {name: event.name});
 
         default: return state;
     }

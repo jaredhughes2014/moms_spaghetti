@@ -17,7 +17,17 @@ const addConversation = util.formatEvent(
     (conversation) => util.createEvent(addConversation, {conversation})
 );
 
+/**
+ * Sets the active conversation. Execute with null to deselect the active
+ * conversation
+ */
+const setActiveConversation = util.formatEvent(
+    'SET_ACTIVE_CONVERSATION',
+    (name) => util.createEvent(setActiveConversation, {name})
+);
+
 export default {
     setConversations,
     addConversation,
+    setActiveConversation,
 };

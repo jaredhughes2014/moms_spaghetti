@@ -1,9 +1,14 @@
 
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {browserHistory} from 'react-router';
 
 import api from '../api';
 import ev from '../events';
+import paths from '../../paths';
+
+import ConversationView from './presentation/landing/ConversationView';
+
 
 const events = ev.conversation;
 
@@ -12,9 +17,10 @@ const events = ev.conversation;
  */
 class LandingView extends React.Component
 {
-    constructor()
+    constructor(props)
     {
-        super();
+        super(props);
+        this.state = {loaded: false};
     }
 
     /**
@@ -22,9 +28,19 @@ class LandingView extends React.Component
      */
     newConversation()
     {
-        api.addConversation("New Conversation " + this.props.conversations.length + 1, (conversation) => {
+        api.addConversation("New Conversation " + (this.props.conversations.length + 1), (conversation) => {
             this.props.addConversation(conversation);
         });
+    }
+
+    /**
+     * Sets the conversation that should currently be edited.
+     * @param name
+     */
+    setConversation(name)
+    {
+        this.props.setActiveConversation(name);
+        browserHistory.push(paths.conversations.edit);
     }
 
     /**
@@ -32,31 +48,27 @@ class LandingView extends React.Component
      */
     render()
     {
-        if (this.props.conversations && this.props.conversations.length > 0) {
-            return (
-                <div id="landing-root">
-                    {this.props.conversations.map(p => <div key={p.name}>{p.name}</div>)}
-                    <button onClick={this.newConversation.bind(this)}>New</button>
-                </div>
-            )
-        }
-        else {
-
-            if (!this.props.conversations) {
-                api.getConversations((conversations) => {
-                    this.props.setConversations(conversations);
-                });
-            }
+        if (!this.state.loaded) {
+            api.getConversations((response) => {
+                this.setState({loaded: true});
+                this.props.setConversations(response);
+            });
 
             return (
-                <div id="landing-root">
-                    <div className="conversation-warning">
-                        No conversations. Click "New" to start a new conversation
-                    </div>
-                    <button onClick={this.newConversation.bind(this)}>New</button>
+                <div id="landing-loading-notification">
+                    Loading, please wait...
                 </div>
             );
         }
+        else return (
+            <div id="landing-page">
+                {this.props.conversations.map(p => <ConversationView name={p.name}
+                                                                    key={p.name}
+                                                                    onClick={this.setConversation.bind(this)}/>)}
+
+                <button onClick={this.newConversation.bind(this)}>New Conversation</button>
+            </div>
+        );
     }
 }
 
@@ -79,6 +91,7 @@ const mapDispatchToProps = (dispatch) =>
     return {
         setConversations : (c) => dispatch(events.setConversations.create(c)),
         addConversation : (c) => dispatch(events.addConversation.create(c)),
+        setActiveConversation : (name) => dispatch(events.setActiveConversation.create(name)),
     };
 };
 
