@@ -4,9 +4,6 @@ import React, {Component} from 'react';
 
 /**
  *
- * @param children
- * @return {XML}
- * @constructor
  */
 const AppSkeleton  = ({title, children}) => {
     return (

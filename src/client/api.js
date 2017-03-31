@@ -13,7 +13,7 @@ const methods = {
 /**
  * Builds a handler that will process the server response when it is completed
  */
-const handleError = (handler) =>
+const handleError = (err) =>
 {
     console.error("TODO error handling");
 };

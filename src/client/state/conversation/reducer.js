@@ -24,7 +24,12 @@ const reducer = (state=defaultState, event) =>
             return Object.assign({}, state, {conversations});
 
         case (events.setActiveConversation.type):
-            return Object.assign({}, state, {name: event.name});
+            if (event.name) {
+                return Object.assign({}, state, {active: state.conversations.find(p => p.name === event.name)});
+            }
+            else {
+                return Object.assign({}, state, {active: null});
+            }
 
         default: return state;
     }

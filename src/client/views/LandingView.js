@@ -8,6 +8,7 @@ import ev from '../events';
 import paths from '../../paths';
 
 import ConversationView from './presentation/landing/ConversationView';
+import FlowList from './presentation/FlowList';
 
 
 const events = ev.conversation;
@@ -21,6 +22,12 @@ class LandingView extends React.Component
     {
         super(props);
         this.state = {loaded: false};
+
+        // Bind functions because React
+        this.newConversation = this.newConversation.bind(this);
+        this.setConversation = this.setConversation.bind(this);
+        this.renderNotLoaded = this.renderNotLoaded.bind(this);
+        this.generateConversationList = this.generateConversationList.bind(this);
     }
 
     /**
@@ -49,26 +56,61 @@ class LandingView extends React.Component
     render()
     {
         if (!this.state.loaded) {
-            api.getConversations((response) => {
-                this.setState({loaded: true});
-                this.props.setConversations(response);
-            });
+            return this.renderNotLoaded();
+        }
+        else {
+            let conversationList = this.generateConversationList();
 
             return (
-                <div id="landing-loading-notification">
-                    Loading, please wait...
+                <div id="landing-root">
+                    {conversationList}
+
+                    <button onClick={this.newConversation}>New Conversation</button>
                 </div>
             );
         }
-        else return (
-            <div id="landing-page">
-                {this.props.conversations.map(p => <ConversationView name={p.name}
-                                                                    key={p.name}
-                                                                    onClick={this.setConversation.bind(this)}/>)}
+    }
 
-                <button onClick={this.newConversation.bind(this)}>New Conversation</button>
+    /**
+     * Renders when the conversations have not yet been loaded
+     * @returns {XML}
+     */
+    renderNotLoaded()
+    {
+        api.getConversations((response) => {
+            this.setState({loaded: true});
+            this.props.setConversations(response);
+        });
+
+        return (
+            <div id="landing-loading-notification">
+                Loading, please wait...
             </div>
         );
+    }
+
+    /**
+     * Generates the conversation list based on the state of the conversations
+     */
+    generateConversationList()
+    {
+        let conversationList = null;
+        if (this.props.conversations.length === 0) {
+            return (
+                <FlowList horizontal={true}>
+                    No Conversations are loaded yet
+                </FlowList>
+            );
+        }
+        else {
+            return (
+                <FlowList horizontal={true}>
+                    {this.props.conversations.map(p => <ConversationView name={p.name}
+                                                                         key={p.name}
+                                                                         onClick={this.setConversation}/>)}
+                </FlowList>
+            );
+        }
     }
 }
 
