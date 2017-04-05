@@ -1,3 +1,6 @@
+
+import ConversationNode from './ConversationNode';
+
 /**
  * A conversation object organizes all conversation data into a single storage object
  */
@@ -6,22 +9,25 @@ class Conversation
     /**
      * Initializes this conversation
      */
-    constructor(name)
+    constructor({name, triggers=[], nodes=[], variables=[]})
+    {
+        this.update({name, triggers, nodes, variables});
+    }
+
+    update({name, triggers, nodes, variables})
     {
         this.name = name;
-        this.triggers = [];
-        this.nodes = [];
-        this.variables = [];
-
-        this.previousNode = -1;
+        this.triggers = triggers;
+        this.nodes = nodes;
+        this.variables = variables;
     }
 
     /**
      * Adds a new node to this conversation
      */
-    addNode(triggers, response, parent=null)
+    addNode(nodeData)
     {
-        this.nodes.addNode(this.nodes.length, parent, triggers, response);
+        this.nodes.addNode(new ConversationNode({...nodeData}));
     }
 
     /**
@@ -30,25 +36,6 @@ class Conversation
     removeNode(id)
     {
         this.nodes = this.nodes.filter(x => x.id !== id);
-    }
-}
-
-/**
- * Conversation nodes are logical steps in a conversation
- */
-class ConversationNode
-{
-    /**
-     * Creates a new Conversation Node
-     */
-    constructor(id, parent, triggers, response)
-    {
-        this.id = id;
-        this.parent = parent;
-        this.triggers = triggers.map(p => p);
-        this.response = response;
-
-        this.children = [];
     }
 }
 

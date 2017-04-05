@@ -41,6 +41,12 @@ class Database
         let matches = this.conversations.filter(p => p.name === name);
         return matches.length > 0 ? matches[0] : {};
     }
+
+    saveConversation(conversation)
+    {
+        let c = this.getConversation(conversation.name);
+        c.update(conversation);
+    }
 }
 
 module.exports = Database;

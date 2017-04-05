@@ -48,10 +48,19 @@ const getConversations = (onLoaded) =>
  */
 const addConversation = (name, onLoaded) =>
 {
-    sendRequest(methods.post, paths.conversations.add, onLoaded, {name: name});
+    sendRequest(methods.post, paths.conversations.add, onLoaded, {name});
+};
+
+/**
+ * Saves the given conversation in the "database"
+ */
+const saveConversation = (conversation, onSaved) =>
+{
+    sendRequest(methods.post, paths.conversations.save, onSaved, {conversation});
 };
 
 export default {
     getConversations,
     addConversation,
+    saveConversation,
 };

@@ -2,7 +2,7 @@
 var path = require('path');
 
 const BUILD_DIR = path.resolve(__dirname, 'public/');
-const SOURCE_DIR = path.resolve(__dirname, 'src/client/');
+const SOURCE_DIR = path.resolve(__dirname, 'client/');
 
 var config = {
     entry: path.join(SOURCE_DIR, 'index.js'),

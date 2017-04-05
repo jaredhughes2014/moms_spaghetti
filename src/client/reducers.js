@@ -1,4 +1,4 @@
-import conversation from './state/conversation/reducer';
+import conversation from '../../client/state/conversation/reducer';
 
 /**
  * Combines all events into a single export

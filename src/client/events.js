@@ -1,5 +1,5 @@
 
-import conversation from './state/conversation/events';
+import conversation from '../../client/state/conversation/events';
 
 /**
  * Combines all events into a single export
