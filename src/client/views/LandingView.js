@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 
-import api from '../api';
+import api from '../../../client/api';
 import ev from '../events';
 import paths from '../../paths';
 

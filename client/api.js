@@ -1,5 +1,5 @@
 
-import paths from '../paths';
+import paths from '../app/paths';
 
 /**
  * HTTP methods. Referenced here for consistency
@@ -19,13 +19,29 @@ const handleError = (err) =>
 };
 
 /**
+ * Builds a handler that processes messages from the application
+ */
+const buildHandler = (response, onSuccess) =>
+{
+    if (response.warning) {
+        console.warn(response.warning);
+    }
+    else if (response.warning) {
+        console.error(response.error);
+    }
+    else {
+        onSuccess(response);
+    }
+};
+
+/**
  * Builds an AJAX request and sends it. The handler function will receive
  * the server response
  */
 const sendRequest = (method, path, handler, data=null) =>
 {
     $.ajax({
-        success: handler,
+        success: (response) => buildHandler(response, handler),
         data: data,
         method: method,
         url: path,
@@ -40,7 +56,7 @@ const sendRequest = (method, path, handler, data=null) =>
  */
 const getConversations = (onLoaded) =>
 {
-    sendRequest(methods.get, paths.conversations.get, onLoaded);
+    sendRequest(methods.get, paths.conversationRoot, onLoaded);
 };
 
 /**

@@ -22,6 +22,8 @@ const paths = {
     conversationRoot: '/conversations',
     conversations: extendPaths('/conversations', {
         edit: 'edit',
+        add: 'add',
+        save: 'save',
     }),
 };
 module.exports = paths;

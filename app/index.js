@@ -21,6 +21,13 @@ app.listen(process.env.PORT || 8080, () => {
 });
 
 /**
+ * Landing page. This is where the front-end is served from
+ */
+app.get(paths.index, (req, res) => {
+    res.sendFile('public/index.html', { root: __dirname });
+});
+
+/**
  * Gets the names of all conversations to send to the UI
  */
 app.get(paths.conversationRoot, (req, res) => {
@@ -29,9 +36,8 @@ app.get(paths.conversationRoot, (req, res) => {
     })
 });
 
-/**
- * Landing page. This is where the front-end is served from
- */
-app.get(paths.index, (req, res) => {
-    res.sendFile('public/index.html', { root: __dirname });
+app.post(paths.conversations.add, (req, res) => {
+    db.newConversation(req.body.name, (response) => {
+        res.send(response);
+    })
 });

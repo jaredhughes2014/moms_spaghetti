@@ -3,6 +3,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
+import api from '../../api';
+
 /**
  * Renders the modal box for the user to enter a new conversation name
  */
@@ -44,8 +46,9 @@ class NewConversationModal extends React.Component
      */
     submit()
     {
-        console.log(`Adding conversation ${this.state.conversationName}`);
-        this.props.onClose();
+        api.addConversation(this.state.conversationName, (response) => {
+            this.props.onClose();
+        });
     }
 
     /**

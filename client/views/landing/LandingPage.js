@@ -1,13 +1,17 @@
 
-
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+
+import api from '../../api';
+import ev from '../../state/events';
 
 import ConversationBox from './ConversationBox';
 import FlowList from '../general/FlowList';
 import LowerBar from './LowerBar';
 import NewConversationModal from './NewConversationModal';
 
+
+const events = ev.conversations;
 
 /**
  * Page where the landing be do
@@ -18,14 +22,39 @@ class LandingPage extends React.Component
     {
         super(props);
 
-        this.state = {newOpen: false};
+        this.state = {
+            newOpen: false,
+            loaded: false,
+        };
         this.selectConversation = this.selectConversation.bind(this);
         this.toggleNewModal = this.toggleNewModal.bind(this);
     }
 
     render()
     {
-        return this.state.newOpen ? this.renderModal() : this.renderNoModal();
+        if (this.state.loaded) {
+            return this.state.newOpen ? this.renderModal() : this.renderNoModal();
+        }
+        else {
+            api.getConversations((response) => {
+                this.props.setConversations(response.conversations);
+                this.setState({loaded: true});
+            });
+            return this.renderNotLoaded();
+        }
+    }
+
+    /**
+     * Renders this view if the conversations have not been loaded yet
+     * @returns {XML}
+     */
+    renderNotLoaded()
+    {
+        return (
+            <div id="landing-page">
+                Loading...
+            </div>
+        );
     }
 
     /**
@@ -89,7 +118,7 @@ const mapStateToProps = (state) =>
 const mapDispatchToProps = (dispatch) =>
 {
     return {
-
+        setConversations: (conversations) => dispatch(events.setConversations.create(conversations)),
     };
 };
 
