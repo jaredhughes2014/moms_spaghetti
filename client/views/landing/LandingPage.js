@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import ConversationBox from './ConversationBox';
 import FlowList from '../general/FlowList';
 import LowerBar from './LowerBar';
+import NewConversationModal from './NewConversationModal';
 
 
 /**
@@ -17,11 +18,20 @@ class LandingPage extends React.Component
     {
         super(props);
 
+        this.state = {newOpen: false};
         this.selectConversation = this.selectConversation.bind(this);
-        this.openNewConversationModal = this.openNewConversationModal.bind(this);
+        this.toggleNewModal = this.toggleNewModal.bind(this);
     }
 
     render()
+    {
+        return this.state.newOpen ? this.renderModal() : this.renderNoModal();
+    }
+
+    /**
+     * Renders this view without a modal box
+     */
+    renderNoModal()
     {
         return (
             <div id="landing-page">
@@ -29,9 +39,21 @@ class LandingPage extends React.Component
                     {this.props.conversations.map(p => <ConversationBox name={p} key={p} onClick={this.selectConversation}/>)}
                 </FlowList>
 
-                <LowerBar onNew={this.openNewConversationModal}/>
+                <LowerBar onNew={this.toggleNewModal}/>
             </div>
-        )
+        );
+    }
+
+    /**
+     * Renders this view with a modal box
+     */
+    renderModal()
+    {
+        return (
+            <div id="landing-page">
+                <NewConversationModal onClose={this.toggleNewModal}/>
+            </div>
+        );
     }
 
     /**
@@ -45,9 +67,9 @@ class LandingPage extends React.Component
     /**
      * Opens a modal box for the user to create a new conversation
      */
-    openNewConversationModal()
+    toggleNewModal()
     {
-        console.log(`Opening new conversation box`);
+        this.setState({newOpen: !this.state.newOpen})
     }
 }
 
