@@ -1,8 +1,6 @@
 
-const Database = require("./Database");
+const Database = require("./data/Database");
 let db = new Database();
-
-// All API endpoints should respond via onComplete in case we ever hook up a DBMS
 
 /**
  * Gets all conversations from the database
@@ -36,8 +34,14 @@ const removeConversation = (name, onComplete) =>
  */
 const saveConversation = (conversation, onComplete) =>
 {
-    let response = db.saveConversation(conversation);
-    onComplete(response);
+    let c = db.getConversation(conversation.name);
+
+    if (conversation) {
+        Object.assign(c, conversation);
+        onComplete({success: true});
+    }
+
+    onComplete({error: 'Conversation not found'});
 };
 
 

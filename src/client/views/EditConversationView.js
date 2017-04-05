@@ -5,13 +5,8 @@ import {browserHistory} from 'react-router';
 
 import paths from '../../paths';
 import ev from '../events';
-import api from '../api';
 
-import NodeSection from './presentation/edit/NodeSection';
-import TriggerSection from './presentation/edit/TriggerSection';
-import VariableSection from './presentation/edit/VariableSection';
-
-
+import NodeSelector from './presentation/edit/NodeSelector';
 import FlowList from './presentation/FlowList';
 import TriggerView from './presentation/edit/TriggerView';
 import VariableView from './presentation/edit/VariableView';
@@ -78,10 +73,7 @@ class EditConversationView extends React.Component
      */
     addNode()
     {
-        this.props.addNode();
-        api.saveConversation(this.state.conversation, () => {
-
-        });
+        console.log('Node added');
     }
 
     /**
@@ -97,9 +89,8 @@ class EditConversationView extends React.Component
      */
     addTrigger()
     {
-        this.props.addTrigger(this.state.triggerText);
+        console.log("Adding trigger: " + this.state.triggerText);
         this.setState({triggerText: ''});
-        api.saveConversation(this.state.conversation);
     }
 
     /**
@@ -115,9 +106,8 @@ class EditConversationView extends React.Component
      */
     addVariable()
     {
-        this.props.addVariable(this.state.variableText);
-        this.setState({variableText: ''});
-        api.saveConversation(this.state.conversation);
+        console.log("Adding variable: " + this.state.triggerText);
+        this.setState({triggerText: ''});
     }
 
     /**
@@ -143,16 +133,22 @@ class EditConversationView extends React.Component
      */
     render()
     {
+        let c = this.props.conversation;
+
+        let nodes = this.renderConversationNodes();
+        let triggers = this.renderTriggers();
+        let variables = this.renderVariables();
+
         return (
             <div id="edit-conversation-root">
                 <div id="edit-conversation-title">
-                    {this.props.conversation.name}
+                    {c.name}
                 </div>
 
                 <div id="edit-conversation-content">
-                    {this.renderConversationNodes()}
-                    {this.renderTriggers()}
-                    {this.renderVariables()}
+                    {nodes}
+                    {triggers}
+                    {variables}
                 </div>
 
                 <button onClick={this.deselectConversation}>Back</button>
@@ -165,15 +161,28 @@ class EditConversationView extends React.Component
      */
     renderVariables()
     {
+        let c = this.props.conversation;
+
+        let variables = null;
+        if (c.triggers.length == 0) {
+            variables = <div>No variables added yet</div>;
+        }
+        else {
+            variables =
+                <FlowList horizontal={false}>
+                    {c.variables.map(p => <VariableView onClick={this.deleteVariable} text={p.name} key={p.name}/>)}
+                </FlowList>;
+        }
+
         return (
             <div id="edit-variables-root">
                 <div className="edit-content-title">
                     Variables
                 </div>
-                <VariableSection variables={this.props.conversation.variables} onDelete={this.deleteVariable}/>
+                {variables}
 
                 <input type="text" value={this.state.variableText} onChange={this.updateVariableText}/>
-                <button onClick={this.addVariable}>Submit</button>
+                <button onClick={this.addTrigger}>Submit</button>
             </div>
         );
     }
@@ -183,12 +192,27 @@ class EditConversationView extends React.Component
      */
     renderTriggers()
     {
+        let c = this.props.conversation;
+
+        let triggers = null;
+
+        if (c.triggers.length == 0) {
+            triggers = <div>No triggers added yet</div>;
+        }
+
+        else {
+            triggers =
+                <FlowList horizontal={false}>
+                    {c.triggers.map(p => <TriggerView onClick={this.deleteTrigger} text={p} key={p}/>)}
+                </FlowList>;
+        }
+
         return (
             <div id="edit-triggers-root">
                 <div className="edit-content-title">
                     Triggers
                 </div>
-                <TriggerSection triggers={this.props.conversation.triggers} onDelete={this.deleteTrigger}/>
+                {triggers}
 
                 <input type="text" value={this.state.triggerText} onChange={this.updateTriggerText}/>
                 <button onClick={this.addTrigger}>Submit</button>
@@ -201,12 +225,25 @@ class EditConversationView extends React.Component
      */
     renderConversationNodes()
     {
+        let c = this.props.conversation;
+
+        let list = null;
+        if (c.nodes.length == 0) {
+            list = <div>No Nodes added yet</div>
+        }
+        else {
+            list =
+                <FlowList horizontal={false}>
+                    {c.nodes.map(p => <NodeSelector id={p.id} key={p.id} onClick={this.selectNode}/>)}
+                </FlowList>;
+        }
+
         return (
             <div id="node-selection">
                 <div className="edit-content-title">
                     Nodes
                 </div>
-                <NodeSection nodes={this.props.conversation.nodes} onClick={this.selectNode}/>
+                {list}
                 <button onClick={this.addNode}>New</button>
             </div>
         );
@@ -229,10 +266,7 @@ const mapStateToProps = (state) =>
 const mapDispatchToProps = (dispatch) =>
 {
     return {
-        goBack : () => dispatch(events.setActiveConversation.create(null)),
-        addTrigger: (text) => dispatch(events.addTrigger.create(text)),
-        addVariable: (name) => dispatch(events.addVariable.create(name)),
-        addNode: () => dispatch(events.addNode.create()),
+        goBack : () => dispatch(events.setActiveConversation.create(null))
     };
 };
 

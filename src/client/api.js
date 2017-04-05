@@ -46,21 +46,12 @@ const getConversations = (onLoaded) =>
 /**
  * Adds a new conversation to the database
  */
-const addConversation = (name, onAdded) =>
+const addConversation = (name, onLoaded) =>
 {
-    sendRequest(methods.post, paths.conversations.add, onAdded, {name});
-};
-
-/**
- * Saves a conversation. This conversation must already exist in the database
- */
-const saveConversation = (conversation, onSaved) =>
-{
-    sendRequest(methods.post, paths.conversations.save, onSaved, {conversation})
+    sendRequest(methods.post, paths.conversations.add, onLoaded, {name: name});
 };
 
 export default {
     getConversations,
     addConversation,
-    saveConversation,
 };
