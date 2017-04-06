@@ -4,6 +4,9 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import api from '../../api';
+import ev from '../../state/events';
+
+let events = ev.conversations;
 
 /**
  * Renders the modal box for the user to enter a new conversation name
@@ -46,6 +49,7 @@ class NewConversationModal extends React.Component
     submit()
     {
         api.addConversation(this.state.conversationName, (response) => {
+            this.props.addConversation(response.conversation);
             this.props.onClose();
         });
     }
@@ -69,7 +73,7 @@ const mapStateToProps = (state) =>
 const mapDispatchToProps = (dispatch) =>
 {
     return {
-
+        addConversation: (c) => dispatch(events.addConversation.create(c))
     };
 };
 

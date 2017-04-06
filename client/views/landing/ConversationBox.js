@@ -7,7 +7,7 @@ const ConversationBox = ({name, onClick}) =>
 {
     return (
         <div className="landing-conversation-box" onClick={onClick}>
-            <div className="label">
+            <div>
                 {name}
             </div>
         </div>
