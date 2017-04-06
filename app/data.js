@@ -6,57 +6,88 @@ class Conversation
 {
     /**
      * Creates a new conversation with a name
-     * @param name
      */
-    constructor(obj)
+    constructor({name, nodes=[], keyWords=[], variables=[]})
     {
-        this.update({...obj});
+        this.update({name, nodes, keyWords, variables});
     }
 
     /**
      * Updates all data in this conversation object
      */
-    update({name, nodes, init_phrases})
+    update({name, nodes, keyWords, variables})
     {
-        this.init_phrases = init_phrases;
+        this.keyWords = keyWords;
         this.name = name;
-        this.nodes = [];
-        if (nodes)
-        {
-            for (let n of nodes)
-            {
-                this.nodes.push(new Conv_Node(n));
-            }
-        }
+        this.nodes = nodes.map(p => new ConversationNode(p));
+        this.variables = variables.map(p => new Variable(p));
+    }
+
+    /**
+     * Gets the node with the given name
+     */
+    getNode(name)
+    {
+        return this.nodes.find(p => p.name === name);
+    }
+
+    /**
+     * Gets the variable with the given name
+     */
+    getVariable(name)
+    {
+        return this.variables.find(p => p.name === name);
+    }
+}
+
+/**
+ * A name/value pair inferred from conversation
+ */
+class Variable
+{
+    constructor({name, value=null})
+    {
+        this.update({name, value});
+    }
+
+    update({name, value})
+    {
+        this.name = name;
+        this.value = value;
     }
 }
 
 /**
  * prompts: Set of prompts to give user when they arrive
- * key_words: Set of keywords that indicate the user should go here
+ * keyWords: Set of keywords that indicate the user should go here
  * text:    What the node 'says' aloud after prompts are complete
- * links:   Indices of nodes that the user can go to next
+ * targets:   Names of nodes that the user can go to next
  */
-class Conv_Node
+class ConversationNode
 {
-    constructor(obj)
+    constructor({name, text='', keyWords=[], targets=[], prompts=[], variables=[]})
     {
-        this.update({...obj});
+        this.update({name, text, keyWords, targets, prompts, variables});
     }
 
-    update({text, key_words, links, prompts})
+    update({name, text, keyWords, targets, prompts, variables})
     {
+        this.name = name;
         this.text = text;
-        this.key_words = key_words;
-        this.links = links
-        this.prompts = [];
-        if (prompts)
-        {
-            for (let p of prompts)
-            {
-                this.prompts.push(new Prompt(p));
-            }
-        }
+        this.keyWords = keyWords;
+        this.targets = targets;
+        this.prompts = prompts.map(p => new Prompt(p));
+        this.variables = variables.map(p => new Variable(p));
+    }
+
+    getPrompt(name)
+    {
+        return this.prompts.find(p => p.name === name);
+    }
+
+    getVariable(name)
+    {
+        return this.variables.find(p => p.name === name);
     }
 }
 
@@ -66,13 +97,14 @@ class Conv_Node
  */
 class Prompt
 {
-    constuctor(obj)
+    constuctor({name, text='', target=null})
     {
-        this.update({...obj});
+        this.update({name, text, target});
     }
 
-    update({text, target})
+    update({name, text, target})
     {
+        this.name = name;
         this.text = text;
         this.target = target;
     }
@@ -80,6 +112,6 @@ class Prompt
 
 module.exports = {
     Conversation,
-    Conv_Node,
+    ConversationNode,
     Prompt,
 };

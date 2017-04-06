@@ -3,7 +3,7 @@
  */
 const createEvent = (event, args) =>
 {
-    return Object.assign({}, {type: event.type}, args);
+    return Object.assign({}, {type: event.type}, {args});
 };
 
 /**

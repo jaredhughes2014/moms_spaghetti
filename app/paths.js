@@ -24,6 +24,7 @@ const paths = {
         get: 'get',
         add: 'add',
         save: 'save',
+        edit: 'edit',
     }),
 };
 module.exports = paths;

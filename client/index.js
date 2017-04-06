@@ -10,6 +10,7 @@ import reducers from './state/reducers';
 // Import Views Here
 import AppSkeleton from './views/general/AppSkeleton';
 import LandingPage from './views/landing/LandingPage';
+import ConversationEditor from './views/conversation/ConversationEditor';
 
 const reducer = combineReducers(reducers);
 let store = createStore(reducer);
@@ -25,6 +26,9 @@ const MomsSpaghettiRouter = () =>
                 <Route path={paths.index} component={AppSkeleton}>
                     /* Home Page */
                     <IndexRoute component={LandingPage}/>
+
+                    /* Edit Page */
+                    <Route path={paths.conversations.edit} component={ConversationEditor}/>
                 </Route>
             </Router>
         </Provider>

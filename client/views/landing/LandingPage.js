@@ -1,14 +1,16 @@
 
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {browserHistory} from 'react-router';
 
 import api from '../../api';
+import paths from '../../../app/paths';
 import ev from '../../state/events';
 
 import ConversationBox from './ConversationBox';
 import FlowList from '../general/FlowList';
 import LowerBar from './LowerBar';
-import NewConversationModal from './NewConversationModal';
+import NameModal from '../general/NameModal';
 
 
 const events = ev.conversations;
@@ -26,8 +28,10 @@ class LandingPage extends React.Component
             newOpen: false,
             loaded: false,
         };
+
         this.selectConversation = this.selectConversation.bind(this);
         this.toggleNewModal = this.toggleNewModal.bind(this);
+        this.submitNewConversation = this.submitNewConversation.bind(this);
     }
 
     render()
@@ -80,7 +84,7 @@ class LandingPage extends React.Component
     {
         return (
             <div id="landing-page">
-                <NewConversationModal onClose={this.toggleNewModal}/>
+                <NameModal onSubmit={this.submitNewConversation} onCancel={this.toggleNewModal}/>
             </div>
         );
     }
@@ -91,8 +95,8 @@ class LandingPage extends React.Component
     selectConversation(name)
     {
         api.fetchConversation(name, (response) => {
-            console.log(response);
             this.props.editConversation(response.conversation)
+            browserHistory.push(paths.conversations.edit);
         });
     }
 
@@ -102,6 +106,14 @@ class LandingPage extends React.Component
     toggleNewModal()
     {
         this.setState({newOpen: !this.state.newOpen})
+    }
+
+    submitNewConversation(name)
+    {
+        api.addConversation(name, (response) => {
+            this.props.addConversation(response.conversation);
+            this.toggleNewModal();
+        })
     }
 }
 
@@ -123,6 +135,7 @@ const mapDispatchToProps = (dispatch) =>
     return {
         setConversations: (conversations) => dispatch(events.setConversations.create(conversations)),
         editConversation: (conversation) => dispatch(events.editConversation.create(conversation)),
+        addConversation: (conversation) => dispatch(events.addConversation.create(conversation)),
     };
 };
 

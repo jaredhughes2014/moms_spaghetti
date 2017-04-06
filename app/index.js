@@ -39,7 +39,6 @@ app.get(paths.conversationRoot, (req, res) => {
  * Finds and returns the conversation with the provided name
  */
 app.post(paths.conversations.get, (req, res) => {
-    console.log(req.body);
     db.getConversation(req.body.name, (response) => {
         res.send(response);
     })

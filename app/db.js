@@ -66,8 +66,25 @@ const conversationNames = (onComplete) =>
     onComplete({conversations: conversations.map(p => p.name)});
 };
 
+/**
+ * Saves the given conversation into the database
+ */
+const saveConversation = (conversation, onComplete) =>
+{
+    getConversation(conversation.name, (c) => {
+        if (c) {
+            c.update(conversation);
+            onComplete({success: true});
+        }
+        else {
+            warn(`No conversation named ${conversation.name} exists`, onComplete);
+        }
+    });
+};
+
 module.exports = {
     newConversation,
     getConversation,
     conversationNames,
+    saveConversation,
 };
