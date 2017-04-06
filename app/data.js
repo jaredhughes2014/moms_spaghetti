@@ -1,0 +1,27 @@
+
+/**
+ * Collection of nodes, triggers, and variables used to simulate a conversation
+ */
+class Conversation
+{
+    /**
+     * Creates a new conversation with a name
+     * @param name
+     */
+    constructor(name)
+    {
+        this.update({name});
+    }
+
+    /**
+     * Updates all data in this conversation object
+     */
+    update({name})
+    {
+        this.name = name;
+    }
+}
+
+module.exports = {
+    Conversation,
+};
