@@ -10,7 +10,7 @@ class Conversation
      */
     constructor(name)
     {
-        this.update(name);
+        this.update({name});
     }
 
     /**
@@ -18,14 +18,8 @@ class Conversation
      */
     update({name})
     {
-        this.m_name = name;
+        this.name = name;
     }
-
-    /**
-     * The name of the conversation
-     */
-    get name() { return this.m_name; }
-    set name(val) { this.m_name = val; }
 }
 
 module.exports = {

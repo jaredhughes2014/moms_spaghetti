@@ -38,6 +38,7 @@ const newConversation = (name, onComplete) =>
         else {
             let c = new data.Conversation(name);
             conversations.push(c);
+            console.log(conversations);
             onComplete({conversation: c});
         }
     });

@@ -34,7 +34,6 @@ class NewConversationModal extends React.Component
 
     /**
      * Updates the text in the text box
-     * @param source
      */
     updateText(event)
     {
