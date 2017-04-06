@@ -10,7 +10,7 @@ class Conversation
      */
     constructor(obj)
     {
-        this.update(obj);
+        this.update({...obj});
     }
 
     /**
@@ -41,7 +41,7 @@ class Conv_Node
 {
     constructor(obj)
     {
-        this.update(obj);
+        this.update({...obj});
     }
 
     update({text, key_words, links, prompts})
@@ -68,7 +68,7 @@ class Prompt
 {
     constuctor(obj)
     {
-        this.update(obj);
+        this.update({...obj});
     }
 
     update({text, target})
