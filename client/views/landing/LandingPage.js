@@ -90,7 +90,10 @@ class LandingPage extends React.Component
      */
     selectConversation(name)
     {
-        console.log(`Selected ${name}`);
+        api.fetchConversation(name, (response) => {
+            console.log(response);
+            this.props.editConversation(response.conversation)
+        });
     }
 
     /**
@@ -119,6 +122,7 @@ const mapDispatchToProps = (dispatch) =>
 {
     return {
         setConversations: (conversations) => dispatch(events.setConversations.create(conversations)),
+        editConversation: (conversation) => dispatch(events.editConversation.create(conversation)),
     };
 };
 

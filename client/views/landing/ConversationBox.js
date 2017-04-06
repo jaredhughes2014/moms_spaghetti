@@ -6,7 +6,7 @@ import React from 'react';
 const ConversationBox = ({name, onClick}) =>
 {
     return (
-        <div className="landing-conversation-box" onClick={onClick}>
+        <div className="landing-conversation-box" onClick={() => onClick(name)}>
             <div>
                 {name}
             </div>

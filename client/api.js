@@ -67,6 +67,12 @@ const addConversation = (name, onLoaded) =>
     sendRequest(methods.post, paths.conversations.add, onLoaded, {name});
 };
 
+const fetchConversation = (name, onLoaded) =>
+{
+    console.log(name);
+    sendRequest(methods.post, paths.conversations.get, onLoaded, {name});
+};
+
 /**
  * Saves the given conversation in the "database"
  */
@@ -79,4 +85,5 @@ export default {
     getConversations,
     addConversation,
     saveConversation,
+    fetchConversation,
 };

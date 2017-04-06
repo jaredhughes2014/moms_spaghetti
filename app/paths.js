@@ -21,7 +21,7 @@ const paths = {
     index: '/',
     conversationRoot: '/conversations',
     conversations: extendPaths('/conversations/', {
-        edit: 'edit',
+        get: 'get',
         add: 'add',
         save: 'save',
     }),

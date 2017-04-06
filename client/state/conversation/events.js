@@ -17,7 +17,16 @@ const addConversation = util.formatEvent(
     (conversation) => util.createEvent(addConversation, conversation)
 );
 
+/**
+ * Set the conversation to edit
+ */
+const editConversation = util.formatEvent(
+    'EDIT_CONVERSATION',
+    (conversation) => util.createEvent(editConversation, conversation)
+);
+
 export default {
     setConversations,
     addConversation,
+    editConversation,
 };
