@@ -29,14 +29,14 @@ const err = (message, onComplete) =>
 /**
  * Generates a new conversation with the given name
  */
-const newConversation = (name, onComplete) =>
+const newConversation = (conv, onComplete) =>
 {
-    getConversation(name, (c) => {
+    getConversation(conv.name, (c) => {
         if (c.conversation) {
             warn("Conversation already exists", onComplete);
         }
         else {
-            let c = new data.Conversation(name);
+            let c = new data.Conversation(conv);
             conversations.push(c);
             onComplete({conversation: c});
         }

@@ -21,7 +21,7 @@ app.listen(process.env.PORT || 8080, () => {
 });
 
 app.post(paths.conversations.add, (req, res) => {
-    db.newConversation(req.body.name, (response) => {
+    db.newConversation(req.body, (response) => {
         res.send(response);
     })
 });
