@@ -1,19 +1,15 @@
 import React from 'react';
 import {render} from 'react-dom';
 import {Router, Route, IndexRoute, browserHistory} from 'react-router';
-import paths from '../app/paths';
-import {createStore, combineReducers} from 'redux';
-import {Provider} from 'react-redux';
-import reducers from './state/reducers';
-
+import routes from './routes';
 
 // Import Views Here
-import AppSkeleton from './views/general/AppSkeleton';
-import LandingPage from './views/landing/LandingPage';
-import ConversationEditor from './views/conversation/ConversationEditor';
+import MomsSpaghettiProvider from './MomsSpaghettiProvider';
+import AppSkeleton from './views2/AppSkeleton';
 
-const reducer = combineReducers(reducers);
-let store = createStore(reducer);
+import LandingPage from './views2/LandingPage';
+import ConversationEditView from './views2/ConversationEditView';
+
 
 /**
  * Routes all the things
@@ -21,17 +17,14 @@ let store = createStore(reducer);
 const MomsSpaghettiRouter = () =>
 {
     return (
-        <Provider store={store}>
+        <MomsSpaghettiProvider>
             <Router history={browserHistory}>
-                <Route path={paths.index} component={AppSkeleton}>
-                    /* Home Page */
+                <Route path={routes.index} component={AppSkeleton}>
                     <IndexRoute component={LandingPage}/>
-
-                    /* Edit Page */
-                    <Route path={paths.conversations.edit} component={ConversationEditor}/>
+                    <Route component={ConversationEditView}/>
                 </Route>
             </Router>
-        </Provider>
+        </MomsSpaghettiProvider>
     );
 };
 

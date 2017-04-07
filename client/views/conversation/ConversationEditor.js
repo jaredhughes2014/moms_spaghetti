@@ -7,9 +7,9 @@ import {connect} from 'react-redux';
 import paths from '../../../app/paths';
 
 import NodeSelector from './NodeSelector';
-import FlowList from '../general/FlowList';
-import VariableView from '../general/VariableView';
-import NameModal from '../general/NameModal';
+import FlowList from '../../views2/general/FlowList';
+import VariableView from '../../views2/general/VariableView';
+import NameModal from '../../views2/general/NameModal';
 
 
 /**

@@ -3,17 +3,14 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 
-import api from '../../api';
-import paths from '../../../app/paths';
-import ev from '../../state/events';
+import paths from '../../app/paths';
+import events from '../events';
 
-import ConversationBox from './ConversationBox';
-import FlowList from '../general/FlowList';
-import LowerBar from './LowerBar';
-import NameModal from '../general/NameModal';
+import ConversationBox from './landing/ConversationBox';
+import FlowList from '../views2/general/FlowList';
+import LowerBar from './landing/LowerBar';
+import NameModal from '../views2/general/NameModal';
 
-
-const events = ev.conversations;
 
 /**
  * Page where the landing be do
@@ -133,7 +130,7 @@ const mapStateToProps = (state) =>
 const mapDispatchToProps = (dispatch) =>
 {
     return {
-        setConversations: (conversations) => dispatch(events.setConversations.create(conversations)),
+        setConversations: (conversations) => dispatch(events(conversations)),
         editConversation: (conversation) => dispatch(events.editConversation.create(conversation)),
         addConversation: (conversation) => dispatch(events.addConversation.create(conversation)),
     };
