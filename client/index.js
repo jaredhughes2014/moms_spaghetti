@@ -21,7 +21,7 @@ const MomsSpaghettiRouter = () =>
             <Router history={browserHistory}>
                 <Route path={routes.index} component={AppSkeleton}>
                     <IndexRoute component={LandingPage}/>
-                    <Route component={ConversationEditView}/>
+                    <Route path={routes.conversation} component={ConversationEditView}/>
                 </Route>
             </Router>
         </MomsSpaghettiProvider>

@@ -1,4 +1,7 @@
 
+import {put, call} from 'redux-saga/effects';
+import api from '../api2';
+
 const defaultState = {
     available: [],
     loading: false,
@@ -65,10 +68,20 @@ const reducer = (state=defaultState, event) =>
     }
 };
 
+function* addConversation(event)
+{
+
+}
+
+function* removeConversation(event)
+{
+
+}
+
 /**
  * Used to combine all state definitions into a single export
  */
-const api = {
+const exports = {
     events: {
         setConversations,
         addConversation,
@@ -78,4 +91,4 @@ const api = {
     },
     reducer
 };
-export default api;
+export default exports;

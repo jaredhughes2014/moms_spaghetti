@@ -11,7 +11,7 @@ const defaultState = {
  */
 const setName = {
     type: 'SET_CONVERSATION_NAME',
-    expectedArgs: ['name'],
+    expectedArgs: ['oldName', 'newName'],
 };
 
 /**
