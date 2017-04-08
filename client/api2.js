@@ -1,5 +1,6 @@
 
 import paths from '../app/paths';
+import 'whatwg-fetch';
 
 /**
  * Sets of executable HTTP methods
@@ -14,24 +15,33 @@ const http = {
  */
 const formatFetch = (path, method, data=null) =>
 {
-    console.log('Fetch NYI')
+    let body = data == null ? {} : data;
+    return fetch(
+        path,
+        {
+            method,
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(body)
+        }
+    ).then(response => response.json());
 };
 
 
 const api = {
+
+    // Conversations
     addConversation: (name) => formatFetch(paths.conversations.add, http.post, {
         name,
     }),
     removeConversation: (name) => formatFetch(paths.conversations.remove, http.post, {
         name,
     }),
-
     fetchConversations: () => formatFetch(paths.conversations.all, http.get),
     getConversation: (name) => formatFetch(paths.conversations.get, http.get, {
         name,
     }),
 
-    // Conversations
+    // Conversation Editing
 
     updateConversationName: (oldName, newName) => formatFetch(paths.conversation.updateName, http.post, {
         oldName,
@@ -80,7 +90,6 @@ const api = {
         conversationName,
         nodeName,
     }),
-
 
     addNodePrompt: (conversationName, nodeName, promptName) => formatFetch(paths.node.addPrompt, http.post, {
         conversationName,

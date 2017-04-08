@@ -5,7 +5,7 @@ const BUILD_DIR = path.resolve(__dirname, 'public/');
 const SOURCE_DIR = path.resolve(__dirname, 'client/');
 
 var config = {
-    entry: path.join(SOURCE_DIR, 'index.js'),
+    entry: ['whatwg-fetch', path.join(SOURCE_DIR, 'index.js')],
 
     output: {
         path: path.join(BUILD_DIR, 'js'),

@@ -19,12 +19,33 @@ const extendPaths = (root, endpoints) =>
 
 const paths = {
     index: '/',
-    conversationRoot: '/conversations',
     conversations: extendPaths('/conversations/', {
-        get: 'get',
+        all: 'all',
         add: 'add',
-        save: 'save',
-        edit: 'edit',
+        remove: 'remove',
+        get: 'get',
+    }),
+
+    conversation: extendPaths('/conversation/edit/', {
+        updateName: 'updateName',
+        addNode: 'addNode',
+        removeNode: 'removeNode',
+        addTrigger: 'addTrigger',
+        removeTrigger: 'removeTrigger',
+        addVariable: 'addVariable',
+        removeVariable: 'removeVariable'
+    }),
+
+    node: extendPaths('/node/edit/', {
+        updateName: 'updateName',
+        updateText: 'updateText',
+        addPrompt: 'addPrompt',
+        removePrompt: 'removePrompt',
+        updatePrompt: 'updatePrompt',
+        addKeyWord: 'addKeyWord',
+        removeKeyWord: 'removeKeyWord',
+        addTarget: 'addTarget',
+        removeTarget: 'removeTarget'
     }),
 };
 module.exports = paths;

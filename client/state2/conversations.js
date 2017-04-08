@@ -1,5 +1,6 @@
 
 import {put, call} from 'redux-saga/effects';
+import {takeEvery} from 'redux-saga';
 import api from '../api2';
 
 const defaultState = {
@@ -28,7 +29,7 @@ const addConversation = {
  * Event executed to remove a conversation from the list of available conversations. This is an asynchronous
  * action
  */
-const deleteConversation = {
+const removeConversation = {
     type: 'DELETE_CONVERSATION',
     expectedArgs: ['name'],
 };
@@ -68,14 +69,64 @@ const reducer = (state=defaultState, event) =>
     }
 };
 
-function* addConversation(event)
+/**
+ * Asynchronous event for adding a conversation
+ */
+function* addConversationHandler(event)
 {
+    const {name} = event.args;
 
+    try {
+        if (name) {
+            const {conversation} = yield call(api.addConversation, name);
+            yield put({type: setConversations.type, args: {conversation}});
+        }
+    }
+    catch (err) {
+        console.error(err);
+    }
 }
 
-function* removeConversation(event)
+/**
+ * Asynchronous event for removing a conversation
+ */
+function* removeConversationHandler(event)
 {
+    const {name} = event.args;
 
+    try {
+        if (name) {
+            const {conversations} = yield call(api.removeConversation, name);
+            yield put({type: setConversations.type, args: {conversations}});
+        }
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Asynchronous event for fetching all conversations
+ */
+function* fetchConversationsHandler()
+{
+    try {
+        const {conversations} = yield call(api.fetchConversations);
+        yield put({type: setConversations.type, args: {conversations}});
+    }
+    catch(err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Assigns each asynchronous event to its handler function.
+ */
+function* saga()
+{
+    yield takeEvery(addConversation.type, addConversationHandler);
+    yield takeEvery(removeConversation.type, removeConversationHandler);
+    yield takeEvery(fetchConversations.type, fetchConversationsHandler);
 }
 
 /**
@@ -85,10 +136,11 @@ const exports = {
     events: {
         setConversations,
         addConversation,
-        deleteConversation,
+        removeConversation,
         fetchConversations,
         waitForConversations,
     },
-    reducer
+    reducer,
+    saga,
 };
 export default exports;
