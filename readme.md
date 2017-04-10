@@ -10,6 +10,6 @@ If you had mom's spaghetti, would you capture it, or just let it slip. Yo.
 ```
 npm run globalize
 npm install
-rpm run rebuild
+npm run rebuild
 ```
 3. Navigate to your localhost at port 8080 [local host]{http://localhost:8080}

@@ -32,11 +32,11 @@ function handle_inventory(body){
     var response;
 
     if (body.includes('reset')) {
-        response = 'The count is now at ' + incr_count();
-    }
-    else {
         init_inventory();
         response = 'The count has been reset';
+    }
+    else {
+        response = 'The count is now at ' + incr_count();
     }
 
     return response;
