@@ -39,6 +39,7 @@ const paths = {
     node: extendPaths('/node/edit/', {
         updateName: 'updateName',
         updateText: 'updateText',
+        get: 'getNode',
         addPrompt: 'addPrompt',
         removePrompt: 'removePrompt',
         updatePrompt: 'updatePrompt',

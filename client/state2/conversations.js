@@ -1,6 +1,6 @@
 
 import {put, call} from 'redux-saga/effects';
-import {takeEvery} from 'redux-saga';
+import {takeEvery, takeLatest} from 'redux-saga';
 import api from '../api2';
 
 const defaultState = {
@@ -78,6 +78,7 @@ function* addConversationHandler(event)
 
     try {
         if (name) {
+            yield put(wait());
             const {conversation} = yield call(api.addConversation, name);
             yield put({type: setConversations.type, args: {conversation}});
         }
@@ -96,6 +97,7 @@ function* removeConversationHandler(event)
 
     try {
         if (name) {
+            yield put(wait());
             const {conversations} = yield call(api.removeConversation, name);
             yield put({type: setConversations.type, args: {conversations}});
         }
@@ -111,6 +113,7 @@ function* removeConversationHandler(event)
 function* fetchConversationsHandler()
 {
     try {
+        yield put(wait());
         const {conversations} = yield call(api.fetchConversations);
         yield put({type: setConversations.type, args: {conversations}});
     }
@@ -120,13 +123,21 @@ function* fetchConversationsHandler()
 }
 
 /**
+ * Returns a wait event object that puts the conversations state in a waiting state
+ */
+const wait = () =>
+{
+    return {type: waitForConversations.type, args: {}};
+};
+
+/**
  * Assigns each asynchronous event to its handler function.
  */
 function* saga()
 {
     yield takeEvery(addConversation.type, addConversationHandler);
     yield takeEvery(removeConversation.type, removeConversationHandler);
-    yield takeEvery(fetchConversations.type, fetchConversationsHandler);
+    yield takeLatest(fetchConversations.type, fetchConversationsHandler);
 }
 
 /**

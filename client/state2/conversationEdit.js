@@ -1,4 +1,8 @@
 
+import {put, call} from 'redux-saga/effects';
+import {takeEvery, takeLatest} from 'redux-saga';
+import api from '../api2';
+
 const defaultState = {
     name: "",
     nodes: [],
@@ -35,7 +39,7 @@ const setConversation = {
  */
 const addNode = {
     type: 'ADD_CONVERSATION_NODE',
-    expectedArgs: ['name'],
+    expectedArgs: ['conversationName', 'nodeName'],
 };
 
 /**
@@ -43,7 +47,7 @@ const addNode = {
  */
 const removeNode = {
     type: 'REMOVE_CONVERSATION_NODE',
-    expectedArgs: ['name'],
+    expectedArgs: ['conversationName', 'nodeName'],
 };
 
 /**
@@ -59,7 +63,7 @@ const setNodes = {
  */
 const addTrigger = {
     type: 'ADD_CONVERSATION_TRIGGER',
-    expectedArgs: ['word'],
+    expectedArgs: ['conversationName', 'word'],
 };
 
 /**
@@ -67,7 +71,7 @@ const addTrigger = {
  */
 const removeTrigger = {
     type: 'REMOVE_CONVERSATION_TRIGGER',
-    expectedArgs: ['word'],
+    expectedArgs: ['conversationName', 'word'],
 };
 
 /**
@@ -83,7 +87,7 @@ const setTriggers = {
  */
 const addVariable = {
     type: 'ADD_CONVERSATION_VARIABLE',
-    expectedArgs: ['name'],
+    expectedArgs: ['conversationName', 'variableName'],
 };
 
 /**
@@ -91,7 +95,7 @@ const addVariable = {
  */
 const removeVariable = {
     type: 'REMOVE_CONVERSATION_VARIABLE',
-    expectedArgs: ['name'],
+    expectedArgs: ['conversationName', 'variableName'],
 };
 
 /**
@@ -134,9 +138,156 @@ const reducer = (state=defaultState, event) =>
 };
 
 /**
+ * Sets the name of the edited conversation
+ */
+function* setNameHandler(event)
+{
+    const {oldName, newName} = event.args;
+
+    try {
+        const response = yield call(api.updateConversationName, oldName, newName);
+        yield put({type: setConversation.type, args: response})
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Loads the conversation with the given name
+ */
+function* loadConversationHandler(event)
+{
+    const {name} = event.args;
+
+    try {
+        const response = yield call(api.getConversation, name);
+        yield put({type: setConversation.type, args: response})
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Adds a node to the edited conversation
+ */
+function* addNodeHandler(event)
+{
+    const {conversationName, nodeName} = event.args;
+
+    try {
+        const response = yield call(api.addConversationNode, conversationName, nodeName);
+        yield put({type: setConversation.type, args: response})
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Removes a conversation node from the edited conversation
+ */
+function* removeNodeHandler(event)
+{
+    const {conversationName, nodeName} = event.args;
+
+    try {
+        const response = yield call(api.removeConversationNode, conversationName, nodeName);
+        yield put({type: setConversation.type, args: response})
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Adds a trigger word to the edited conversation
+ */
+function* addTriggerHandler(event)
+{
+    const {conversationName, word} = event.args;
+
+    try {
+        const response = yield call(api.addConversationTrigger, conversationName, word);
+        yield put({type: setConversation.type, args: response})
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Removes a trigger word from the edited conversation
+ */
+function* removeTriggerHandler(event)
+{
+    const {conversationName, word} = event.args;
+
+    try {
+        const response = yield call(api.removeConversationTrigger, conversationName, word);
+        yield put({type: setConversation.type, args: response})
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Adds a variable to the edited conversation
+ */
+function* addVariableHandler(event)
+{
+    const {conversationName, variableName} = event.args;
+
+    try {
+        const response = yield call(api.addConversationVariable, conversationName, variableName);
+        yield put({type: setConversation.type, args: response});
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Removes a variable from the conversation
+ */
+function* removeVariableHandler(event)
+{
+    const {conversationName, variableName} = event.args;
+
+    try {
+        const response = yield call(api.removeConversationVariable, conversationName, variableName);
+        yield put({type: setConversation.type, args: response})
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Maps every saga handler function to its event
+ */
+function* saga()
+{
+    yield takeEvery(setName.type, setNameHandler);
+    yield takeEvery(loadConversation.type, loadConversationHandler);
+
+    yield takeEvery(addNode.type, addNodeHandler);
+    yield takeEvery(removeNode.type, removeNodeHandler);
+
+    yield takeEvery(addTrigger.type, addTriggerHandler);
+    yield takeEvery(removeTrigger.type, removeTriggerHandler);
+
+    yield takeEvery(addVariable.type, addVariableHandler);
+    yield takeEvery(removeVariable.type, removeVariableHandler);
+}
+
+
+/**
  * Used to combine all state definitions into a single export
  */
-const api = {
+const exports = {
     events: {
         setName,
         loadConversation,
@@ -151,6 +302,7 @@ const api = {
         removeVariable,
         setVariables,
     },
-    reducer
+    reducer,
+    saga,
 };
-export default api;
+export default exports;

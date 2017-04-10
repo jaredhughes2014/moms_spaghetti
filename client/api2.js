@@ -1,6 +1,5 @@
 
 import paths from '../app/paths';
-import 'whatwg-fetch';
 
 /**
  * Sets of executable HTTP methods
@@ -13,17 +12,27 @@ const http = {
 /**
  * Performs a fetch from the database
  */
-const formatFetch = (path, method, data=null) =>
+const formatFetch = (path, method, data = null) =>
 {
-    let body = data == null ? {} : data;
+    let body = data == null ? undefined : data;
     return fetch(
         path,
         {
             method,
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(body)
+            body: body ? JSON.stringify(body) : undefined,
         }
-    ).then(response => response.json());
+    )
+        .then(response => response.json())
+        .then(json => {
+            if (json.error) {
+                console.error(json.error);
+            }
+            else if (json.warning) {
+                console.warn(json.warning);
+            }
+            return json;
+        });
 };
 
 
@@ -37,7 +46,7 @@ const api = {
         name,
     }),
     fetchConversations: () => formatFetch(paths.conversations.all, http.get),
-    getConversation: (name) => formatFetch(paths.conversations.get, http.get, {
+    getConversation: (name) => formatFetch(paths.conversations.get, http.post, {
         name,
     }),
 
@@ -56,13 +65,13 @@ const api = {
         nodeName,
     }),
 
-    addConversationTrigger: (conversationName, triggerName) => formatFetch(paths.conversation.addTrigger, http.post, {
+    addConversationTrigger: (conversationName, word) => formatFetch(paths.conversation.addTrigger, http.post, {
         conversationName,
-        triggerName,
+        word,
     }),
-    removeConversationTrigger: (conversationName, triggerName) => formatFetch(paths.conversation.removeTrigger, http.post, {
+    removeConversationTrigger: (conversationName, word) => formatFetch(paths.conversation.removeTrigger, http.post, {
         conversationName,
-        triggerName,
+        word,
     }),
 
     addConversationVariable: (conversationName, variableName) => formatFetch(paths.conversation.addVariable, http.post, {
@@ -86,7 +95,7 @@ const api = {
         nodeName,
         text,
     }),
-    getNode: (conversationName, nodeName) => formatFetch(paths.node.get, http.get, {
+    getNode: (conversationName, nodeName) => formatFetch(paths.node.get, http.post, {
         conversationName,
         nodeName,
     }),

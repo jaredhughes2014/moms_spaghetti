@@ -33,6 +33,7 @@ app.post(paths.conversations.add, (req, res) => {
     }
 });
 
+
 /**
  * Removes an existing conversation from the database
  */
@@ -47,7 +48,7 @@ app.post(paths.conversations.remove, (req, res) => {
 /**
  * Gets a specific conversation from the database
  */
-app.get(paths.conversations.get, (req, res) => {
+app.post(paths.conversations.get, (req, res) => {
     const {name} = req.body;
 
     if (validateBodyParameters(res, name)) {
@@ -101,9 +102,9 @@ app.post(paths.conversation.removeNode, (req, res) => {
  *
  */
 app.post(paths.conversation.addTrigger, (req, res) => {
-    const {conversationName, triggerName} = req.body;
+    const {conversationName, word} = req.body;
 
-    if (validateBodyParameters(res, conversationName, triggerName)) {
+    if (validateBodyParameters(res, conversationName, word)) {
         res.send({testSuccess: true});
     }
 });
@@ -112,9 +113,9 @@ app.post(paths.conversation.addTrigger, (req, res) => {
  *
  */
 app.post(paths.conversation.removeTrigger, (req, res) => {
-    const {conversationName, triggerName} = req.body;
+    const {conversationName, word} = req.body;
 
-    if (validateBodyParameters(res, conversationName, triggerName)) {
+    if (validateBodyParameters(res, conversationName, word)) {
         res.send({testSuccess: true});
     }
 });
@@ -161,6 +162,17 @@ app.post(paths.node.updateText, (req, res) => {
     const {conversationName, nodeName, text} = req.body;
 
     if (validateBodyParameters(res, conversationName, nodeName, text)) {
+        res.send({testSuccess: true});
+    }
+});
+
+/**
+ *
+ */
+app.post(paths.node.get, (req, res) => {
+    const {conversationName, nodeName} = req.body;
+
+    if (validateBodyParameters(res, conversationName, nodeName)) {
         res.send({testSuccess: true});
     }
 });

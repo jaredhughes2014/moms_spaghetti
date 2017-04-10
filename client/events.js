@@ -11,13 +11,12 @@ import nodeEdit from './state2/nodeEdit';
 const transformEventDefinition = (event) =>
 {
     return (args) => {
-
         if (event.expectedArgs) {
-            let missing = event.expectedArgs.map(p => args[p] == undefined);
+            let missing = event.expectedArgs.filter(p => args[p] == undefined);
 
             if (missing.length > 0) {
 
-                let message = "Missing expected arguments: ";
+                let message = `Missing expected arguments from ${event.type}: `;
                 for (let i = 0; i < missing.length - 1; ++i) {
                     message += missing[i] + ', ';
                 }
@@ -49,8 +48,8 @@ const formatEventObject = (events) =>
 };
 
 const api = {
-    conversations: formatEventObject(conversations),
-    conversationEdit: formatEventObject(conversationEdit),
-    nodeEdit: formatEventObject(nodeEdit),
+    conversations: formatEventObject(conversations.events),
+    conversationEdit: formatEventObject(conversationEdit.events),
+    nodeEdit: formatEventObject(nodeEdit.events),
 };
 export default api;

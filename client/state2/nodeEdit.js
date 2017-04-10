@@ -1,4 +1,8 @@
 
+import {put, call} from 'redux-saga/effects';
+import {takeEvery, takeLatest} from 'redux-saga';
+import api from '../api2';
+
 const defaultState = {
     name: "",
     keyWords: [],
@@ -8,11 +12,11 @@ const defaultState = {
 };
 
 /**
- * Sets the name of the current conversation. This is an asynchronous action
+ * Sets the name of the current conversation node. This is an asynchronous action
  */
 const setName = {
     type: 'SET_CONVERSATION_NODE_NAME',
-    expectedArgs: ['name'],
+    expectedArgs: ['conversationName', 'oldName', 'newName'],
 };
 
 /**
@@ -20,7 +24,7 @@ const setName = {
  */
 const setText = {
     type: 'SET_CONVERSATION_NODE_TEXT',
-    expectedArgs: ['text']
+    expectedArgs: ['conversationName', 'nodeName', 'text']
 };
 
 /**
@@ -60,7 +64,7 @@ const removePrompt = {
  */
 const updatePrompt = {
     type: 'UPDATE_NODE_PROMPT',
-    expectedArgs: ['conversationName', 'nodeName', 'promptName', 'variableSet', 'text']
+    expectedArgs: ['conversationName', 'nodeName', 'promptName', 'variableSet', 'promptText']
 };
 
 /**
@@ -74,17 +78,17 @@ const setPrompts = {
 /**
  * Adds a keyword to the edited node. This is an asynchronous action
  */
-const addKeyword = {
+const addKeyWord = {
     type: 'ADD_NODE_KEYWORD',
-    expectedArgs: ['word'],
+    expectedArgs: ['conversationName', 'nodeName', 'keyWord'],
 };
 
 /**
  * Removes a keyword from the edited node. This is an asynchronous action
  */
-const removeKeyword = {
+const removeKeyWord = {
     type: 'REMOVE_NODE_KEYWORD',
-    expectedArgs: ['word'],
+    expectedArgs: ['conversationName', 'nodeName', 'keyWord'],
 };
 
 /**
@@ -100,7 +104,7 @@ const setKeywords = {
  */
 const addTarget = {
     type: 'ADD_TARGET_NODE',
-    expectedArgs: ['name'],
+    expectedArgs: ['conversationName', 'nodeName', 'targetName'],
 };
 
 /**
@@ -108,7 +112,7 @@ const addTarget = {
  */
 const removeTarget = {
     type: 'REMOVE_TARGET_NODE',
-    expectedArgs: ['name'],
+    expectedArgs: ['conversationName', 'nodeName', 'targetName'],
 };
 
 /**
@@ -150,9 +154,189 @@ const reducer = (state=defaultState, event) =>
 };
 
 /**
+ * Sets the name of the node being edited
+ */
+function* setNameHandler(event)
+{
+    const {conversationName, oldName, newName} = event.args;
+
+    try {
+        const response = yield call(api.updateNodeName, conversationName, oldName, newName);
+        yield put({type: setNode.type, args: response})
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Sets the text of the node being edited
+ */
+function* setTextHandler(event)
+{
+    const {conversationName, nodeName, text} = event.args;
+
+    try {
+        const response = yield call(api.updateNodeText, conversationName, nodeName, text);
+        yield put({type: setNode.type, args: response})
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Fetches a particular node from a conversation
+ */
+function* loadNodeHandler(event)
+{
+    const {conversationName, nodeName} = event.args;
+
+    try {
+        const response = yield call(api.getNode, conversationName, nodeName);
+        yield put({type: setNode.type, args: response})
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Adds a prompt to the edited node
+ */
+function* addPromptHandler(event)
+{
+    const {conversationName, nodeName, promptName} = event.args;
+
+    try {
+        const {prompts} = yield call(api.addNodePrompt, conversationName, nodeName, promptName);
+        yield put({type: setPrompts.type, args: {prompts}})
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Removes a prompt from the edited node
+ */
+function* removePromptHandler(event)
+{
+    const {conversationName, nodeName, promptName} = event.args;
+
+    try {
+        const {prompts} = yield call(api.removeNodePrompt, conversationName, nodeName, promptName);
+        yield put({type: setPrompts.type, args: {prompts}})
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Updates the contents of a prompt within the edited node
+ */
+function* updatePromptHandler(event)
+{
+    const {conversationName, nodeName, promptName, promptText, variableSet} = event.args;
+
+    try {
+        const {prompts} = yield call(api.updateNodePrompt, conversationName, nodeName, promptName, promptText, variableSet);
+        yield put({type: setPrompts.type, args: {prompts}})
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Adds a key word to the edited node
+ */
+function* addKeyWordHandler(event)
+{
+    const {conversationName, nodeName, keyWord} = event.args;
+
+    try {
+        const {keyWords} = yield call(api.addNodeKeyWord, conversationName, nodeName, keyWord);
+        yield put({type: setKeywords.type, args: {keyWords}})
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Removes a key word to the edited node
+ */
+function* removeKeyWordHandler(event)
+{
+    const {conversationName, nodeName, keyWord} = event.args;
+
+    try {
+        const {keyWords} = yield call(api.removeNodeKeyWord, conversationName, nodeName, keyWord);
+        yield put({type: setKeywords.type, args: {keyWords}})
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Adds a target to the edited node
+ */
+function* addTargetHandler(event)
+{
+    const {conversationName, nodeName, targetName} = event.args;
+
+    try {
+        const {targets} = yield call(api.addNodeTarget, conversationName, nodeName, targetName);
+        yield put({type: setTargets.type, args: {targets}})
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Removes a target from the edited node
+ */
+function* removeTargetHandler(event)
+{
+    const {conversationName, nodeName, targetName} = event.args;
+
+    try {
+        const {targets} = yield call(api.removeNodeTarget, conversationName, nodeName, targetName);
+        yield put({type: setTargets.type, args: {targets}})
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Maps every saga handler function to its event
+ */
+function* saga()
+{
+    yield takeEvery(setName.type, setNameHandler);
+    yield takeEvery(setText.type, setTextHandler);
+    yield takeEvery(loadNode.type, loadNodeHandler);
+
+    yield takeEvery(addPrompt.type, addPromptHandler);
+    yield takeEvery(removePrompt.type, removePromptHandler);
+    yield takeEvery(updatePrompt.type, updatePromptHandler);
+
+    yield takeEvery(addKeyWord.type, addKeyWordHandler);
+    yield takeEvery(removeKeyWord.type, removeKeyWordHandler);
+
+    yield takeEvery(addTarget.type, addTargetHandler);
+    yield takeEvery(removeTarget.type, removeTargetHandler);
+}
+
+/**
  * Used to combine all state definitions into a single export
  */
-const api = {
+const exports = {
     events: {
         setName,
         setText,
@@ -162,13 +346,14 @@ const api = {
         removePrompt,
         updatePrompt,
         setPrompts,
-        addKeyword,
-        removeKeyword,
+        addKeyWord,
+        removeKeyWord,
         setKeywords,
         addTarget,
         removeTarget,
         setTargets,
     },
-    reducer
+    reducer,
+    saga
 };
-export default api;
+export default exports;

@@ -28,6 +28,8 @@ const store = createStore(
 );
 
 sagaMiddleware.run(conversations.saga);
+sagaMiddleware.run(conversationEdit.saga);
+sagaMiddleware.run(nodeEdit.saga);
 
 /**
  * Insures that all children have access to the redux store

@@ -5,7 +5,7 @@ const BUILD_DIR = path.resolve(__dirname, 'public/');
 const SOURCE_DIR = path.resolve(__dirname, 'client/');
 
 var config = {
-    entry: ['whatwg-fetch', path.join(SOURCE_DIR, 'index.js')],
+    entry: ['babel-polyfill', path.join(SOURCE_DIR, 'index.js')],
 
     output: {
         path: path.join(BUILD_DIR, 'js'),
