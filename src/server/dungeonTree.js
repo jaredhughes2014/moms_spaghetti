@@ -70,6 +70,7 @@ tree_opt.prototype.test = function(body, attrs) {
 }
 
 for (node of tree) {
+    if (undefined === node.opts) continue;
     nops = [];
     for (key in node.opts) {
         nops.push(new tree_opt(key, node.opts[key]));
