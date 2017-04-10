@@ -23,7 +23,7 @@ app.listen(process.env.PORT || 8080, () => {
 // Conversations
 
 /**
- * Adds a new conversation to the database
+ * TODO: Return the names of all conversations in the database
  */
 app.post(paths.conversations.add, (req, res) => {
     const {name} = req.body;
@@ -35,7 +35,7 @@ app.post(paths.conversations.add, (req, res) => {
 
 
 /**
- * Removes an existing conversation from the database
+ * TODO: Return the names of all conversations in the database
  */
 app.post(paths.conversations.remove, (req, res) => {
     const {name} = req.body;
@@ -46,7 +46,7 @@ app.post(paths.conversations.remove, (req, res) => {
 });
 
 /**
- * Gets a specific conversation from the database
+ * TODO: Return the conversation with the given name
  */
 app.post(paths.conversations.get, (req, res) => {
     const {name} = req.body;
@@ -57,7 +57,7 @@ app.post(paths.conversations.get, (req, res) => {
 });
 
 /**
- * Gets all conversations from the database
+ * TODO: Return the names of all conversations in the database
  */
 app.get(paths.conversations.all, (req, res) => {
     res.send({testSuccess: true});
@@ -66,7 +66,7 @@ app.get(paths.conversations.all, (req, res) => {
 // Conversation editing
 
 /**
- * Updates the name of a conversation
+ * TODO: Return the conversation that was changed
  */
 app.post(paths.conversation.updateName, (req, res) => {
     const {oldName, newName} = req.body;
@@ -77,7 +77,7 @@ app.post(paths.conversation.updateName, (req, res) => {
 });
 
 /**
- *
+ * TODO: Return the list of nodes this affects
  */
 app.post(paths.conversation.addNode, (req, res) => {
     const {conversationName, nodeName} = req.body;
@@ -88,7 +88,7 @@ app.post(paths.conversation.addNode, (req, res) => {
 });
 
 /**
- *
+ * TODO: Return the list of nodes this affects
  */
 app.post(paths.conversation.removeNode, (req, res) => {
     const {conversationName, nodeName} = req.body;
@@ -99,7 +99,7 @@ app.post(paths.conversation.removeNode, (req, res) => {
 });
 
 /**
- *
+ * TODO: Return the list of triggers this affects
  */
 app.post(paths.conversation.addTrigger, (req, res) => {
     const {conversationName, word} = req.body;
@@ -110,7 +110,7 @@ app.post(paths.conversation.addTrigger, (req, res) => {
 });
 
 /**
- *
+ * TODO: Return the list of triggers this affects
  */
 app.post(paths.conversation.removeTrigger, (req, res) => {
     const {conversationName, word} = req.body;
@@ -121,7 +121,7 @@ app.post(paths.conversation.removeTrigger, (req, res) => {
 });
 
 /**
- *
+ * TODO: Return the list of variables this affects
  */
 app.post(paths.conversation.addVariable, (req, res) => {
     const {conversationName, variableName} = req.body;
@@ -132,7 +132,7 @@ app.post(paths.conversation.addVariable, (req, res) => {
 });
 
 /**
- *
+ * TODO: Return the list of variables this affects
  */
 app.post(paths.conversation.removeVariable, (req, res) => {
     const {conversationName, variableName} = req.body;
@@ -145,7 +145,7 @@ app.post(paths.conversation.removeVariable, (req, res) => {
 // Node Editing
 
 /**
- *
+ * TODO: Return the node that was changed
  */
 app.post(paths.node.updateName, (req, res) => {
     const {conversationName, nodeName, newName} = req.body;
@@ -156,7 +156,7 @@ app.post(paths.node.updateName, (req, res) => {
 });
 
 /**
- *
+ * TODO: Return the node that was changed
  */
 app.post(paths.node.updateText, (req, res) => {
     const {conversationName, nodeName, text} = req.body;
@@ -167,7 +167,7 @@ app.post(paths.node.updateText, (req, res) => {
 });
 
 /**
- *
+ * TODO: Return the node with the given name from the given conversation
  */
 app.post(paths.node.get, (req, res) => {
     const {conversationName, nodeName} = req.body;
@@ -178,7 +178,7 @@ app.post(paths.node.get, (req, res) => {
 });
 
 /**
- *
+ * TODO: Return the list of prompts from the node
  */
 app.post(paths.node.addPrompt, (req, res) => {
     const {conversationName, nodeName, promptName} = req.body;
@@ -191,7 +191,7 @@ app.post(paths.node.addPrompt, (req, res) => {
 });
 
 /**
- *
+ * TODO: Return the list of prompts from the node
  */
 app.post(paths.node.removePrompt, (req, res) => {
     const {conversationName, nodeName, promptName} = req.body;
@@ -202,7 +202,7 @@ app.post(paths.node.removePrompt, (req, res) => {
 });
 
 /**
- *
+ * TODO: Return the list of prompts from the node
  */
 app.post(paths.node.updatePrompt, (req, res) => {
     const {conversationName, nodeName, promptName, promptText, variableSet} = req.body;
@@ -213,7 +213,7 @@ app.post(paths.node.updatePrompt, (req, res) => {
 });
 
 /**
- *
+ * TODO: Return the list of key words from the node
  */
 app.post(paths.node.addKeyWord, (req, res) => {
     const {conversationName, nodeName, keyWord} = req.body;
@@ -224,7 +224,7 @@ app.post(paths.node.addKeyWord, (req, res) => {
 });
 
 /**
- *
+ * TODO: Return the list of key words from the node
  */
 app.post(paths.node.removeKeyWord, (req, res) => {
     const {conversationName, nodeName, keyWord} = req.body;
@@ -235,7 +235,7 @@ app.post(paths.node.removeKeyWord, (req, res) => {
 });
 
 /**
- *
+ * TODO: Return the list of targets from the node
  */
 app.post(paths.node.addTarget, (req, res) => {
     const {conversationName, nodeName, targetName} = req.body;
@@ -246,7 +246,7 @@ app.post(paths.node.addTarget, (req, res) => {
 });
 
 /**
- *
+ * TODO: Return the list of targets from the node
  */
 app.post(paths.node.removeTarget, (req, res) => {
     const {conversationName, nodeName, targetName} = req.body;
