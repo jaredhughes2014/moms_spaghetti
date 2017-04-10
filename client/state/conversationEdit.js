@@ -177,8 +177,8 @@ function* addNodeHandler(event)
     const {conversationName, nodeName} = event.args;
 
     try {
-        const response = yield call(api.addConversationNode, conversationName, nodeName);
-        yield put({type: setConversation.type, args: response})
+        const {nodes} = yield call(api.addConversationNode, conversationName, nodeName);
+        yield put({type: setNodes.type, args: {nodes}})
     }
     catch (err) {
         console.error(err);
@@ -193,8 +193,8 @@ function* removeNodeHandler(event)
     const {conversationName, nodeName} = event.args;
 
     try {
-        const response = yield call(api.removeConversationNode, conversationName, nodeName);
-        yield put({type: setConversation.type, args: response})
+        const {nodes} = yield call(api.removeConversationNode, conversationName, nodeName);
+        yield put({type: setNodes.type, args: {nodes}})
     }
     catch (err) {
         console.error(err);
@@ -209,8 +209,8 @@ function* addTriggerHandler(event)
     const {conversationName, word} = event.args;
 
     try {
-        const response = yield call(api.addConversationTrigger, conversationName, word);
-        yield put({type: setConversation.type, args: response})
+        const {triggers} = yield call(api.addConversationTrigger, conversationName, word);
+        yield put({type: setTriggers.type, args: {triggers}})
     }
     catch (err) {
         console.error(err);
@@ -225,8 +225,8 @@ function* removeTriggerHandler(event)
     const {conversationName, word} = event.args;
 
     try {
-        const response = yield call(api.removeConversationTrigger, conversationName, word);
-        yield put({type: setConversation.type, args: response})
+        const {triggers} = yield call(api.removeConversationTrigger, conversationName, word);
+        yield put({type: setTriggers.type, args: {triggers}})
     }
     catch (err) {
         console.error(err);
@@ -241,8 +241,8 @@ function* addVariableHandler(event)
     const {conversationName, variableName} = event.args;
 
     try {
-        const response = yield call(api.addConversationVariable, conversationName, variableName);
-        yield put({type: setConversation.type, args: response});
+        const {variables} = yield call(api.addConversationVariable, conversationName, variableName);
+        yield put({type: setVariables.type, args: {variables}});
     }
     catch (err) {
         console.error(err);
@@ -257,8 +257,8 @@ function* removeVariableHandler(event)
     const {conversationName, variableName} = event.args;
 
     try {
-        const response = yield call(api.removeConversationVariable, conversationName, variableName);
-        yield put({type: setConversation.type, args: response})
+        const {variables} = yield call(api.removeConversationVariable, conversationName, variableName);
+        yield put({type: setVariables.type, args: {variables}})
     }
     catch (err) {
         console.error(err);
