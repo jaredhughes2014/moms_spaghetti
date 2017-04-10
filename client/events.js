@@ -1,7 +1,7 @@
 
-import conversationEdit from './state2/conversationEdit';
-import conversations from './state2/conversations';
-import nodeEdit from './state2/nodeEdit';
+import conversationEdit from './state/conversationEdit';
+import conversations from './state/conversations';
+import nodeEdit from './state/nodeEdit';
 
 /**
  * Converts an event type string into a function which accepts an event argument

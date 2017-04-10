@@ -1,7 +1,7 @@
 
-import conversationEdit from './state2/conversationEdit';
-import conversations from './state2/conversations';
-import nodeEdit from './state2/nodeEdit';
+import conversationEdit from './state/conversationEdit';
+import conversations from './state/conversations';
+import nodeEdit from './state/nodeEdit';
 
 import {createStore, combineReducers, applyMiddleware} from 'redux';
 import createSagaMiddleware from 'redux-saga';

@@ -5,10 +5,10 @@ import routes from './routes';
 
 // Import Views Here
 import MomsSpaghettiProvider from './MomsSpaghettiProvider';
-import AppSkeleton from './views2/AppSkeleton';
+import AppSkeleton from './views/AppSkeleton';
 
-import LandingPage from './views2/LandingPage';
-import ConversationEditView from './views2/ConversationEditView';
+import LandingPage from './views/LandingPage';
+import ConversationEditView from './views/ConversationEditView';
 
 
 /**

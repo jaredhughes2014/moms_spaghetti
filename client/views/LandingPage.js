@@ -1,139 +1,99 @@
 
-import React, {Component} from 'react';
+
+import React from 'react';
 import {connect} from 'react-redux';
-import {browserHistory} from 'react-router';
 
-import paths from '../../app/paths';
-import events from '../events';
+import ev from '../events';
 
-import ConversationBox from './landing/ConversationBox';
-import FlowList from '../views2/general/FlowList';
-import LowerBar from './landing/LowerBar';
-import NameModal from '../views2/general/NameModal';
+import ConversationSelector from './landing/ConversationSelector';
+const evCon = ev.conversations;
+const evConEdit = ev.conversationEdit;
+const evNode = ev.nodeEdit;
 
 
 /**
- * Page where the landing be do
+ *
  */
 class LandingPage extends React.Component
 {
+    /**
+     * Expected props:
+     */
     constructor(props)
     {
         super(props);
-
-        this.state = {
-            newOpen: false,
-            loaded: false,
-        };
-
-        this.selectConversation = this.selectConversation.bind(this);
-        this.toggleNewModal = this.toggleNewModal.bind(this);
-        this.submitNewConversation = this.submitNewConversation.bind(this);
     }
 
+    /**
+     * Renders this view
+     */
     render()
     {
-        if (this.state.loaded) {
-            return this.state.newOpen ? this.renderModal() : this.renderNoModal();
-        }
-        else {
-            api.getConversations((response) => {
-                this.props.setConversations(response.conversations);
-                this.setState({loaded: true});
-            });
-            return this.renderNotLoaded();
-        }
-    }
+        this.props.testAPI();
 
-    /**
-     * Renders this view if the conversations have not been loaded yet
-     * @returns {XML}
-     */
-    renderNotLoaded()
-    {
         return (
-            <div id="landing-page">
-                Loading...
+            <div>
+                NYI
             </div>
         );
-    }
-
-    /**
-     * Renders this view without a modal box
-     */
-    renderNoModal()
-    {
-        return (
-            <div id="landing-page">
-                <FlowList horizontal={true}>
-                    {this.props.conversations.map(p => <ConversationBox name={p} key={p} onClick={this.selectConversation}/>)}
-                </FlowList>
-
-                <LowerBar onNew={this.toggleNewModal}/>
-            </div>
-        );
-    }
-
-    /**
-     * Renders this view with a modal box
-     */
-    renderModal()
-    {
-        return (
-            <div id="landing-page">
-                <NameModal onSubmit={this.submitNewConversation} onCancel={this.toggleNewModal}/>
-            </div>
-        );
-    }
-
-    /**
-     * Selects the conversation to edit
-     */
-    selectConversation(name)
-    {
-        api.fetchConversation(name, (response) => {
-            this.props.editConversation(response.conversation)
-            browserHistory.push(paths.conversations.edit);
-        });
-    }
-
-    /**
-     * Opens a modal box for the user to create a new conversation
-     */
-    toggleNewModal()
-    {
-        this.setState({newOpen: !this.state.newOpen})
-    }
-
-    submitNewConversation(name)
-    {
-        api.addConversation(name, (response) => {
-            this.props.addConversation(response.conversation);
-            this.toggleNewModal();
-        })
     }
 }
 
 /**
- * Maps the redux state to the properties of the landing page
+ * Connects the redux state to the view
  */
 const mapStateToProps = (state) =>
 {
     return {
-        conversations: state.conversations.conversations
+
     };
 };
 
 /**
- * Maps the redux dispatch function to the properties of the landing page
+ * Connects the redux event dispatcher to the view
  */
 const mapDispatchToProps = (dispatch) =>
 {
     return {
-        setConversations: (conversations) => dispatch(events(conversations)),
-        editConversation: (conversation) => dispatch(events.editConversation.create(conversation)),
-        addConversation: (conversation) => dispatch(events.addConversation.create(conversation)),
+        testAPI: () => {
+            console.log('Testing all asynchronous events');
+
+            // Conversations
+            dispatch(evCon.addConversation({name: 'name'}));
+            dispatch(evCon.removeConversation({name: 'name'}));
+            dispatch(evCon.fetchConversations());
+
+            // Conversation Edit
+            dispatch(evConEdit.setName({oldName: 'name1', newName: 'name2'}));
+            dispatch(evConEdit.loadConversation({name: 'name'}));
+
+            dispatch(evConEdit.addNode({conversationName: 'cName', nodeName: 'nName'}));
+            dispatch(evConEdit.removeNode({conversationName: 'cName', nodeName: 'nName'}));
+
+            dispatch(evConEdit.addTrigger({conversationName: 'cName', word: 'tName'}));
+            dispatch(evConEdit.removeTrigger({conversationName: 'cName', word: 'tName'}));
+
+            dispatch(evConEdit.addVariable({conversationName: 'cName', variableName: 'vName'}));
+            dispatch(evConEdit.removeVariable({conversationName: 'cName', variableName: 'vName'}));
+
+            // Node Edit
+            dispatch(evNode.setName({conversationName: 'cName', oldName: 'nName1', newName: 'nName2',}));
+            dispatch(evNode.setText({conversationName: 'cName', nodeName: 'nName', text: 'text',}));
+            dispatch(evNode.loadNode({conversationName: 'cName', nodeName: 'nName',}));
+
+            dispatch(evNode.addPrompt({conversationName: 'cName', nodeName: 'nName', promptName: 'pName'}));
+            dispatch(evNode.removePrompt({conversationName: 'cName', nodeName: 'nName', promptName: 'pName'}));
+            dispatch(evNode.updatePrompt({conversationName: 'cName', nodeName: 'nName', promptName: 'pName', promptText: 'text', variableSet: 'vName'}));
+
+            dispatch(evNode.addKeyWord({conversationName: 'cName', nodeName: 'nName', keyWord: 'pName',}));
+            dispatch(evNode.removeKeyWord({conversationName: 'cName', nodeName: 'nName', keyWord: 'pName',}));
+
+            dispatch(evNode.addTarget({conversationName: 'cName', nodeName: 'nName', targetName: 'pName',}));
+            dispatch(evNode.removeTarget({conversationName: 'cName', nodeName: 'nName', targetName: 'pName',}));
+        }
     };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LandingPage);
+
+

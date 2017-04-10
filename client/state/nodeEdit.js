@@ -1,7 +1,7 @@
 
 import {put, call} from 'redux-saga/effects';
 import {takeEvery, takeLatest} from 'redux-saga';
-import api from '../api2';
+import api from '../api';
 
 const defaultState = {
     name: "",
