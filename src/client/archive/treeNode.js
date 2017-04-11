@@ -1,9 +1,10 @@
-var React = require('react');
-var TreeData = require('./treeData.js');
-var FormControl = require('react-bootstrap/lib/FormControl');
-var Button = require('react-bootstrap/lib/Button');
+const React = require('react');
+const TreeData = require('./treeData.js');
+const FormControl = require('react-bootstrap/lib/FormControl');
+const Button = require('react-bootstrap/lib/Button');
+import TreeNodeModal from './components/TreeNodeModal';
 
-var TreeNode = React.createClass({
+const TreeNode = React.createClass({
 	getInitialState: function() {
 		return {
 			visible: true,
@@ -19,22 +20,22 @@ var TreeNode = React.createClass({
   	edit: function(){
   		this.setState({editing: true});
   	},
-  	CurrentTitle: function(){
-  		if(this.state.editing){
+  	CurrentTitle: function({openModal}){
+  		if(this.state.editing && false){
 			return (
-  				<span className="input-node"><FormControl onChange={(e) => this.props.edit(this.props.node.tree_id, e.target.value)} 
+  				<span className="input-node"><FormControl onChange={(e) => this.props.edit(this.props.node.tree_id, e.target.value)}
   					onDoubleClick={() => this.setState({editing: false})} /></span>
   			);
   		} else {
   			return (
-  				<h4 className="title" onDoubleClick={this.edit}>
+  				<h4 className="title" onDoubleClick={openModal}>
 					{this.props.node.title}
 				</h4>
 			);
   		}
   	},
 	render: function() {
-		var childNodes;
+		let childNodes;
 		if (this.props.node.childNodes != null) {
 			childNodes = this.props.node.childNodes.map(function(child, index) {
 				return (
@@ -45,17 +46,19 @@ var TreeNode = React.createClass({
 			}.bind(this));
 		}
 
-		var style = {};
+		let style = {};
 		if (!this.state.visible) {
 			style.display = "none";
 		}
 
 		return (
 			<div>
-				<this.CurrentTitle />
+				<TreeNodeModal>
+					<this.CurrentTitle />
+				</TreeNodeModal>
 				<Button onClick={this.toggle} bsStyle="default" className="toggle">{this.state.visible ? "Hide" : "Show"}</Button>
 				<Button onClick={this.add} bsStyle="default">Add</Button>
-				<ul className="child-list"style={style}>
+				<ul className="child-list" style={style}>
 					{childNodes}
 				</ul>
 			</div>

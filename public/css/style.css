@@ -20,3 +20,9 @@ html {
 	width: 200px;
 	display: inline-block;
 }
+.modalWrapper {
+	cursor: pointer;
+}
+#title {
+	display: inline;
+}
