@@ -38,7 +38,7 @@ const newConversation = (conv, onComplete) =>
         else {
             let c = new data.Conversation(conv);
             conversations.push(c);
-            onComplete({conversation: c});
+            conversationNames(onComplete);
         }
     });
 };

@@ -22,15 +22,19 @@ app.listen(process.env.PORT || 8080, () => {
 
 // Conversations
 
+const getCallback = (res) => { return (result) => {res.send(result);} };
+
 /**
  * TODO: Return the names of all conversations in the database
  */
 app.post(paths.conversations.add, (req, res) => {
     const {name} = req.body;
 
-    if (validateBodyParameters(res, name)) {
-        res.send({testSuccess: true});
+    if (!validateBodyParameters(res, name)) {
+        res.send({warning: 'Missing required parameters'});
     }
+
+    db.newConversation(req.body, getCallback(res));
 });
 
 
