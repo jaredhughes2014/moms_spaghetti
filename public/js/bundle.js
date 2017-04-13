@@ -7057,7 +7057,7 @@ eval("\n\nmodule.exports = {\n  isString: function(arg) {\n    return typeof(arg
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! babel-polyfill */252);
-module.exports = __webpack_require__(/*! C:\Users\Baby Boo\Documents\moms_spaghetti\client\index.js */251);
+module.exports = __webpack_require__(/*! C:\Users\Brian\Desktop\SE2\moms_spaghetti\client\index.js */251);
 
 
 /***/ })
