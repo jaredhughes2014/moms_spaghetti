@@ -112,6 +112,7 @@ class Prompt
 
 module.exports = {
     Conversation,
+    Variable,
     ConversationNode,
     Prompt,
 };
