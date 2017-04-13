@@ -83,7 +83,7 @@ app.post(paths.conversation.addNode, (req, res) => {
     const {conversationName, nodeName} = req.body;
 
     if (validateBodyParameters(res, conversationName, nodeName)) {
-        res.send({testSuccess: true});
+        db.addConversationNode(conversationName, nodeName, buildDatabaseResponseHandler(res));
     }
 });
 

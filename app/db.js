@@ -37,8 +37,6 @@ const addConversation = (name, onComplete) =>
         duplicate = true;
     }
 
-    console.log(conversations);
-
     const response = {conversations: conversations.map(p => p.name)};
     if (duplicate) {
         onComplete(response)
@@ -98,6 +96,33 @@ const updateConversationName = (oldName, newName, onComplete) =>
 };
 
 /**
+ * Adds a node to a conversation
+ */
+const addConversationNode = (conversationName, nodeName, onComplete) =>
+{
+    let conversation = conversations.find(p => p.name == conversationName);
+
+    if (conversation) {
+
+        let duplicate = conversation.nodes.find(p => p.name == nodeName) !== undefined;
+        if (!duplicate) {
+            conversation.nodes.push(new data.ConversationNode({name: nodeName}));
+        }
+        let nodes = conversation.nodes.map(p => p.name);
+
+        if (duplicate) {
+            warn(`Node named ${nodeName} already exists in ${conversationName}`, onComplete, {nodes});
+        }
+        else {
+            onComplete({nodes});
+        }
+    }
+    else {
+        warn(`No conversation named ${conversationName} exists`, onComplete, {nodes: []});
+    }
+};
+
+/*
  * Removes the given tag
  */
 const rmTarget = (args, onComplete) => {
@@ -116,7 +141,7 @@ const rmTarget = (args, onComplete) => {
         targets.splice(ix, 1);
         onComplete({targets});
     });
-}
+};
 
 module.exports = {
     addConversation,
@@ -124,5 +149,6 @@ module.exports = {
     getConversation,
     getConversationNames,
     updateConversationName,
+    addConversationNode,
     rmTarget,
 };
