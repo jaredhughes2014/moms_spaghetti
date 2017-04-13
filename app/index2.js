@@ -31,7 +31,7 @@ app.post(paths.conversations.add, (req, res) => {
     const {name} = req.body;
 
     if (!validateBodyParameters(res, name)) {
-        res.send({warning: 'Missing required parameters'});
+        return;
     }
 
     db.newConversation(req.body, getCallback(res));
@@ -45,7 +45,7 @@ app.post(paths.conversations.remove, (req, res) => {
     const {name} = req.body;
 
     if (!validateBodyParameters(res, name)) {
-        res.send({warning: 'Missing required parameters'});
+        return;
     }
 
     db.rmConversation(req.body, getCallback(res));
@@ -58,7 +58,7 @@ app.post(paths.conversations.get, (req, res) => {
     const {name} = req.body;
 
     if (!validateBodyParameters(res, name)) {
-        res.send({warning: 'Missing required parameters'});
+        return;
     }
 
     db.getConversation(name, getCallback(res));
@@ -259,9 +259,11 @@ app.post(paths.node.addTarget, (req, res) => {
 app.post(paths.node.removeTarget, (req, res) => {
     const {conversationName, nodeName, targetName} = req.body;
 
-    if (validateBodyParameters(res, conversationName, nodeName, targetName)) {
-        res.send({testSuccess: true});
+    if (!validateBodyParameters(res, conversationName, nodeName, targetName)) {
+        return;
     }
+
+    db.rmTarget(req.body, getCallback(res));
 });
 
 /**

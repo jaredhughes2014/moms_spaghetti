@@ -48,14 +48,14 @@ const newConversation = (conv, onComplete) =>
  */
 const rmConversation = (conv, onComplete) =>
 {
-	let ix = conversations.findIndex(p => p.name === conv.name);
-	if (ix == -1)
-	{
-		warn("Conversation not found", onComplete);
-	}
-	//Remove element at ix
-	conversations.splice(ix, 1);
-	conversationNames(onComplete);
+    let ix = conversations.findIndex(p => p.name === conv.name);
+    if (ix == -1)
+    {
+        warn("Conversation not found", onComplete);
+    }
+    //Remove element at ix
+    conversations.splice(ix, 1);
+    conversationNames(onComplete);
 }
 
 /**
@@ -97,10 +97,32 @@ const saveConversation = (conversation, onComplete) =>
     });
 };
 
+/**
+ * Removes the given tag
+ */
+const rmTarget = (args, onComplete) => {
+    getConversation(args.conversationName, (ret) => {
+        let conversation = ret.conversation;
+        if (conversation === undefined) {
+            onComplete(ret);
+            return;
+        }
+        let targets = conversation.getNode(args.nodeName).targets;
+        let ix = targets.indexOf(args.targetName);
+        if (ix == -1) {
+            warn('Specified target not found!', onComplete);
+            return;
+        }
+        targets.splice(ix, 1);
+        onComplete({targets});
+    });
+}
+
 module.exports = {
     newConversation,
     rmConversation,
     getConversation,
     conversationNames,
     saveConversation,
+    rmTarget,
 };
