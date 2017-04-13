@@ -38,10 +38,25 @@ const newConversation = (conv, onComplete) =>
         else {
             let c = new data.Conversation(conv);
             conversations.push(c);
-            onComplete({conversation: c});
+            conversationNames(onComplete);
         }
     });
 };
+
+/**
+ * Removes the conversation with the given name
+ */
+const rmConversation = (conv, onComplete) =>
+{
+	let ix = conversations.findIndex(p => p.name === conv.name);
+	if (ix == -1)
+	{
+		warn("Conversation not found", onComplete);
+	}
+	//Remove element at ix
+	conversations.splice(ix, 1);
+	conversationNames(onComplete);
+}
 
 /**
  * Gets the conversation with the given name
@@ -84,6 +99,7 @@ const saveConversation = (conversation, onComplete) =>
 
 module.exports = {
     newConversation,
+    rmConversation,
     getConversation,
     conversationNames,
     saveConversation,
