@@ -84,7 +84,7 @@ class LandingPage extends React.Component
     openConversation(name)
     {
         this.props.loadConversation(name);
-        browserHistory(routes.conversation);
+        browserHistory.push(routes.conversation);
     }
 
     openNewConversationModal()
