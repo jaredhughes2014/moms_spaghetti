@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 var ReactDOM = require('react-dom');
 var React = require('react');
 var Tree = require('./tree.js');
@@ -6,7 +5,6 @@ var TreeData = require('./treeData.js');
 var Panel = require('react-bootstrap/lib/Panel');
 var ReactNodeGraph = require('react-node-graph');
 var Button = require('react-bootstrap/lib/Button');
-=======
 
 // var ReactDOM = require('react-dom');
 // var React = require('react');
@@ -23,7 +21,7 @@ var Button = require('react-bootstrap/lib/Button');
 //     document.getElementById('app')
 // );
 
-import React from 'react';
+//import React from 'react';
 import {render} from 'react-dom';
 import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 import paths from '../paths';
@@ -40,12 +38,11 @@ import EditConversationView from './views/EditConversationView';
 let reducer = combineReducers(reducers);
 let store = createStore(reducer);
 
->>>>>>> develop
 
 /**
  * Routes all the things
  */
-<<<<<<< HEAD
+
 var node_id = 111;
 var exampleGraph = {
   "nodes":[
@@ -120,7 +117,7 @@ ReactDOM.render(
 			onNewConnector={(n1,o,n2,i)=>onNewConnector(n1,o,n2,i)} />
 	</div>,
   document.getElementById('app')
-=======
+
 const MomsSpaghettiRouter = () =>
 {
     return (
@@ -144,5 +141,4 @@ const MomsSpaghettiRouter = () =>
 render(
     <MomsSpaghettiRouter/>,
     document.getElementById('root')
->>>>>>> develop
 );
