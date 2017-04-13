@@ -123,19 +123,236 @@ const addConversationNode = (conversationName, nodeName, onComplete) =>
 };
 
 /*
- * Removes the given tag
+ * Sets the node's name
  */
-const rmTarget = (args, onComplete) => {
-    getConversation(args.conversationName, (ret) => {
-        let conversation = ret.conversation;
+const updateNodeName = ({conversationName, nodeName, newName}, onComplete) => {
+    getConversation(conversationName, (ret) => {
+        const conversation = ret.conversation;
         if (!conversation) {
             onComplete(ret);
             return;
         }
-        let targets = conversation.getNode(args.nodeName).targets;
-        let ix = targets.indexOf(args.targetName);
+        const node = conversation.getNode(nodeName);
+        if (!node) {
+            warn(`Can't find node $(nodeName).`, onComplete, {node: null});
+            return;
+        }
+        node.name = newName;
+        onComplete({node});
+    });
+};
+
+/*
+ * Gets the requested node
+ */
+const updateNodeText = ({conversationName, nodeName, text}, onComplete) => {
+    getConversation(conversationName, (ret) => {
+        const conversation = ret.conversation;
+        if (!conversation) {
+            onComplete(ret);
+            return;
+        }
+        const node = conversation.getNode(nodeName);
+        if (!node) {
+            warn(`Can't find node $(nodeName).`, onComplete, {node: null});
+            return;
+        }
+        node.text = text;
+        onComplete({node});
+    });
+};
+
+/*
+ * Gets the requested node
+ */
+const getNode = ({conversationName, nodeName}, onComplete) => {
+    getConversation(conversationName, (ret) => {
+        const conversation = ret.conversation;
+        if (!conversation) {
+            onComplete(ret);
+            return;
+        }
+        const node = conversation.getNode(nodeName);
+        if (!node) {
+            warn(`Can't find node $(nodeName).`, onComplete, {node: null});
+            return;
+        }
+        onComplete({node});
+    });
+};
+
+/*
+ * Adds the given prompt
+ */
+const addPrompt = ({conversationName, nodeName, promptName}, onComplete) => {
+    getConversation(conversationName, (ret) => {
+        const conversation = ret.conversation;
+        if (!conversation) {
+            onComplete(ret);
+            return;
+        }
+        const node = conversation.getNode(nodeName);
+        if (!node) {
+            warn(`Can't find node $(nodeName).`, onComplete, {prompts: []});
+            return;
+        }
+        const prompts = node.prompts;
+        if (node.getPrompt(promptName)) {
+            warn(`Prompt ${promptName} already exists.`, onComplete, {prompts});
+            return;
+        }
+        prompts.push(new Prompt(promptName));
+        onComplete({prompts});
+    });
+};
+
+/*
+ * Removes the given prompt
+ */
+const removePrompt = ({conversationName, nodeName, promptName}, onComplete) => {
+    getConversation(conversationName, (ret) => {
+        const conversation = ret.conversation;
+        if (!conversation) {
+            onComplete(ret);
+            return;
+        }
+        const node = conversation.getNode(nodeName);
+        if (!node) {
+            warn(`Can't find node $(nodeName).`, onComplete, {prompts: []});
+            return;
+        }
+        const prompts = node.prompts;
+        const ix = prompts.findIndex(p => p.name === promptName);
         if (ix == -1) {
-            warn(`No target named ${args.targetName} exists.`, onComplete, {targets});
+            warn(`No prompt named ${promptName} exists.`, onComplete, {prompts});
+            return;
+        }
+        prompts.splice(ix, 1);
+        onComplete({prompts});
+    });
+};
+
+/*
+ * Updates the given prompt
+ */
+const updatePrompt = ({conversationName, nodeName, promptName, promptText, variableSet}, onComplete) => {
+    getConversation(conversationName, (ret) => {
+        const conversation = ret.conversation;
+        if (!conversation) {
+            onComplete(ret);
+            return;
+        }
+        const node = conversation.getNode(nodeName);
+        if (!node) {
+            warn(`Can't find node $(nodeName).`, onComplete, {prompts: []});
+            return;
+        }
+        const prompts = node.prompts;
+        const p = node.getPrmopt(promptName);
+        if (!p) {
+            warn(`No prompt named ${promptName} exists.`, onComplete, {prompts});
+            return;
+        }
+        p.update({name: promptName, text: promptText, target: variableSet});
+        onComplete({prompts});
+    });
+};
+
+/*
+ * Adds the given key word
+ */
+const addKeyWord = ({conversationName, nodeName, keyWord}, onComplete) => {
+    getConversation(conversationName, (ret) => {
+        const conversation = ret.conversation;
+        if (!conversation) {
+            onComplete(ret);
+            return;
+        }
+        const node = conversation.getNode(nodeName);
+        if (!node) {
+            warn(`Can't find node $(nodeName).`, onComplete, {keyWords: []});
+            return;
+        }
+        const keyWords = node.keyWords;
+        if (keyWords.indexOf(keyWord) != -1) {
+            warn(`Key word ${keyWord} already exists.`, onComplete, {keyWords});
+            return;
+        }
+        keyWords.push(keyWord);
+        onComplete({keyWords});
+    });
+};
+
+/*
+ * Removes the given key word
+ */
+const removeKeyWord = ({conversationName, nodeName, keyWord}, onComplete) => {
+    getConversation(conversationName, (ret) => {
+        const conversation = ret.conversation;
+        if (!conversation) {
+            onComplete(ret);
+            return;
+        }
+        const node = conversation.getNode(nodeName);
+        if (!node) {
+            warn(`Can't find node $(nodeName).`, onComplete, {keyWords: []});
+            return;
+        }
+        const keyWords = node.keyWords;
+        const ix = keyWords.indexOf(keyWord);
+        if (ix == -1) {
+            warn(`No key word named ${keyWord} exists.`, onComplete, {keyWords});
+            return;
+        }
+        keyWords.splice(ix, 1);
+        onComplete({keyWords});
+    });
+};
+
+/*
+ * Adds the given target
+ */
+const addTarget = ({conversationName, nodeName, targetName}, onComplete) => {
+    getConversation(conversationName, (ret) => {
+        const conversation = ret.conversation;
+        if (!conversation) {
+            onComplete(ret);
+            return;
+        }
+        const node = conversation.getNode(nodeName);
+        if (!node) {
+            warn(`Can't find node $(nodeName).`, onComplete, {targets: []});
+            return;
+        }
+        const targets = node.targets;
+        if (targets.indexOf(targetName) != -1) {
+            warn(`Target ${targetName} already exists.`, onComplete, {targets});
+            return;
+        }
+        targets.push(targetName);
+        onComplete({targets});
+    });
+};
+
+/*
+ * Removes the given target
+ */
+const removeTarget = ({conversationName, nodeName, targetName}, onComplete) => {
+    getConversation(conversationName, (ret) => {
+        const conversation = ret.conversation;
+        if (!conversation) {
+            onComplete(ret);
+            return;
+        }
+        const node = conversation.getNode(nodeName);
+        if (!node) {
+            warn(`Can't find node $(nodeName).`, onComplete, {targets: []});
+            return;
+        }
+        const targets = node.targets;
+        const ix = targets.indexOf(targetName);
+        if (ix == -1) {
+            warn(`No target named ${targetName} exists.`, onComplete, {targets});
             return;
         }
         targets.splice(ix, 1);
@@ -150,5 +367,14 @@ module.exports = {
     getConversationNames,
     updateConversationName,
     addConversationNode,
-    rmTarget,
+    updateNodeName,
+    updateNodeText,
+    getNode,
+    addPrompt,
+    removePrompt,
+    updatePrompt,
+    addKeyWord,
+    removeKeyWord,
+    addTarget,
+    removeTarget,
 };

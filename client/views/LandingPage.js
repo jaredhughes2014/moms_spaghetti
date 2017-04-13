@@ -4,11 +4,13 @@ import React from 'react';
 import {connect} from 'react-redux';
 
 import ev from '../events';
+import paths from '../routes';
 
 import ConversationSelector from './landing/ConversationSelector';
 const evCon = ev.conversations;
 const evConEdit = ev.conversationEdit;
 const evNode = ev.nodeEdit;
+import {Link} from 'react-router';
 
 
 /**
@@ -32,9 +34,7 @@ class LandingPage extends React.Component
         this.props.testAPI();
 
         return (
-            <div>
-                NYI
-            </div>
+            <Link to={paths.conversation}>Edit</Link>
         );
     }
 }
