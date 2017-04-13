@@ -22,19 +22,15 @@ app.listen(process.env.PORT || 8080, () => {
 
 // Conversations
 
-const getCallback = (res) => { return (result) => {res.send(result);} };
-
 /**
  * TODO: Return the names of all conversations in the database
  */
 app.post(paths.conversations.add, (req, res) => {
     const {name} = req.body;
 
-    if (!validateBodyParameters(res, name)) {
-        return;
+    if (validateBodyParameters(res, name)) {
+        db.addConversation(name, buildDatabaseResponseHandler(res));
     }
-
-    db.newConversation(req.body, getCallback(res));
 });
 
 
@@ -44,11 +40,9 @@ app.post(paths.conversations.add, (req, res) => {
 app.post(paths.conversations.remove, (req, res) => {
     const {name} = req.body;
 
-    if (!validateBodyParameters(res, name)) {
-        return;
+    if (validateBodyParameters(res, name)) {
+        db.removeConversation(name, buildDatabaseResponseHandler(res));
     }
-
-    db.rmConversation(req.body, getCallback(res));
 });
 
 /**
@@ -57,18 +51,16 @@ app.post(paths.conversations.remove, (req, res) => {
 app.post(paths.conversations.get, (req, res) => {
     const {name} = req.body;
 
-    if (!validateBodyParameters(res, name)) {
-        return;
+    if (validateBodyParameters(res, name)) {
+        db.getConversation(name, buildDatabaseResponseHandler(res));
     }
-
-    db.getConversation(name, getCallback(res));
 });
 
 /**
  * TODO: Return the names of all conversations in the database
  */
 app.get(paths.conversations.all, (req, res) => {
-    db.conversationNames(getCallback(res));
+    db.getConversationNames(buildDatabaseResponseHandler(res));
 });
 
 // Conversation editing
@@ -80,7 +72,7 @@ app.post(paths.conversation.updateName, (req, res) => {
     const {oldName, newName} = req.body;
 
     if (validateBodyParameters(res, oldName, newName)) {
-        res.send({testSuccess: true});
+        db.updateConversationName(oldName, newName, buildDatabaseResponseHandler(res));
     }
 });
 
@@ -263,8 +255,16 @@ app.post(paths.node.removeTarget, (req, res) => {
         return;
     }
 
-    db.rmTarget(req.body, getCallback(res));
+    db.rmTarget(req.body, buildDatabaseResponseHandler(res));
 });
+
+/**
+ * Builds a handler function for the database response
+ */
+const buildDatabaseResponseHandler = (res) =>
+{
+    return (response) => res.send(response);
+};
 
 /**
  * Insures that every argument provided is defined. If not, this will automatically send an error
