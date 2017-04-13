@@ -29,7 +29,7 @@ app.post(paths.conversations.add, (req, res) => {
     const {name} = req.body;
 
     if (validateBodyParameters(res, name)) {
-        res.send({testSuccess: true});
+        db.addConversation(name, buildDatabaseResponseHandler(res));
     }
 });
 
@@ -41,7 +41,7 @@ app.post(paths.conversations.remove, (req, res) => {
     const {name} = req.body;
 
     if (validateBodyParameters(res, name)) {
-        res.send({testSuccess: true});
+        db.removeConversation(name, buildDatabaseResponseHandler(res));
     }
 });
 
@@ -52,7 +52,7 @@ app.post(paths.conversations.get, (req, res) => {
     const {name} = req.body;
 
     if (validateBodyParameters(res, name)) {
-        res.send({testSuccess: true});
+        db.getConversation(name, buildDatabaseResponseHandler(res));
     }
 });
 
@@ -60,7 +60,7 @@ app.post(paths.conversations.get, (req, res) => {
  * TODO: Return the names of all conversations in the database
  */
 app.get(paths.conversations.all, (req, res) => {
-    res.send({testSuccess: true});
+    db.getConversationNames(buildDatabaseResponseHandler(res));
 });
 
 // Conversation editing
@@ -72,7 +72,7 @@ app.post(paths.conversation.updateName, (req, res) => {
     const {oldName, newName} = req.body;
 
     if (validateBodyParameters(res, oldName, newName)) {
-        res.send({testSuccess: true});
+        db.updateConversationName(oldName, newName, buildDatabaseResponseHandler(res));
     }
 });
 
@@ -255,6 +255,14 @@ app.post(paths.node.removeTarget, (req, res) => {
         res.send({testSuccess: true});
     }
 });
+
+/**
+ * Builds a handler function for the database response
+ */
+const buildDatabaseResponseHandler = (res) =>
+{
+    return (response) => res.send(response);
+};
 
 /**
  * Insures that every argument provided is defined. If not, this will automatically send an error
