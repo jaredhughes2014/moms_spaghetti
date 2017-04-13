@@ -38,6 +38,8 @@ const addConversation = (name, onComplete) =>
     }
 
     const response = {conversations: conversations.map(p => p.name)};
+    console.log(response);
+
     if (duplicate) {
         onComplete(response)
     }
@@ -76,7 +78,7 @@ const getConversation = (name, onComplete) =>
  */
 const getConversationNames = (onComplete) =>
 {
-    onComplete({conversations: conversations.filter(p => p.name)});
+    onComplete({conversations: conversations.map(p => p.name)});
 };
 
 /**
