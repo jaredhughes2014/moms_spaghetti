@@ -44,9 +44,11 @@ app.post(paths.conversations.add, (req, res) => {
 app.post(paths.conversations.remove, (req, res) => {
     const {name} = req.body;
 
-    if (validateBodyParameters(res, name)) {
-        res.send({testSuccess: true});
+    if (!validateBodyParameters(res, name)) {
+        res.send({warning: 'Missing required parameters'});
     }
+
+    db.rmConversation(req.body, getCallback(res));
 });
 
 /**
@@ -55,16 +57,18 @@ app.post(paths.conversations.remove, (req, res) => {
 app.post(paths.conversations.get, (req, res) => {
     const {name} = req.body;
 
-    if (validateBodyParameters(res, name)) {
-        res.send({testSuccess: true});
+    if (!validateBodyParameters(res, name)) {
+        res.send({warning: 'Missing required parameters'});
     }
+
+    db.getConversation(name, getCallback(res));
 });
 
 /**
  * TODO: Return the names of all conversations in the database
  */
 app.get(paths.conversations.all, (req, res) => {
-    res.send({testSuccess: true});
+    db.conversationNames(getCallback(res));
 });
 
 // Conversation editing
