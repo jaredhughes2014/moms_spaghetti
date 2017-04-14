@@ -8,6 +8,7 @@ const defaultState = {
     nodes: [],
     triggers: [],
     variables: [],
+    loading: false,
 };
 
 /**
@@ -16,6 +17,14 @@ const defaultState = {
 const setName = {
     type: 'SET_CONVERSATION_NAME',
     expectedArgs: ['oldName', 'newName'],
+};
+
+/**
+ * Puts the conversation edit state in the waiting state
+ */
+const setWaiting = {
+    type: 'SET_CONVERSATION_EDIT_WAITING',
+    expectedArgs: [],
 };
 
 /**
@@ -118,10 +127,11 @@ const reducer = (state=defaultState, event) =>
 
         case(setConversation.type):
             return Object.assign({}, state, {
-                name: args.name,
-                nodes: args.nodes,
-                triggers: args.triggers,
-                variables: args.variables,
+                name: args.conversation.name,
+                nodes: args.conversation.nodes,
+                triggers: args.conversation.triggers,
+                variables: args.conversation.variables,
+                loading: false,
             });
 
         case(setNodes.type):
@@ -132,6 +142,9 @@ const reducer = (state=defaultState, event) =>
 
         case(setTriggers.type):
             return Object.assign({}, state, {triggers: args.triggers});
+
+        case (setWaiting.type):
+            return Object.assign({}, state, {loading: true});
 
         default: return state;
     }
@@ -175,8 +188,10 @@ function* loadConversationHandler(event)
 function* addNodeHandler(event)
 {
     const {conversationName, nodeName} = event.args;
+    console.log(event.args);
 
     try {
+        yield put({type: setWaiting.type, args: {}});
         const {nodes} = yield call(api.addConversationNode, conversationName, nodeName);
         yield put({type: setNodes.type, args: {nodes}})
     }
@@ -193,6 +208,7 @@ function* removeNodeHandler(event)
     const {conversationName, nodeName} = event.args;
 
     try {
+        yield put({type: setWaiting.type, args: {}});
         const {nodes} = yield call(api.removeConversationNode, conversationName, nodeName);
         yield put({type: setNodes.type, args: {nodes}})
     }
@@ -209,6 +225,7 @@ function* addTriggerHandler(event)
     const {conversationName, word} = event.args;
 
     try {
+        yield put({type: setWaiting.type, args: {}});
         const {triggers} = yield call(api.addConversationTrigger, conversationName, word);
         yield put({type: setTriggers.type, args: {triggers}})
     }
@@ -225,6 +242,7 @@ function* removeTriggerHandler(event)
     const {conversationName, word} = event.args;
 
     try {
+        yield put({type: setWaiting.type, args: {}});
         const {triggers} = yield call(api.removeConversationTrigger, conversationName, word);
         yield put({type: setTriggers.type, args: {triggers}})
     }
@@ -241,6 +259,7 @@ function* addVariableHandler(event)
     const {conversationName, variableName} = event.args;
 
     try {
+        yield put({type: setWaiting.type, args: {}});
         const {variables} = yield call(api.addConversationVariable, conversationName, variableName);
         yield put({type: setVariables.type, args: {variables}});
     }
@@ -257,6 +276,7 @@ function* removeVariableHandler(event)
     const {conversationName, variableName} = event.args;
 
     try {
+        yield put({type: setWaiting.type, args: {}});
         const {variables} = yield call(api.removeConversationVariable, conversationName, variableName);
         yield put({type: setVariables.type, args: {variables}})
     }
@@ -291,6 +311,7 @@ const exports = {
     events: {
         setName,
         loadConversation,
+        setWaiting,
         setConversation,
         addNode,
         removeNode,

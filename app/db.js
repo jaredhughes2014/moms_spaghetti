@@ -110,13 +110,11 @@ const addConversationNode = (conversationName, nodeName, onComplete) =>
         if (!duplicate) {
             conversation.nodes.push(new data.ConversationNode({name: nodeName}));
         }
-        let nodes = conversation.nodes.map(p => p.name);
-
         if (duplicate) {
             warn(`Node named ${nodeName} already exists in ${conversationName}`, onComplete, {nodes});
         }
         else {
-            onComplete({nodes});
+            onComplete({nodes: conversation.nodes});
         }
     }
     else {
