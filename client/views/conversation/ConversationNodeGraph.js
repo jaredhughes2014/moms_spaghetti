@@ -9,11 +9,12 @@ const ConversationNodeGraph = ({conversationNodes, onMove, onStartMove, onConnec
     const nodes = buildGraphNodes(conversationNodes);
     const connections = buildConnections(conversationNodes, nodes);
 
-    console.log('Rendering');
+    const data = {nodes, connections};
+    console.log(data);
 
     return (
         <ReactNodeGraph
-            data={{nodes, connections}}
+            data={data}
             onNodeMove={onMove}
             onNodeStartMove={onStartMove}
             onNewConnector={onConnect}/>
@@ -23,14 +24,14 @@ const ConversationNodeGraph = ({conversationNodes, onMove, onStartMove, onConnec
 const buildGraphNodes = (nodes) =>
 {
     let graphNodes = [];
-    const columns = screen.width / 50;
+    const columns = screen.width / 250;
 
     for (let i = 0; i < nodes.length; ++i) {
         graphNodes.push({
             nid: i + 1,
             type: nodes[i].name,
-            x: (i % columns) * 50,
-            y: ((i + 1) / columns) * 50,
+            x: (i % columns) * 250,
+            y: ((i + 1) / columns) * 250,
             fields: {
                 in: [{name: nodes[i].name}],
                 out: [{name: nodes[i].name}]

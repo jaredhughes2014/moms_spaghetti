@@ -8,7 +8,7 @@ const defaultState = {
     nodes: [],
     triggers: [],
     variables: [],
-    loading: false,
+    loading: true,
 };
 
 /**
@@ -135,13 +135,13 @@ const reducer = (state=defaultState, event) =>
             });
 
         case(setNodes.type):
-            return Object.assign({}, state, {nodes: args.nodes});
+            return Object.assign({}, state, {nodes: args.nodes, loading: false});
 
         case(setVariables.type):
-            return Object.assign({}, state, {variables: args.variables});
+            return Object.assign({}, state, {variables: args.variables, loading: false});
 
         case(setTriggers.type):
-            return Object.assign({}, state, {triggers: args.triggers});
+            return Object.assign({}, state, {triggers: args.triggers, loading: false});
 
         case (setWaiting.type):
             return Object.assign({}, state, {loading: true});

@@ -22,6 +22,7 @@ class ConversationEditView extends React.Component
     constructor(props)
     {
         super(props);
+
         this.state = {
             addNodeModalOpen: false,
         };
@@ -62,7 +63,6 @@ class ConversationEditView extends React.Component
 
     renderNoModal()
     {
-        console.log(this.props.nodes);
         return (
             <div>
                 <button onClick={this.openAddNodeModal}>Add Node</button>
@@ -106,8 +106,8 @@ class ConversationEditView extends React.Component
 
     addNode(name)
     {
-        this.props.addNode(this.props.name, name);
         this.closeAddNodeModal();
+        this.props.addNode(this.props.name, name);
     }
 }
 

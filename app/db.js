@@ -111,7 +111,7 @@ const addConversationNode = (conversationName, nodeName, onComplete) =>
             conversation.nodes.push(new data.ConversationNode({name: nodeName}));
         }
         if (duplicate) {
-            warn(`Node named ${nodeName} already exists in ${conversationName}`, onComplete, {nodes});
+            warn(`Node named ${nodeName} already exists in ${conversationName}`, onComplete, {nodes: conversation.nodes});
         }
         else {
             onComplete({nodes: conversation.nodes});
