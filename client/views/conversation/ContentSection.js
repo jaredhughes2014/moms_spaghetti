@@ -1,14 +1,19 @@
 
 import React from 'react';
 
+import FlowList from '../general/FlowList'
+
 /**
  *
  */
-const ContentSection = ({}) =>
+const ContentSection = ({children, buttonText, onClick}) =>
 {
     return (
         <div>
-            NYI
+            <button onClick={onClick}>{buttonText}</button>
+            <FlowList horizontal={false}>
+                {children}
+            </FlowList>
         </div>
     );
 };

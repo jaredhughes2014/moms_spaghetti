@@ -122,6 +122,100 @@ const addConversationNode = (conversationName, nodeName, onComplete) =>
     }
 };
 
+const removeConversationNode = (conversationName, nodeName, onComplete) =>
+{
+    let conversation = conversations.find(p => p.name == conversationName);
+
+    if (conversation) {
+        conversation.nodes = conversation.nodes.filter(p => p.name !== nodeName);
+        onComplete({nodes: conversation.nodes});
+    }
+    else {
+        warn(`No conversation named ${conversationName} exists`, onComplete, {nodes: []});
+    }
+};
+
+const addConversationTrigger = (conversationName, triggerName, onComplete) =>
+{
+    getConversation(conversationName, (response) => {
+        const {conversation} = response;
+
+        if (conversation) {
+
+            let duplicate = conversation.triggers.find(p => p == triggerName) !== undefined;
+            if (!duplicate) {
+                conversation.triggers.push(triggerName);
+            }
+            if (duplicate) {
+                warn(`Trigger named ${triggerName} already exists in ${conversationName}`, onComplete, {triggers: conversation.triggers});
+            }
+            else {
+                onComplete({triggers: conversation.triggers});
+            }
+        }
+        else {
+            warn(`No conversation named ${conversationName} exists`, onComplete, {triggers: []});
+        }
+    });
+};
+
+const removeConversationTrigger = (conversationName, triggerName, onComplete) =>
+{
+    getConversation(conversationName, (response) => {
+        const {conversation} = response;
+
+        if (conversation) {
+            conversation.triggers = conversation.triggers.filter(p => p != triggerName);
+            onComplete({triggers: conversation.triggers});
+        }
+        else {
+            warn(`No conversation named ${conversationName} exists`, onComplete, {triggers: []})
+        }
+    });
+};
+
+const addConversationVariable = (conversationName, variablesName, onComplete) =>
+{
+    getConversation(conversationName, (response) => {
+        const {conversation} = response;
+
+        if (conversation) {
+
+            let duplicate = conversation.variables.find(p => p.name == variablesName) !== undefined;
+
+            if (!duplicate) {
+                conversation.variables.push(new data.Variable({name: variablesName}));
+            }
+
+            if (duplicate) {
+                warn(`Variable named ${variablesName} already exists in ${conversationName}`, onComplete, {variables: conversation.variables});
+            }
+            else {
+                onComplete({variables: conversation.variables});
+            }
+        }
+        else {
+            warn(`No conversation named ${conversationName} exists`, onComplete, {variables: []});
+        }
+    });
+};
+
+const removeConversationVariable = (conversationName, variableName, onComplete) =>
+{
+
+    getConversation(conversationName, (response) => {
+        const {conversation} = response;
+
+        if (conversation) {
+            conversation.variables = conversation.variables.filter(p => p != variableName);
+            onComplete({variables: conversation.variables});
+        }
+        else {
+            warn(`No conversation named ${conversationName} exists`, onComplete, {variables: []})
+        }
+    });
+};
+
 /*
  * Sets the node's name
  */
@@ -391,6 +485,11 @@ module.exports = {
     getConversationNames,
     updateConversationName,
     addConversationNode,
+    removeConversationNode,
+    addConversationVariable,
+    removeConversationVariable,
+    addConversationTrigger,
+    removeConversationTrigger,
     updateNodeName,
     updateNodeText,
     getNode,

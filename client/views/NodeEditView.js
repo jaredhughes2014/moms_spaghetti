@@ -1,9 +1,10 @@
 
-
 import React from 'react';
 import {connect} from 'react-redux';
+import {Link} from 'react-router';
 
 import events from '../events';
+import routes from '../routes';
 
 import ContentSection from './node/ContentSection';
 import KeyWordSelector from './node/KeyWordSelector';
@@ -29,9 +30,7 @@ class NodeEditView extends React.Component
     render()
     {
         return (
-            <div>
-                NYI
-            </div>
+            <Link to={routes.conversation}>Go Back</Link>
         );
     }
 }

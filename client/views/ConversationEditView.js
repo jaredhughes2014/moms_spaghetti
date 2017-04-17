@@ -1,12 +1,12 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {browserHistory} from 'react-router';
 
 import events from '../events';
+import routes from '../routes';
 
 import ContentSection from './conversation/ContentSection';
-import NodeSelector from './conversation/NodeSelector';
-import TargetSelector from './conversation/TargetSelector';
-import VariableSelector from './conversation/VariableSelector';
+import EditableText from './general/EditableText';
 import NameModal from './general/NameModal';
 
 import ConversationNodeGraph from './conversation/ConversationNodeGraph';
@@ -25,15 +25,27 @@ class ConversationEditView extends React.Component
 
         this.state = {
             addNodeModalOpen: false,
+            addVariableModalOpen: false,
+            addTriggerModalOpen: false,
         };
 
         this.openAddNodeModal = this.openAddNodeModal.bind(this);
         this.closeAddNodeModal = this.closeAddNodeModal.bind(this);
         this.addNode = this.addNode.bind(this);
 
+        this.openAddTriggerModal = this.openAddTriggerModal.bind(this);
+        this.closeAddTriggerModal = this.closeAddTriggerModal.bind(this);
+        this.addTrigger = this.addTrigger.bind(this);
+
+        this.openAddVariableModal = this.openAddVariableModal.bind(this);
+        this.closeAddVariableModal = this.closeAddVariableModal.bind(this);
+        this.addVariable = this.addVariable.bind(this);
+
         this.onNodeMove = this.onNodeMove.bind(this);
         this.onNodeStartMove = this.onNodeStartMove.bind(this);
         this.onConnect = this.onConnect.bind(this);
+
+        this.submitConversationName = this.submitConversationName.bind(this);
     }
 
     /**
@@ -46,27 +58,46 @@ class ConversationEditView extends React.Component
                 <div>Loading...</div>
             )
         }
-        if (this.state.addNodeModalOpen) {
-            return this.renderNodeModal();
+        else if (this.state.addNodeModalOpen) {
+            return (
+                <NameModal onSubmit={this.addNode} onCancel={this.closeAddNodeModal}/>
+            )
+        }
+        else if (this.state.addTriggerModalOpen) {
+            return (
+                <NameModal onSubmit={this.addTrigger} onCancel={this.closeAddTriggerModal}/>
+            )
+        }
+        else if (this.state.addVariableModalOpen) {
+            return (
+                <NameModal onSubmit={this.addVariable} onCancel={this.closeAddVariableModal}/>
+            )
         }
         else {
             return this.renderNoModal();
         }
     }
 
-    renderNodeModal()
-    {
-        return (
-            <NameModal onSubmit={this.addNode} onCancel={this.closeAddNodeModal}/>
-        )
-    }
-
     renderNoModal()
     {
+        console.log(this.props);
         return (
             <div>
+                <EditableText text={this.props.name} onSubmit={this.submitConversationName}/>
+
+                <div>
+                    <span>
+                        <ContentSection onClick={this.openAddVariableModal} buttonText="Add Variable">
+                            {this.props.variables.map(p => <div>{p.name}</div>)}
+                        </ContentSection>
+
+                        <ContentSection onClick={this.openAddTriggerModal} buttonText="Add Trigger">
+                            {this.props.triggers.map(p => <div>{p}</div>)}
+                        </ContentSection>
+                    </span>
+                </div>
+
                 <button onClick={this.openAddNodeModal}>Add Node</button>
-                <div>{this.props.name ? this.props.name : 'NO NAME SET'}</div>
                 <ConversationNodeGraph
                     conversationNodes={this.props.nodes}
                     onMove={this.onNodeMove}
@@ -76,20 +107,31 @@ class ConversationEditView extends React.Component
         );
     }
 
+    submitConversationName(oldName, name)
+    {
+        this.props.setName(oldName, name);
+    }
+
     // Movement functions
 
     onNodeMove(nid, pos)
     {
-        this.props.updateNodePosition(this.props.name, nid, pos.left, pos.top);
+        const node = this.props.nodes.find(p => p.name == nid);
+
+        if (node.x == pos.left && node.y == pos.top) {
+            this.props.loadNode(this.props.name, nid);
+            browserHistory.push(routes.node);
+        }
+        else {
+            this.props.updateNodePosition(this.props.name, nid, pos.left, pos.top);
+        }
     }
 
-    onNodeStartMove(nid)
-    {
-    }
+    onNodeStartMove() {}
 
     onConnect(fromNid, from, toNid, to)
     {
-        this.props.addTarget(this.props.name, from, to);
+        this.props.addTarget(this.props.name, fromNid, toNid);
     }
 
     // Add node modal
@@ -108,6 +150,42 @@ class ConversationEditView extends React.Component
     {
         this.closeAddNodeModal();
         this.props.addNode(this.props.name, name);
+    }
+
+    // Add key word modal
+
+    openAddTriggerModal()
+    {
+        this.setState({addTriggerModalOpen: true});
+    }
+
+    closeAddTriggerModal()
+    {
+        this.setState({addTriggerModalOpen: false});
+    }
+
+    addTrigger(name)
+    {
+        this.closeAddTriggerModal();
+        this.props.addTrigger(this.props.name, name);
+    }
+
+    // Add variable modal
+
+    openAddVariableModal()
+    {
+        this.setState({addVariableModalOpen: true});
+    }
+
+    closeAddVariableModal()
+    {
+        this.setState({addVariableModalOpen: false});
+    }
+
+    addVariable(name)
+    {
+        this.closeAddVariableModal();
+        this.props.addVariable(this.props.name, name);
     }
 }
 
@@ -134,15 +212,20 @@ const mapDispatchToProps = (dispatch) =>
 
     return {
         setName: (oldName, newName) => dispatch(ev.setName({oldName, newName})),
+
         addNode: (conversationName, nodeName) => dispatch(ev.addNode({conversationName, nodeName})),
         removeNode: (conversationName, nodeName) => dispatch(ev.removeNode({conversationName, nodeName})),
+
+        addTrigger: (conversationName, triggerName) => dispatch(ev.addTrigger({conversationName, triggerName})),
+        addVariable: (conversationName, variableName) => dispatch(ev.addVariable({conversationName, variableName})),
+
         addTarget: (conversationName, nodeName, targetName) => dispatch(
                 ev.addNodeTarget({conversationName, nodeName, targetName})
             ),
         updateNodePosition: (conversationName, nodeName, x, y) => dispatch(
                 ev.updateNodePosition({conversationName, nodeName, x, y})
             ),
-
+        loadNode: (conversationName, nodeName) => dispatch(events.nodeEdit.loadNode({conversationName, nodeName}))
     };
 };
 
