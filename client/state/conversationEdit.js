@@ -8,6 +8,7 @@ const defaultState = {
     nodes: [],
     triggers: [],
     variables: [],
+    loading: true,
 };
 
 /**
@@ -16,6 +17,14 @@ const defaultState = {
 const setName = {
     type: 'SET_CONVERSATION_NAME',
     expectedArgs: ['oldName', 'newName'],
+};
+
+/**
+ * Puts the conversation edit state in the waiting state
+ */
+const setWaiting = {
+    type: 'SET_CONVERSATION_EDIT_WAITING',
+    expectedArgs: [],
 };
 
 /**
@@ -106,7 +115,29 @@ const setVariables = {
     expectedArgs: ['variables'],
 };
 
+/**
+ * Updates the x, y coordinates of a conversation node
+ */
+const updateNodePosition = {
+    type: 'UPDATE_NODE_POSITION',
+    expectedArgs: ['conversationName', 'nodeName', 'x', 'y']
+};
 
+/**
+ * Adds a target node to the edited node. This is an asynchronous action
+ */
+const addNodeTarget = {
+    type: 'ADD_TARGET_NODE',
+    expectedArgs: ['conversationName', 'nodeName', 'targetName'],
+};
+
+/**
+ * Removes a target node from the edited node. This is an asynchronous action
+ */
+const removeNodeTarget = {
+    type: 'REMOVE_TARGET_NODE',
+    expectedArgs: ['conversationName', 'nodeName', 'targetName'],
+};
 
 /**
  * The reducer function for the conversations state
@@ -118,20 +149,24 @@ const reducer = (state=defaultState, event) =>
 
         case(setConversation.type):
             return Object.assign({}, state, {
-                name: args.name,
-                nodes: args.nodes,
-                triggers: args.triggers,
-                variables: args.variables,
+                name: args.conversation.name,
+                nodes: args.conversation.nodes,
+                triggers: args.conversation.triggers,
+                variables: args.conversation.variables,
+                loading: false,
             });
 
         case(setNodes.type):
-            return Object.assign({}, state, {nodes: args.nodes});
+            return Object.assign({}, state, {nodes: args.nodes, loading: false});
 
         case(setVariables.type):
-            return Object.assign({}, state, {variables: args.variables});
+            return Object.assign({}, state, {variables: args.variables, loading: false});
 
         case(setTriggers.type):
-            return Object.assign({}, state, {triggers: args.triggers});
+            return Object.assign({}, state, {triggers: args.triggers, loading: false});
+
+        case (setWaiting.type):
+            return Object.assign({}, state, {loading: true});
 
         default: return state;
     }
@@ -177,6 +212,7 @@ function* addNodeHandler(event)
     const {conversationName, nodeName} = event.args;
 
     try {
+        yield put({type: setWaiting.type, args: {}});
         const {nodes} = yield call(api.addConversationNode, conversationName, nodeName);
         yield put({type: setNodes.type, args: {nodes}})
     }
@@ -193,6 +229,7 @@ function* removeNodeHandler(event)
     const {conversationName, nodeName} = event.args;
 
     try {
+        yield put({type: setWaiting.type, args: {}});
         const {nodes} = yield call(api.removeConversationNode, conversationName, nodeName);
         yield put({type: setNodes.type, args: {nodes}})
     }
@@ -209,6 +246,7 @@ function* addTriggerHandler(event)
     const {conversationName, word} = event.args;
 
     try {
+        yield put({type: setWaiting.type, args: {}});
         const {triggers} = yield call(api.addConversationTrigger, conversationName, word);
         yield put({type: setTriggers.type, args: {triggers}})
     }
@@ -225,6 +263,7 @@ function* removeTriggerHandler(event)
     const {conversationName, word} = event.args;
 
     try {
+        yield put({type: setWaiting.type, args: {}});
         const {triggers} = yield call(api.removeConversationTrigger, conversationName, word);
         yield put({type: setTriggers.type, args: {triggers}})
     }
@@ -241,6 +280,7 @@ function* addVariableHandler(event)
     const {conversationName, variableName} = event.args;
 
     try {
+        yield put({type: setWaiting.type, args: {}});
         const {variables} = yield call(api.addConversationVariable, conversationName, variableName);
         yield put({type: setVariables.type, args: {variables}});
     }
@@ -257,8 +297,58 @@ function* removeVariableHandler(event)
     const {conversationName, variableName} = event.args;
 
     try {
+        yield put({type: setWaiting.type, args: {}});
         const {variables} = yield call(api.removeConversationVariable, conversationName, variableName);
         yield put({type: setVariables.type, args: {variables}})
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Updates the x, y coordinates of a conversation node
+ * @param event
+ */
+function* updateNodePositionHandler(event)
+{
+    const {conversationName, nodeName, x, y} = event.args;
+
+    try {
+        const {nodes} = yield call(api.updateNodePosition, conversationName, nodeName, x, y);
+        yield put({type: setNodes.type, args: {nodes}});
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Adds a target to the edited node
+ */
+function* addTargetHandler(event)
+{
+    const {conversationName, nodeName, targetName} = event.args;
+
+    try {
+        const {nodes} = yield call(api.addNodeTarget, conversationName, nodeName, targetName);
+        yield put({type: setNodes.type, args: {nodes}})
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Removes a target from the edited node
+ */
+function* removeTargetHandler(event)
+{
+    const {conversationName, nodeName, targetName} = event.args;
+
+    try {
+        const {nodes} = yield call(api.removeNodeTarget, conversationName, nodeName, targetName);
+        yield put({type: setNodes.type, args: {nodes}})
     }
     catch (err) {
         console.error(err);
@@ -281,6 +371,10 @@ function* saga()
 
     yield takeEvery(addVariable.type, addVariableHandler);
     yield takeEvery(removeVariable.type, removeVariableHandler);
+
+    yield takeEvery(updateNodePosition.type, updateNodePositionHandler);
+    yield takeEvery(addNodeTarget.type, addTargetHandler);
+    yield takeEvery(removeNodeTarget.type, removeTargetHandler);
 }
 
 
@@ -291,6 +385,7 @@ const exports = {
     events: {
         setName,
         loadConversation,
+        setWaiting,
         setConversation,
         addNode,
         removeNode,
@@ -301,6 +396,9 @@ const exports = {
         addVariable,
         removeVariable,
         setVariables,
+        updateNodePosition,
+        addNodeTarget,
+        removeNodeTarget,
     },
     reducer,
     saga,

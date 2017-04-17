@@ -57,7 +57,6 @@ const waitForConversations = {
 const reducer = (state=defaultState, event) =>
 {
     let args = event.args;
-    console.log(event);
 
     switch (event.type) {
 

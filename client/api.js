@@ -139,5 +139,11 @@ const api = {
         nodeName,
         targetName,
     }),
+    updateNodePosition: (conversationName, nodeName, x, y) => formatFetch(paths.node.updatePosition, http.post, {
+        conversationName,
+        nodeName,
+        x,
+        y
+    }),
 };
 export default api;

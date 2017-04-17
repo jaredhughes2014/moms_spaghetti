@@ -46,7 +46,8 @@ const paths = {
         addKeyWord: 'addKeyWord',
         removeKeyWord: 'removeKeyWord',
         addTarget: 'addTarget',
-        removeTarget: 'removeTarget'
+        removeTarget: 'removeTarget',
+        updatePosition: 'updatePosition',
     }),
 };
 module.exports = paths;
