@@ -115,7 +115,13 @@ const setVariables = {
     expectedArgs: ['variables'],
 };
 
-
+/**
+ * Updates the x, y coordinates of a conversation node
+ */
+const updateNodePosition = {
+    type: 'UPDATE_NODE_POSITION',
+    expectedArgs: ['conversationName', 'nodeName', 'x', 'y']
+};
 
 /**
  * The reducer function for the conversations state
@@ -286,6 +292,23 @@ function* removeVariableHandler(event)
 }
 
 /**
+ * Updates the x, y coordinates of a conversation node
+ * @param event
+ */
+function* updateNodePositionHandler(event)
+{
+    const {conversationName, nodeName, x, y} = event.args;
+
+    try {
+        const {nodes} = yield call(api.updateNodePosition, conversationName, nodeName, x, y);
+        yield put({type: setNodes.type, args: {nodes}});
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
  * Maps every saga handler function to its event
  */
 function* saga()
@@ -301,6 +324,8 @@ function* saga()
 
     yield takeEvery(addVariable.type, addVariableHandler);
     yield takeEvery(removeVariable.type, removeVariableHandler);
+
+    yield takeEvery(updateNodePosition.type, updateNodePositionHandler);
 }
 
 
@@ -322,6 +347,7 @@ const exports = {
         addVariable,
         removeVariable,
         setVariables,
+        updateNodePosition,
     },
     reducer,
     saga,

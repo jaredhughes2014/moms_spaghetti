@@ -162,6 +162,33 @@ const updateNodeText = ({conversationName, nodeName, text}, onComplete) => {
     });
 };
 
+/**
+ * Updates the x and y coordinate of the given nodes. Used by the editor only
+ */
+const updateNodePosition = ({conversationName, nodeName, x, y}, onComplete) =>
+{
+    getConversation({conversationName}, (response) => {
+        const {conversation} = response;
+
+        if (conversation) {
+            let node = conversation.nodes.find(p => p.name == nodeName);
+
+            if (node) {
+                node.x = x;
+                node.y = y;
+
+                onComplete({nodes: conversation.nodes});
+            }
+            else {
+                warn(`No node named ${nodeName} in conversation ${conversationName} exists`, onComplete, {nodes: []});
+            }
+        }
+        else {
+            warn(`No conversation named ${conversationName} exists`, onComplete, {nodes: []});
+        }
+    })
+};
+
 /*
  * Gets the requested node
  */
@@ -377,4 +404,5 @@ module.exports = {
     removeKeyWord,
     addTarget,
     removeTarget,
+    updateNodePosition,
 };

@@ -257,6 +257,17 @@ app.post(paths.node.removeTarget, (req, res) => {
 });
 
 /**
+ * TODO: Return the affected node
+ */
+app.post(paths.node.updatePosition, (req, res) => {
+    const {conversationName, nodeName, x, y} = req.body;
+
+    if (validateBodyParameters(res, conversationName, nodeName, x, y)) {
+        db.updateNodePosition(req.body, buildDatabaseResponseHandler(res));
+    }
+});
+
+/**
  * Builds a handler function for the database response
  */
 const buildDatabaseResponseHandler = (res) =>
