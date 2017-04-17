@@ -80,6 +80,7 @@ class ConversationEditView extends React.Component
 
     onNodeMove(nid, pos)
     {
+        this.props.updateNodePosition(this.props.name, nid, pos.left, pos.top);
     }
 
     onNodeStartMove(nid)
@@ -89,7 +90,6 @@ class ConversationEditView extends React.Component
     onConnect(fromNid, from, toNid, to)
     {
         this.props.addTarget(this.props.name, from, to);
-        this.setState({});
     }
 
     // Add node modal
@@ -130,15 +130,17 @@ const mapStateToProps = (state) =>
  */
 const mapDispatchToProps = (dispatch) =>
 {
-    const evCon = events.conversationEdit;
-    const evNode = events.nodeEdit;
+    const ev = events.conversationEdit;
 
     return {
-        setName: (oldName, newName) => dispatch(evCon.setName({oldName, newName})),
-        addNode: (conversationName, nodeName) => dispatch(evCon.addNode({conversationName, nodeName})),
-        removeNode: (conversationName, nodeName) => dispatch(evCon.removeNode({conversationName, nodeName})),
+        setName: (oldName, newName) => dispatch(ev.setName({oldName, newName})),
+        addNode: (conversationName, nodeName) => dispatch(ev.addNode({conversationName, nodeName})),
+        removeNode: (conversationName, nodeName) => dispatch(ev.removeNode({conversationName, nodeName})),
         addTarget: (conversationName, nodeName, targetName) => dispatch(
-                evNode.addTarget({conversationName, nodeName, targetName})
+                ev.addNodeTarget({conversationName, nodeName, targetName})
+            ),
+        updateNodePosition: (conversationName, nodeName, x, y) => dispatch(
+                ev.updateNodePosition({conversationName, nodeName, x, y})
             ),
 
     };

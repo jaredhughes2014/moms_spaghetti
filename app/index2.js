@@ -257,7 +257,7 @@ app.post(paths.node.removeTarget, (req, res) => {
 });
 
 /**
- * TODO: Return the affected node
+ * TODO: Return all nodes in the conversation
  */
 app.post(paths.node.updatePosition, (req, res) => {
     const {conversationName, nodeName, x, y} = req.body;

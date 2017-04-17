@@ -124,6 +124,22 @@ const updateNodePosition = {
 };
 
 /**
+ * Adds a target node to the edited node. This is an asynchronous action
+ */
+const addNodeTarget = {
+    type: 'ADD_TARGET_NODE',
+    expectedArgs: ['conversationName', 'nodeName', 'targetName'],
+};
+
+/**
+ * Removes a target node from the edited node. This is an asynchronous action
+ */
+const removeNodeTarget = {
+    type: 'REMOVE_TARGET_NODE',
+    expectedArgs: ['conversationName', 'nodeName', 'targetName'],
+};
+
+/**
  * The reducer function for the conversations state
  */
 const reducer = (state=defaultState, event) =>
@@ -194,7 +210,6 @@ function* loadConversationHandler(event)
 function* addNodeHandler(event)
 {
     const {conversationName, nodeName} = event.args;
-    console.log(event.args);
 
     try {
         yield put({type: setWaiting.type, args: {}});
@@ -309,6 +324,38 @@ function* updateNodePositionHandler(event)
 }
 
 /**
+ * Adds a target to the edited node
+ */
+function* addTargetHandler(event)
+{
+    const {conversationName, nodeName, targetName} = event.args;
+
+    try {
+        const {nodes} = yield call(api.addNodeTarget, conversationName, nodeName, targetName);
+        yield put({type: setNodes.type, args: {nodes}})
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Removes a target from the edited node
+ */
+function* removeTargetHandler(event)
+{
+    const {conversationName, nodeName, targetName} = event.args;
+
+    try {
+        const {nodes} = yield call(api.removeNodeTarget, conversationName, nodeName, targetName);
+        yield put({type: setNodes.type, args: {nodes}})
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
+/**
  * Maps every saga handler function to its event
  */
 function* saga()
@@ -326,6 +373,8 @@ function* saga()
     yield takeEvery(removeVariable.type, removeVariableHandler);
 
     yield takeEvery(updateNodePosition.type, updateNodePositionHandler);
+    yield takeEvery(addNodeTarget.type, addTargetHandler);
+    yield takeEvery(removeNodeTarget.type, removeTargetHandler);
 }
 
 
@@ -348,6 +397,8 @@ const exports = {
         removeVariable,
         setVariables,
         updateNodePosition,
+        addNodeTarget,
+        removeNodeTarget,
     },
     reducer,
     saga,

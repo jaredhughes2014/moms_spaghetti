@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactNodeGraph from 'react-node-graph';
 
+let graphData = null;
+
 /**
  *
  */
@@ -9,12 +11,26 @@ const ConversationNodeGraph = ({conversationNodes, onMove, onStartMove, onConnec
     const nodes = buildGraphNodes(conversationNodes);
     const connections = buildConnections(conversationNodes, nodes);
 
-    const data = {nodes, connections};
-    console.log(data);
+    if (graphData) {
+        graphData.nodes.splice(0, graphData.nodes.length);
+        graphData.connections.splice(0, graphData.connections.length);
+
+        for (let i = 0; i < nodes.length; ++i) {
+            graphData.nodes.push(nodes[i]);
+        }
+        for (let i = 0; i < connections.length; ++i) {
+            graphData.connections.push(connections[i]);
+        }
+    }
+    else {
+        graphData = {nodes, connections};
+    }
+
+    console.log(graphData);
 
     return (
         <ReactNodeGraph
-            data={data}
+            data={graphData}
             onNodeMove={onMove}
             onNodeStartMove={onStartMove}
             onNewConnector={onConnect}/>
@@ -24,14 +40,13 @@ const ConversationNodeGraph = ({conversationNodes, onMove, onStartMove, onConnec
 const buildGraphNodes = (nodes) =>
 {
     let graphNodes = [];
-    const columns = screen.width / 250;
 
     for (let i = 0; i < nodes.length; ++i) {
         graphNodes.push({
-            nid: i + 1,
+            nid: nodes[i].name,
             type: nodes[i].name,
-            x: (i % columns) * 250,
-            y: ((i + 1) / columns) * 250,
+            x: nodes[i].x,
+            y: nodes[i].y,
             fields: {
                 in: [{name: nodes[i].name}],
                 out: [{name: nodes[i].name}]
