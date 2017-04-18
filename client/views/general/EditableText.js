@@ -1,5 +1,7 @@
 
 import React from 'react';
+import FormControl from 'react-bootstrap/lib/formcontrol';
+
 
 /**
  * Represents a label that can be clicked to become editable
@@ -27,16 +29,16 @@ class EditableText extends React.Component
             return (
                 <div>
                     <span>
-                        <input type="text" value={this.state.content} onChange={this.updateText}/>
-                        <button onClick={this.onSubmit}>Submit</button>
-                        <button onClick={this.closeEdit}>Cancel</button>
+                        <FormControl type="text" value={this.state.content} onChange={this.updateText}/>
+                        <Button onClick={this.onSubmit}>Submit</Button>
+                        <Button onClick={this.closeEdit}>Cancel</Button>
                     </span>
                 </div>
             )
         }
         else {
             return (
-                <div onClick={this.onClickLabel}>{this.props.text}</div>
+                <h1 onClick={this.onClickLabel}>{this.props.text}</h1>
             )
         }
     }

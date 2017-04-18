@@ -1,4 +1,7 @@
 import React, {Component} from 'react';
+import Button from 'react-bootstrap/lib/button';
+import FormControl from 'react-bootstrap/lib/formcontrol';
+
 
 /**
  * Renders the modal box for the user to enter a name
@@ -20,9 +23,9 @@ class NameModal extends React.Component
     {
         return (
             <div className="name-modal">
-                <input type="text" value={this.state.name} onChange={this.updateText}/>
-                <button className="name-modal-button" onClick={this.submit}>Submit</button>
-                <button className="name-modal-button" onClick={this.cancel}>Cancel</button>
+                <FormControl type="text" value={this.state.name} onChange={this.updateText}/>
+                <Button className="name-modal-button" onClick={this.submit}>Submit</Button>
+                <Button className="name-modal-button" onClick={this.cancel}>Cancel</Button>
             </div>
         );
     }

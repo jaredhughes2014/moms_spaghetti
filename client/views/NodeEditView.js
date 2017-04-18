@@ -13,6 +13,7 @@ import ContentSection from './general/ContentSection';
 import KeyWordSelector from './node/KeyWordSelector';
 import PromptSelector from './node/PromptSelector';
 import TargetSelector from './node/TargetSelector';
+import Button from 'react-bootstrap/lib/button';
 
 /**
  *
@@ -70,7 +71,7 @@ class NodeEditView extends React.Component
     {
         return (
             <div>
-                <button onClick={this.goBack}>Go Back</button>
+                <Button onClick={this.goBack}>Go Back</Button>
 
                 <ContentSection onClick={this.openKeyWordModal} buttonText="Add Key Word">
                     {this.props.keyWords.map(p => <div key={p}>{p}</div>)}

@@ -10,6 +10,9 @@ import EditableText from './general/EditableText';
 import NameModal from './general/NameModal';
 
 import ConversationNodeGraph from './conversation/ConversationNodeGraph';
+import Button from 'react-bootstrap/lib/button';
+import Panel from 'react-bootstrap/lib/panel';
+
 
 /**
  *
@@ -84,15 +87,19 @@ class ConversationEditView extends React.Component
             <div>
                 <EditableText text={this.props.name} onSubmit={this.submitConversationName}/>
 
-                <ContentSection onClick={this.openAddVariableModal} buttonText="Add Variable">
-                    {this.props.variables.map(p => <div key={p.name}>{p.name}</div>)}
-                </ContentSection>
+                <Panel>
+                    <ContentSection onClick={this.openAddVariableModal} buttonText="Add Variable">
+                        {this.props.variables.map(p => <div key={p.name}>{p.name}</div>)}
+                    </ContentSection>
+                </Panel>
 
+                <Panel>
                 <ContentSection onClick={this.openAddTriggerModal} buttonText="Add Trigger">
                     {this.props.triggers.map(p => <div key={p}>{p}</div>)}
                 </ContentSection>
+                </Panel>
 
-                <button onClick={this.openAddNodeModal}>Add Node</button>
+                <Button onClick={this.openAddNodeModal}>Add Node</Button>
                 <ConversationNodeGraph
                     conversationNodes={this.props.nodes}
                     onMove={this.onNodeMove}
