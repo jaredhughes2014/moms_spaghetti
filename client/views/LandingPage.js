@@ -45,25 +45,33 @@ class LandingPage extends React.Component
     {
         if (this.props.loading) {
             return (
-                <div>Loading...</div>
+                <h1>Loading...</h1>
             );
         }
-        else if (this.state.modalOpen) {
-            return this.renderModal();
-        }
         else {
-            return this.renderNoModal();
+
+            const body = this.getBody();
+            const modal = this.getModal();
+
+            return (
+                <div>
+                    {modal}
+                    {body}
+                </div>
+            )
         }
     }
 
-    renderModal()
+    getModal()
     {
-        return (
-            <NameModal onSubmit={this.addConversation} onCancel={this.closeNewConversationModal}/>
-        )
+        if (this.state.modalOpen) {
+            return (
+                <NameModal onSubmit={this.addConversation} onCancel={this.closeNewConversationModal}/>
+            )
+        }
     }
 
-    renderNoModal()
+    getBody()
     {
         return (
             <div>

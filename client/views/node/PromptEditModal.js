@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Button from 'react-bootstrap/lib/Button';
 import FormControl from 'react-bootstrap/lib/Formcontrol';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
+import Modal from 'react-bootstrap/lib/Modal';
 
 
 /**
@@ -29,22 +30,32 @@ class PromptEditModal extends React.Component
     render()
     {
         return (
-            <div className="prompt-modal">
-                <div>
-                    <ControlLabel>Prompt Name</ControlLabel>
-                    <FormControl type="text" value={this.state.name} onChange={this.updateNameText}/>
-                </div>
-                <div>
-                    <ControlLabel>Text</ControlLabel>
-                    <FormControl type="text" value={this.state.content} onChange={this.updateContentText}/>
-                </div>
-                <div>
-                    <ControlLabel>Variable Changed</ControlLabel>
-                    <FormControl type="text" value={this.state.variable} onChange={this.updateVariableText}/>
-                </div>
+            <div className="static-modal">
+                <Modal.Dialog>
+                    <Modal.Header>
+                        <Modal.Title>Enter a name</Modal.Title>
+                    </Modal.Header>
 
-                <Button className="name-modal-button" onClick={this.submit}>Submit</Button>
-                <Button className="name-modal-button" onClick={this.cancel}>Cancel</Button>
+                    <Modal.Body>
+                        <div>
+                            <ControlLabel>Prompt Name</ControlLabel>
+                            <FormControl type="text" value={this.state.name} onChange={this.updateNameText}/>
+                        </div>
+                        <div>
+                            <ControlLabel>Text</ControlLabel>
+                            <FormControl type="text" value={this.state.content} onChange={this.updateContentText}/>
+                        </div>
+                        <div>
+                            <ControlLabel>Variable Changed</ControlLabel>
+                            <FormControl type="text" value={this.state.variable} onChange={this.updateVariableText}/>
+                        </div>
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button className="name-modal-button" onClick={this.submit}>Submit</Button>
+                        <Button className="name-modal-button" onClick={this.cancel}>Cancel</Button>
+                    </Modal.Footer>
+                </Modal.Dialog>
             </div>
         );
     }
