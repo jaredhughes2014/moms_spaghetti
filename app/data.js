@@ -9,13 +9,16 @@ class Conversation
      */
     constructor({name, nodes=[], triggers=[], variables=[]})
     {
+        if (nodes.length == 0) {
+            nodes.push(new ConversationNode({name: 'Start'}));
+        }
         this.update({name, nodes, triggers, variables});
     }
 
     /**
      * Updates all data in this conversation object
      */
-    update({name, nodes, triggers, variables, x, y})
+    update({name, nodes, triggers, variables})
     {
         this.triggers = triggers;
         this.name = name;
@@ -99,7 +102,7 @@ class ConversationNode
  */
 class Prompt
 {
-    constuctor({name, text='', target=null})
+    constructor({name, text='', target=null})
     {
         this.update({name, text, target});
     }

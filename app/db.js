@@ -305,24 +305,20 @@ const getNode = ({conversationName, nodeName}, onComplete) => {
  * Adds the given prompt
  */
 const addPrompt = ({conversationName, nodeName, promptName}, onComplete) => {
-    getConversation(conversationName, (ret) => {
-        const conversation = ret.conversation;
-        if (!conversation) {
-            onComplete(ret);
-            return;
+    getNode({conversationName, nodeName}, (response) => {
+        const {node} = response;
+        if (node) {
+            if (!node.prompts.find(p => p.name == promptName)) {
+                node.prompts.push(new data.Prompt({name: promptName}));
+                onComplete({prompts: node.prompts});
+            }
+            else {
+                warn(`${promptName} already exists in ${nodeName}`, onComplete, {prompts: node.prompts});
+            }
         }
-        const node = conversation.getNode(nodeName);
-        if (!node) {
-            warn(`Can't find node $(nodeName).`, onComplete, {prompts: []});
-            return;
+        else {
+            warn(`Unable to find node named ${nodeName} in conversation ${conversationName}`, onComplete, {prompts: []});
         }
-        const prompts = node.prompts;
-        if (node.getPrompt(promptName)) {
-            warn(`Prompt ${promptName} already exists.`, onComplete, {prompts});
-            return;
-        }
-        prompts.push(new Prompt(promptName));
-        onComplete({prompts});
     });
 };
 
@@ -330,25 +326,16 @@ const addPrompt = ({conversationName, nodeName, promptName}, onComplete) => {
  * Removes the given prompt
  */
 const removePrompt = ({conversationName, nodeName, promptName}, onComplete) => {
-    getConversation(conversationName, (ret) => {
-        const conversation = ret.conversation;
-        if (!conversation) {
-            onComplete(ret);
-            return;
+    getNode({conversationName, nodeName}, (response) => {
+        const {node} = response;
+
+        if (node) {
+            node.prompts = node.prompts.filter(p => p.name !== promptName);
+            onComplete({prompts: node.prompts});
         }
-        const node = conversation.getNode(nodeName);
-        if (!node) {
-            warn(`Can't find node $(nodeName).`, onComplete, {prompts: []});
-            return;
+        else {
+            onComplete(response);
         }
-        const prompts = node.prompts;
-        const ix = prompts.findIndex(p => p.name === promptName);
-        if (ix == -1) {
-            warn(`No prompt named ${promptName} exists.`, onComplete, {prompts});
-            return;
-        }
-        prompts.splice(ix, 1);
-        onComplete({prompts});
     });
 };
 

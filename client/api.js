@@ -118,7 +118,7 @@ const api = {
         variableSet,
     }),
 
-    addNodeKeyWord: (conversationName, nodeName, keyWord) => formatFetch(paths.node.addTrigger, http.post, {
+    addNodeKeyWord: (conversationName, nodeName, keyWord) => formatFetch(paths.node.addKeyWord, http.post, {
         conversationName,
         nodeName,
         keyWord,
