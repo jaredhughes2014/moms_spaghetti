@@ -73,6 +73,27 @@ const getConversation = (name, onComplete) =>
     }
 };
 
+const getConversationByKeywords = (phrase, onComplete) =>
+{
+    phrase = phrase.toLowerCase();
+    let score = 0;
+    let ret = null;
+    for (let c of conversations)
+    {
+        let s = 0;
+        for (let kw of c.keyWords)
+        {
+            if (phrase.indexOf(kw) != -1) s++;
+        }
+        if (s > score)
+        {
+            score = s;
+            ret = c;
+        }
+    }
+    return ret;
+}
+
 /**
  * Gets the names of all conversations in the database
  */
@@ -388,6 +409,7 @@ module.exports = {
     addConversation,
     removeConversation,
     getConversation,
+    getConversationByKeywords,
     getConversationNames,
     updateConversationName,
     addConversationNode,

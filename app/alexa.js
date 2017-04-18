@@ -1,11 +1,6 @@
-module.exports = handler;
+module.exports = lambda_handler;
 
-var inventory = require("./trailInventory.js")
-
-function handler(body) {
-    //body = JSON.parse(body);
-    return lambda_handler(body);
-}
+//var inventory = require("./trailInventory.js")
 
 /*
     attrs = {}
