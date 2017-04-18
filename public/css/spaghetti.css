@@ -1,0 +1,17 @@
+html {
+	padding: 20px;
+}
+
+.form-control {
+	width: 200px;
+	display: inline-block;
+	margin-right: 10px;
+}
+
+.btn {
+	margin-right: 10px;
+}
+
+.panel {
+	width: 200px;
+}

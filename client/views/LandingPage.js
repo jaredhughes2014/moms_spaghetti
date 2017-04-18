@@ -14,6 +14,7 @@ import FlowList from './general/FlowList';
 const evCon = ev.conversations;
 const evConEdit = ev.conversationEdit;
 const evNode = ev.nodeEdit;
+import Button from 'react-bootstrap/lib/button';
 
 
 /**
@@ -70,7 +71,7 @@ class LandingPage extends React.Component
                     {this.props.conversations.map(p => <ConversationSelector name={p} key={p} onClick={this.openConversation}/>)}
                 </FlowList>
 
-                <button onClick={this.openNewConversationModal}>New Conversation</button>
+                <Button onClick={this.openNewConversationModal}>New Conversation</Button>
             </div>
         );
     }
