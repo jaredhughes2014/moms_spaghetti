@@ -7,17 +7,20 @@ class Conversation
     /**
      * Creates a new conversation with a name
      */
-    constructor({name, nodes=[], keyWords=[], variables=[]})
+    constructor({name, nodes=[], triggers=[], variables=[]})
     {
-        this.update({name, nodes, keyWords, variables});
+        if (nodes.length == 0) {
+            nodes.push(new ConversationNode({name: 'Start'}));
+        }
+        this.update({name, nodes, triggers, variables});
     }
 
     /**
      * Updates all data in this conversation object
      */
-    update({name, nodes, keyWords, variables, x, y})
+    update({name, nodes, triggers, variables})
     {
-        this.keyWords = keyWords;
+        this.triggers = triggers;
         this.name = name;
         this.nodes = nodes.map(p => new ConversationNode(p));
         this.variables = variables.map(p => new Variable(p));
@@ -99,7 +102,7 @@ class ConversationNode
  */
 class Prompt
 {
-    constuctor({name, text='', target=null})
+    constructor({name, text='', target=null})
     {
         this.update({name, text, target});
     }

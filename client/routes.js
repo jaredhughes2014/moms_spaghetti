@@ -4,5 +4,6 @@
 const paths = {
     index: '/',
     conversation: '/conversation',
+    node: '/node',
 };
 export default paths;

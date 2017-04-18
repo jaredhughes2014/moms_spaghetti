@@ -65,13 +65,13 @@ const api = {
         nodeName,
     }),
 
-    addConversationTrigger: (conversationName, word) => formatFetch(paths.conversation.addTrigger, http.post, {
+    addConversationTrigger: (conversationName, triggerName) => formatFetch(paths.conversation.addTrigger, http.post, {
         conversationName,
-        word,
+        triggerName,
     }),
-    removeConversationTrigger: (conversationName, word) => formatFetch(paths.conversation.removeTrigger, http.post, {
+    removeConversationTrigger: (conversationName, triggerName) => formatFetch(paths.conversation.removeTrigger, http.post, {
         conversationName,
-        word,
+        triggerName,
     }),
 
     addConversationVariable: (conversationName, variableName) => formatFetch(paths.conversation.addVariable, http.post, {
@@ -110,7 +110,7 @@ const api = {
         nodeName,
         promptName,
     }),
-    updateNodePrompt: (conversationName, nodeName, promptName, promptText, variableSet) => formatFetch(paths.node.updatePrompt, http.post, {
+    updateNodePrompt: (conversationName, nodeName, promptName, promptText, variableSet) => formatFetch(paths.node.addPrompt, http.post, {
         conversationName,
         nodeName,
         promptName,
