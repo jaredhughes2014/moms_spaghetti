@@ -1,5 +1,6 @@
-
 import React from 'react';
+import Button from 'react-bootstrap/lib/button';
+import FormControl from 'react-bootstrap/lib/formcontrol';
 
 /**
  * Displays a variable. This variable can be toggled between a static version and an editable one
@@ -24,7 +25,7 @@ class VariableView extends React.Component
         return (
             <div className="variable-display">
                 {this.state.editing ? this.renderEditing() : this.renderStatic()}
-                <button onClick={() => this.props.onDelete(this.props.name)}>Delete</button>
+                <Button onClick={() => this.props.onDelete(this.props.name)}>Delete</Button>
             </div>
         );
     }
@@ -36,11 +37,11 @@ class VariableView extends React.Component
     {
         return (
             <div>
-                <input type="text" value={this.state.nameText}
+                <FormControl bsSize="small" type="text" value={this.state.nameText}
                        onChange={this.updateNameText}
                        onSubmit={() => this.props.onChange(this.props.name, this.state.nameText)}/>
 
-                <button onClick={this.toggleEditing}>Cancel</button>
+                <Button onClick={this.toggleEditing}>Cancel</Button>
             </div>
         );
     }

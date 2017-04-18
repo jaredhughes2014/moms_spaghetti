@@ -94,7 +94,7 @@ app.post(paths.conversation.removeNode, (req, res) => {
     const {conversationName, nodeName} = req.body;
 
     if (validateBodyParameters(res, conversationName, nodeName)) {
-        res.send({testSuccess: true});
+        db.removeConversationNode(conversationName, nodeName, buildDatabaseResponseHandler(res));
     }
 });
 
@@ -102,10 +102,10 @@ app.post(paths.conversation.removeNode, (req, res) => {
  * TODO: Return the list of triggers this affects
  */
 app.post(paths.conversation.addTrigger, (req, res) => {
-    const {conversationName, word} = req.body;
+    const {conversationName, triggerName} = req.body;
 
-    if (validateBodyParameters(res, conversationName, word)) {
-        res.send({testSuccess: true});
+    if (validateBodyParameters(res, conversationName, triggerName)) {
+        db.addConversationTrigger(conversationName, triggerName, buildDatabaseResponseHandler(res));
     }
 });
 
@@ -113,10 +113,10 @@ app.post(paths.conversation.addTrigger, (req, res) => {
  * TODO: Return the list of triggers this affects
  */
 app.post(paths.conversation.removeTrigger, (req, res) => {
-    const {conversationName, word} = req.body;
+    const {conversationName, triggerName} = req.body;
 
-    if (validateBodyParameters(res, conversationName, word)) {
-        res.send({testSuccess: true});
+    if (validateBodyParameters(res, conversationName, triggerName)) {
+        db.removeConversationTrigger(conversationName, triggerName, buildDatabaseResponseHandler(res));
     }
 });
 
@@ -127,7 +127,7 @@ app.post(paths.conversation.addVariable, (req, res) => {
     const {conversationName, variableName} = req.body;
 
     if (validateBodyParameters(res, conversationName, variableName)) {
-        res.send({testSuccess: true});
+        db.addConversationVariable(conversationName, variableName, buildDatabaseResponseHandler(res));
     }
 });
 
@@ -138,7 +138,7 @@ app.post(paths.conversation.removeVariable, (req, res) => {
     const {conversationName, variableName} = req.body;
 
     if (validateBodyParameters(res, conversationName, variableName)) {
-        res.send({testSuccess: true});
+        db.removeConversationVariable(conversationName, variableName, buildDatabaseResponseHandler(res));
     }
 });
 
@@ -151,7 +151,7 @@ app.post(paths.node.updateName, (req, res) => {
     const {conversationName, nodeName, newName} = req.body;
 
     if (validateBodyParameters(res, conversationName, nodeName, newName)) {
-        res.send({testSuccess: true});
+        db.updateNodeName(req.body, buildDatabaseResponseHandler(res));
     }
 });
 
@@ -162,7 +162,7 @@ app.post(paths.node.updateText, (req, res) => {
     const {conversationName, nodeName, text} = req.body;
 
     if (validateBodyParameters(res, conversationName, nodeName, text)) {
-        res.send({testSuccess: true});
+        db.updateNodeText(req.body, buildDatabaseResponseHandler(res));
     }
 });
 
@@ -173,7 +173,7 @@ app.post(paths.node.get, (req, res) => {
     const {conversationName, nodeName} = req.body;
 
     if (validateBodyParameters(res, conversationName, nodeName)) {
-        res.send({testSuccess: true});
+        db.getNode(req.body, buildDatabaseResponseHandler(res));
     }
 });
 
@@ -184,7 +184,7 @@ app.post(paths.node.addPrompt, (req, res) => {
     const {conversationName, nodeName, promptName} = req.body;
 
     if (validateBodyParameters(res, conversationName, nodeName, promptName)) {
-        res.send({testSuccess: true});
+        db.addPrompt(req.body, buildDatabaseResponseHandler(res));
     }
 
 
@@ -197,7 +197,7 @@ app.post(paths.node.removePrompt, (req, res) => {
     const {conversationName, nodeName, promptName} = req.body;
 
     if (validateBodyParameters(res, conversationName, nodeName, promptName)) {
-        res.send({testSuccess: true});
+        db.removePrompt(req.body, buildDatabaseResponseHandler(res));
     }
 });
 
@@ -208,7 +208,7 @@ app.post(paths.node.updatePrompt, (req, res) => {
     const {conversationName, nodeName, promptName, promptText, variableSet} = req.body;
 
     if (validateBodyParameters(res, conversationName, nodeName, promptName, promptText, variableSet)) {
-        res.send({testSuccess: true});
+        db.updatePrompt(req.body, buildDatabaseResponseHandler(res));
     }
 });
 
@@ -219,7 +219,7 @@ app.post(paths.node.addKeyWord, (req, res) => {
     const {conversationName, nodeName, keyWord} = req.body;
 
     if (validateBodyParameters(res, conversationName, nodeName, keyWord)) {
-        res.send({testSuccess: true});
+        db.addKeyWord(req.body, buildDatabaseResponseHandler(res));
     }
 });
 
@@ -230,7 +230,7 @@ app.post(paths.node.removeKeyWord, (req, res) => {
     const {conversationName, nodeName, keyWord} = req.body;
 
     if (validateBodyParameters(res, conversationName, nodeName, keyWord)) {
-        res.send({testSuccess: true});
+        db.removeKeyWord(req.body, buildDatabaseResponseHandler(res));
     }
 });
 
@@ -241,7 +241,7 @@ app.post(paths.node.addTarget, (req, res) => {
     const {conversationName, nodeName, targetName} = req.body;
 
     if (validateBodyParameters(res, conversationName, nodeName, targetName)) {
-        res.send({testSuccess: true});
+        db.addTarget(req.body, buildDatabaseResponseHandler(res));
     }
 });
 
@@ -252,7 +252,18 @@ app.post(paths.node.removeTarget, (req, res) => {
     const {conversationName, nodeName, targetName} = req.body;
 
     if (validateBodyParameters(res, conversationName, nodeName, targetName)) {
-        res.send({testSuccess: true});
+        db.removeTarget(req.body, buildDatabaseResponseHandler(res));
+    }
+});
+
+/**
+ * TODO: Return all nodes in the conversation
+ */
+app.post(paths.node.updatePosition, (req, res) => {
+    const {conversationName, nodeName, x, y} = req.body;
+
+    if (validateBodyParameters(res, conversationName, nodeName, x, y)) {
+        db.updateNodePosition(req.body, buildDatabaseResponseHandler(res));
     }
 });
 

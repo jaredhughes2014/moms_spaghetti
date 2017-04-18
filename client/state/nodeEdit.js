@@ -100,30 +100,6 @@ const setKeywords = {
 };
 
 /**
- * Adds a target node to the edited node. This is an asynchronous action
- */
-const addTarget = {
-    type: 'ADD_TARGET_NODE',
-    expectedArgs: ['conversationName', 'nodeName', 'targetName'],
-};
-
-/**
- * Removes a target node from the edited node. This is an asynchronous action
- */
-const removeTarget = {
-    type: 'REMOVE_TARGET_NODE',
-    expectedArgs: ['conversationName', 'nodeName', 'targetName'],
-};
-
-/**
- * Sets the list of target nodes for this node
- */
-const setTargets = {
-    type: 'SET_AVAILABLE_TARGET_NODES',
-    expectedArgs: ['targets'],
-};
-
-/**
  * The reducer function for the conversations state
  */
 const reducer = (state=defaultState, event) =>
@@ -146,9 +122,6 @@ const reducer = (state=defaultState, event) =>
         case (setKeywords.type):
             return Object.assign({}, state, {keyWords: args.keyWords});
 
-        case (setTargets.type):
-            return Object.assign({}, state, {targets: args.targets});
-
         default: return state;
     }
 };
@@ -161,8 +134,8 @@ function* setNameHandler(event)
     const {conversationName, oldName, newName} = event.args;
 
     try {
-        const response = yield call(api.updateNodeName, conversationName, oldName, newName);
-        yield put({type: setNode.type, args: response})
+        const {node} = yield call(api.updateNodeName, conversationName, oldName, newName);
+        yield put({type: setNode.type, args: node})
     }
     catch (err) {
         console.error(err);
@@ -177,8 +150,8 @@ function* setTextHandler(event)
     const {conversationName, nodeName, text} = event.args;
 
     try {
-        const response = yield call(api.updateNodeText, conversationName, nodeName, text);
-        yield put({type: setNode.type, args: response})
+        const {node} = yield call(api.updateNodeText, conversationName, nodeName, text);
+        yield put({type: setNode.type, args: node})
     }
     catch (err) {
         console.error(err);
@@ -193,8 +166,8 @@ function* loadNodeHandler(event)
     const {conversationName, nodeName} = event.args;
 
     try {
-        const response = yield call(api.getNode, conversationName, nodeName);
-        yield put({type: setNode.type, args: response})
+        const {node} = yield call(api.getNode, conversationName, nodeName);
+        yield put({type: setNode.type, args: node})
     }
     catch (err) {
         console.error(err);
@@ -281,37 +254,7 @@ function* removeKeyWordHandler(event)
     }
 }
 
-/**
- * Adds a target to the edited node
- */
-function* addTargetHandler(event)
-{
-    const {conversationName, nodeName, targetName} = event.args;
 
-    try {
-        const {targets} = yield call(api.addNodeTarget, conversationName, nodeName, targetName);
-        yield put({type: setTargets.type, args: {targets}})
-    }
-    catch (err) {
-        console.error(err);
-    }
-}
-
-/**
- * Removes a target from the edited node
- */
-function* removeTargetHandler(event)
-{
-    const {conversationName, nodeName, targetName} = event.args;
-
-    try {
-        const {targets} = yield call(api.removeNodeTarget, conversationName, nodeName, targetName);
-        yield put({type: setTargets.type, args: {targets}})
-    }
-    catch (err) {
-        console.error(err);
-    }
-}
 
 /**
  * Maps every saga handler function to its event
@@ -328,9 +271,6 @@ function* saga()
 
     yield takeEvery(addKeyWord.type, addKeyWordHandler);
     yield takeEvery(removeKeyWord.type, removeKeyWordHandler);
-
-    yield takeEvery(addTarget.type, addTargetHandler);
-    yield takeEvery(removeTarget.type, removeTargetHandler);
 }
 
 /**
@@ -349,9 +289,6 @@ const exports = {
         addKeyWord,
         removeKeyWord,
         setKeywords,
-        addTarget,
-        removeTarget,
-        setTargets,
     },
     reducer,
     saga

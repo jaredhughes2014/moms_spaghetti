@@ -7,17 +7,20 @@ class Conversation
     /**
      * Creates a new conversation with a name
      */
-    constructor({name, nodes=[], keyWords=[], variables=[]})
+    constructor({name, nodes=[], triggers=[], variables=[]})
     {
-        this.update({name, nodes, keyWords, variables});
+        if (nodes.length == 0) {
+            nodes.push(new ConversationNode({name: 'Start'}));
+        }
+        this.update({name, nodes, triggers, variables});
     }
 
     /**
      * Updates all data in this conversation object
      */
-    update({name, nodes, keyWords, variables})
+    update({name, nodes, triggers, variables})
     {
-        this.keyWords = keyWords;
+        this.triggers = triggers;
         this.name = name;
         this.nodes = nodes.map(p => new ConversationNode(p));
         this.variables = variables.map(p => new Variable(p));
@@ -65,12 +68,12 @@ class Variable
  */
 class ConversationNode
 {
-    constructor({name, text='', keyWords=[], targets=[], prompts=[], variables=[]})
+    constructor({name, text='', keyWords=[], targets=[], prompts=[], variables=[], x=0, y=0})
     {
-        this.update({name, text, keyWords, targets, prompts, variables});
+        this.update({name, text, keyWords, targets, prompts, variables, x, y});
     }
 
-    update({name, text, keyWords, targets, prompts, variables})
+    update({name, text, keyWords, targets, prompts, variables, x, y})
     {
         this.name = name;
         this.text = text;
@@ -78,6 +81,8 @@ class ConversationNode
         this.targets = targets;
         this.prompts = prompts.map(p => new Prompt(p));
         this.variables = variables.map(p => new Variable(p));
+        this.x = x;
+        this.y = y;
     }
 
     getPrompt(name)
@@ -97,7 +102,7 @@ class ConversationNode
  */
 class Prompt
 {
-    constuctor({name, text='', target=null})
+    constructor({name, text='', target=null})
     {
         this.update({name, text, target});
     }
@@ -112,6 +117,7 @@ class Prompt
 
 module.exports = {
     Conversation,
+    Variable,
     ConversationNode,
     Prompt,
 };

@@ -1,15 +1,17 @@
 
 import React from 'react';
+import Button from 'react-bootstrap/lib/Button';
+
 
 /**
  *
  */
-const ConversationSelector = ({}) =>
+const ConversationSelector = ({name, onClick}) =>
 {
     return (
-        <div>
-            NYI
-        </div>
+        <Button onClick={() => onClick(name)}>
+            {name}
+        </Button>
     );
 };
 

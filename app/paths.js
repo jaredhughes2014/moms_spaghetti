@@ -43,10 +43,11 @@ const paths = {
         addPrompt: 'addPrompt',
         removePrompt: 'removePrompt',
         updatePrompt: 'updatePrompt',
-        addKeyWord: 'addKeyWord',
+        addKeyWord: 'addTrigger',
         removeKeyWord: 'removeKeyWord',
         addTarget: 'addTarget',
-        removeTarget: 'removeTarget'
+        removeTarget: 'removeTarget',
+        updatePosition: 'updatePosition',
     }),
 };
 module.exports = paths;

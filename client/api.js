@@ -65,13 +65,13 @@ const api = {
         nodeName,
     }),
 
-    addConversationTrigger: (conversationName, word) => formatFetch(paths.conversation.addTrigger, http.post, {
+    addConversationTrigger: (conversationName, triggerName) => formatFetch(paths.conversation.addTrigger, http.post, {
         conversationName,
-        word,
+        triggerName,
     }),
-    removeConversationTrigger: (conversationName, word) => formatFetch(paths.conversation.removeTrigger, http.post, {
+    removeConversationTrigger: (conversationName, triggerName) => formatFetch(paths.conversation.removeTrigger, http.post, {
         conversationName,
-        word,
+        triggerName,
     }),
 
     addConversationVariable: (conversationName, variableName) => formatFetch(paths.conversation.addVariable, http.post, {
@@ -138,6 +138,12 @@ const api = {
         conversationName,
         nodeName,
         targetName,
+    }),
+    updateNodePosition: (conversationName, nodeName, x, y) => formatFetch(paths.node.updatePosition, http.post, {
+        conversationName,
+        nodeName,
+        x,
+        y
     }),
 };
 export default api;
