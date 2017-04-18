@@ -1,5 +1,6 @@
 const paths = require("./paths");
 const db = require("./db");
+const alexa = require("./alexa");
 
 let express = require('express');
 let bodyParser = require('body-parser');
@@ -18,6 +19,17 @@ app.use(express.static('public'));
  */
 app.listen(process.env.PORT || 8080, () => {
     console.log("Braden suxxx at " + (process.env.PORT || 8080));
+});
+
+//Alexa does things here
+app.post(paths.alexa, (req, res) => {
+     if (req.body) {
+         console.log(req.body);
+         res.send(alexa(req.body));
+     }
+     else {
+         res.send('There is an error with this skill');
+     }
 });
 
 // Conversations
