@@ -201,12 +201,11 @@ const addConversationVariable = (conversationName, variablesName, onComplete) =>
 
 const removeConversationVariable = (conversationName, variableName, onComplete) =>
 {
-
     getConversation(conversationName, (response) => {
         const {conversation} = response;
 
         if (conversation) {
-            conversation.variables = conversation.variables.filter(p => p != variableName);
+            conversation.variables = conversation.variables.filter(p => p.name !== variableName);
             onComplete({variables: conversation.variables});
         }
         else {
@@ -343,26 +342,27 @@ const removePrompt = ({conversationName, nodeName, promptName}, onComplete) => {
  * Updates the given prompt
  */
 const updatePrompt = ({conversationName, nodeName, promptName, promptText, variableSet}, onComplete) => {
-    getConversation(conversationName, (ret) => {
-        const conversation = ret.conversation;
-        if (!conversation) {
-            onComplete(ret);
-            return;
+    getNode({conversationName, nodeName}, (response) => {
+        const {node} = response;
+
+        if (node) {
+            const prompt = node.prompts.find(p => p.name === promptName);
+
+            if (prompt) {
+                prompt.name = promptName;
+                prompt.text = promptText;
+                prompt.target = variableSet;
+
+                onComplete({prompts: node.prompts});
+            }
+            else {
+                warn(`No prompt named ${promptName} exists in ${nodeName}`, onComplete, {prompts: node.prompts});
+            }
         }
-        const node = conversation.getNode(nodeName);
-        if (!node) {
-            warn(`Can't find node $(nodeName).`, onComplete, {prompts: []});
-            return;
+        else {
+            onComplete(response);
         }
-        const prompts = node.prompts;
-        const p = node.getPrmopt(promptName);
-        if (!p) {
-            warn(`No prompt named ${promptName} exists.`, onComplete, {prompts});
-            return;
-        }
-        p.update({name: promptName, text: promptText, target: variableSet});
-        onComplete({prompts});
-    });
+    })
 };
 
 /*

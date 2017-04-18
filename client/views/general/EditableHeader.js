@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/lib/Button';
 /**
  * Represents a label that can be clicked to become editable
  */
-class EditableText extends React.Component
+class EditableHeader extends React.Component
 {
     constructor(props)
     {
@@ -39,7 +39,7 @@ class EditableText extends React.Component
         }
         else {
             return (
-                <p onClick={this.onClickLabel}>{this.props.text}</p>
+                <h1 onClick={this.onClickLabel}>{this.props.text}</h1>
             )
         }
     }
@@ -69,4 +69,4 @@ class EditableText extends React.Component
     }
 }
 
-export default EditableText;
+export default EditableHeader;

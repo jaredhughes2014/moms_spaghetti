@@ -14,7 +14,7 @@ import FlowList from './general/FlowList';
 const evCon = ev.conversations;
 const evConEdit = ev.conversationEdit;
 const evNode = ev.nodeEdit;
-import Button from 'react-bootstrap/lib/button';
+import Button from 'react-bootstrap/lib/Button';
 
 
 /**

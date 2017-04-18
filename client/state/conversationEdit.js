@@ -180,6 +180,7 @@ function* setNameHandler(event)
     const {oldName, newName} = event.args;
 
     try {
+        yield put({type: setWaiting.type, args: {}});
         const response = yield call(api.updateConversationName, oldName, newName);
         yield put({type: setConversation.type, args: response})
     }
@@ -196,6 +197,7 @@ function* loadConversationHandler(event)
     const {name} = event.args;
 
     try {
+        yield put({type: setWaiting.type, args: {}});
         const response = yield call(api.getConversation, name);
         yield put({type: setConversation.type, args: response})
     }
@@ -331,6 +333,7 @@ function* addTargetHandler(event)
     const {conversationName, nodeName, targetName} = event.args;
 
     try {
+        yield put({type: setWaiting.type, args: {}});
         const {nodes} = yield call(api.addNodeTarget, conversationName, nodeName, targetName);
         yield put({type: setNodes.type, args: {nodes}})
     }
@@ -347,6 +350,7 @@ function* removeTargetHandler(event)
     const {conversationName, nodeName, targetName} = event.args;
 
     try {
+        yield put({type: setWaiting.type, args: {}});
         const {nodes} = yield call(api.removeNodeTarget, conversationName, nodeName, targetName);
         yield put({type: setNodes.type, args: {nodes}})
     }

@@ -1,8 +1,9 @@
 
 import React from 'react';
+import Panel from 'react-bootstrap/lib/Panel';
 
 import FlowList from './FlowList'
-import Button from 'react-bootstrap/lib/button';
+import Button from 'react-bootstrap/lib/Button';
 
 /**
  *
@@ -10,12 +11,12 @@ import Button from 'react-bootstrap/lib/button';
 const ContentSection = ({children, buttonText, onClick}) =>
 {
     return (
-        <div>
+        <Panel>
             <Button onClick={onClick}>{buttonText}</Button>
             <FlowList horizontal={false}>
                 {children}
             </FlowList>
-        </div>
+        </Panel>
     );
 };
 

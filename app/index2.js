@@ -204,7 +204,7 @@ app.post(paths.node.removePrompt, (req, res) => {
 /**
  * TODO: Return the list of prompts from the node
  */
-app.post(paths.node.addPrompt, (req, res) => {
+app.post(paths.node.updatePrompt, (req, res) => {
     const {conversationName, nodeName, promptName, promptText, variableSet} = req.body;
 
     if (validateBodyParameters(res, conversationName, nodeName, promptName, promptText, variableSet)) {

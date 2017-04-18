@@ -6,12 +6,12 @@ import events from '../events';
 import routes from '../routes';
 
 import ContentSection from './general/ContentSection';
-import EditableText from './general/EditableText';
+import EditableHeader from './general/EditableHeader';
 import NameModal from './general/NameModal';
 
 import ConversationNodeGraph from './conversation/ConversationNodeGraph';
-import Button from 'react-bootstrap/lib/button';
-import Panel from 'react-bootstrap/lib/panel';
+import Button from 'react-bootstrap/lib/Button';
+import ListItemSelector from './general/ListItemSelector';
 
 
 /**
@@ -39,10 +39,12 @@ class ConversationEditView extends React.Component
         this.openAddTriggerModal = this.openAddTriggerModal.bind(this);
         this.closeAddTriggerModal = this.closeAddTriggerModal.bind(this);
         this.addTrigger = this.addTrigger.bind(this);
+        this.deleteTrigger = this.deleteTrigger.bind(this);
 
         this.openAddVariableModal = this.openAddVariableModal.bind(this);
         this.closeAddVariableModal = this.closeAddVariableModal.bind(this);
         this.addVariable = this.addVariable.bind(this);
+        this.deleteVariable = this.deleteVariable.bind(this);
 
         this.onNodeMove = this.onNodeMove.bind(this);
         this.onNodeStartMove = this.onNodeStartMove.bind(this);
@@ -85,19 +87,15 @@ class ConversationEditView extends React.Component
     {
         return (
             <div>
-                <EditableText text={this.props.name} onSubmit={this.submitConversationName}/>
+                <EditableHeader text={this.props.name} onSubmit={this.submitConversationName}/>
 
-                <Panel>
-                    <ContentSection onClick={this.openAddVariableModal} buttonText="Add Variable">
-                        {this.props.variables.map(p => <div key={p.name}>{p.name}</div>)}
-                    </ContentSection>
-                </Panel>
-
-                <Panel>
-                <ContentSection onClick={this.openAddTriggerModal} buttonText="Add Trigger">
-                    {this.props.triggers.map(p => <div key={p}>{p}</div>)}
+                <ContentSection onClick={this.openAddVariableModal} buttonText="Add Variable">
+                    {this.props.variables.map(p => <ListItemSelector key={p.name} name={p.name} onDelete={this.deleteVariable}/>)}
                 </ContentSection>
-                </Panel>
+
+                <ContentSection onClick={this.openAddTriggerModal} buttonText="Add Trigger">
+                    {this.props.triggers.map(p => <ListItemSelector key={p} name={p} onDelete={this.deleteTrigger}/>)}
+                </ContentSection>
 
                 <Button onClick={this.openAddNodeModal}>Add Node</Button>
                 <ConversationNodeGraph
@@ -172,6 +170,11 @@ class ConversationEditView extends React.Component
         this.props.addTrigger(this.props.name, name);
     }
 
+    deleteTrigger(name)
+    {
+        this.props.deleteTrigger(this.props.name, name);
+    }
+
     // Add variable modal
 
     openAddVariableModal()
@@ -188,6 +191,11 @@ class ConversationEditView extends React.Component
     {
         this.closeAddVariableModal();
         this.props.addVariable(this.props.name, name);
+    }
+
+    deleteVariable(name)
+    {
+        this.props.deleteVariable(this.props.name, name);
     }
 }
 
@@ -219,7 +227,10 @@ const mapDispatchToProps = (dispatch) =>
         removeNode: (conversationName, nodeName) => dispatch(ev.removeNode({conversationName, nodeName})),
 
         addTrigger: (conversationName, triggerName) => dispatch(ev.addTrigger({conversationName, triggerName})),
+        deleteTrigger: (conversationName, triggerName) => dispatch(ev.removeTrigger({conversationName, triggerName})),
+
         addVariable: (conversationName, variableName) => dispatch(ev.addVariable({conversationName, variableName})),
+        deleteVariable: (conversationName, variableName) => dispatch(ev.removeVariable({conversationName, variableName})),
 
         addTarget: (conversationName, nodeName, targetName) => dispatch(
                 ev.addNodeTarget({conversationName, nodeName, targetName})
