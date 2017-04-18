@@ -38,7 +38,6 @@ const addConversation = (name, onComplete) =>
     }
 
     const response = {conversations: conversations.map(p => p.name)};
-    console.log(response);
 
     if (duplicate) {
         onComplete(response)
@@ -108,7 +107,7 @@ const addConversationNode = (conversationName, nodeName, onComplete) =>
 
         let duplicate = conversation.nodes.find(p => p.name == nodeName) !== undefined;
         if (!duplicate) {
-            conversation.nodes.push(new data.ConversationNode({name: nodeName}));
+            conversation.nodes.push(new data.ConversationNode({name: nodeName, text: 'New Node'}));
         }
         if (duplicate) {
             warn(`Node named ${nodeName} already exists in ${conversationName}`, onComplete, {nodes: conversation.nodes});
@@ -120,6 +119,100 @@ const addConversationNode = (conversationName, nodeName, onComplete) =>
     else {
         warn(`No conversation named ${conversationName} exists`, onComplete, {nodes: []});
     }
+};
+
+const removeConversationNode = (conversationName, nodeName, onComplete) =>
+{
+    let conversation = conversations.find(p => p.name == conversationName);
+
+    if (conversation) {
+        conversation.nodes = conversation.nodes.filter(p => p.name !== nodeName);
+        onComplete({nodes: conversation.nodes});
+    }
+    else {
+        warn(`No conversation named ${conversationName} exists`, onComplete, {nodes: []});
+    }
+};
+
+const addConversationTrigger = (conversationName, triggerName, onComplete) =>
+{
+    getConversation(conversationName, (response) => {
+        const {conversation} = response;
+
+        if (conversation) {
+
+            let duplicate = conversation.triggers.find(p => p == triggerName) !== undefined;
+            if (!duplicate) {
+                conversation.triggers.push(triggerName);
+            }
+            if (duplicate) {
+                warn(`Trigger named ${triggerName} already exists in ${conversationName}`, onComplete, {triggers: conversation.triggers});
+            }
+            else {
+                onComplete({triggers: conversation.triggers});
+            }
+        }
+        else {
+            warn(`No conversation named ${conversationName} exists`, onComplete, {triggers: []});
+        }
+    });
+};
+
+const removeConversationTrigger = (conversationName, triggerName, onComplete) =>
+{
+    getConversation(conversationName, (response) => {
+        const {conversation} = response;
+
+        if (conversation) {
+            conversation.triggers = conversation.triggers.filter(p => p != triggerName);
+            onComplete({triggers: conversation.triggers});
+        }
+        else {
+            warn(`No conversation named ${conversationName} exists`, onComplete, {triggers: []})
+        }
+    });
+};
+
+const addConversationVariable = (conversationName, variablesName, onComplete) =>
+{
+    getConversation(conversationName, (response) => {
+        const {conversation} = response;
+
+        if (conversation) {
+
+            let duplicate = conversation.variables.find(p => p.name == variablesName) !== undefined;
+
+            if (!duplicate) {
+                conversation.variables.push(new data.Variable({name: variablesName}));
+            }
+
+            if (duplicate) {
+                warn(`Variable named ${variablesName} already exists in ${conversationName}`, onComplete, {variables: conversation.variables});
+            }
+            else {
+                onComplete({variables: conversation.variables});
+            }
+        }
+        else {
+            warn(`No conversation named ${conversationName} exists`, onComplete, {variables: []});
+        }
+    });
+};
+
+const removeConversationVariable = (conversationName, variableName, onComplete) =>
+{
+
+    getConversation(conversationName, (response) => {
+        const {conversation} = response;
+
+        if (conversation) {
+            conversation.variables = conversation.variables.filter(p => p != variableName);
+            onComplete({variables: conversation.variables});
+        }
+        else {
+            warn(`No conversation named ${conversationName} exists`, onComplete, {variables: []})
+        }
+    });
 };
 
 /*
@@ -180,7 +273,7 @@ const updateNodePosition = ({conversationName, nodeName, x, y}, onComplete) =>
                 onComplete({nodes: conversation.nodes});
             }
             else {
-                warn(`No node named ${nodeName} in conversation ${conversationName} exists`, onComplete, {nodes: []});
+                warn(`No node named ${nodeName} in conversation ${conversationName} exists`, onComplete, {nodes: conversation.nodes});
             }
         }
         else {
@@ -212,24 +305,20 @@ const getNode = ({conversationName, nodeName}, onComplete) => {
  * Adds the given prompt
  */
 const addPrompt = ({conversationName, nodeName, promptName}, onComplete) => {
-    getConversation(conversationName, (ret) => {
-        const conversation = ret.conversation;
-        if (!conversation) {
-            onComplete(ret);
-            return;
+    getNode({conversationName, nodeName}, (response) => {
+        const {node} = response;
+        if (node) {
+            if (!node.prompts.find(p => p.name == promptName)) {
+                node.prompts.push(new data.Prompt({name: promptName}));
+                onComplete({prompts: node.prompts});
+            }
+            else {
+                warn(`${promptName} already exists in ${nodeName}`, onComplete, {prompts: node.prompts});
+            }
         }
-        const node = conversation.getNode(nodeName);
-        if (!node) {
-            warn(`Can't find node $(nodeName).`, onComplete, {prompts: []});
-            return;
+        else {
+            warn(`Unable to find node named ${nodeName} in conversation ${conversationName}`, onComplete, {prompts: []});
         }
-        const prompts = node.prompts;
-        if (node.getPrompt(promptName)) {
-            warn(`Prompt ${promptName} already exists.`, onComplete, {prompts});
-            return;
-        }
-        prompts.push(new Prompt(promptName));
-        onComplete({prompts});
     });
 };
 
@@ -237,25 +326,16 @@ const addPrompt = ({conversationName, nodeName, promptName}, onComplete) => {
  * Removes the given prompt
  */
 const removePrompt = ({conversationName, nodeName, promptName}, onComplete) => {
-    getConversation(conversationName, (ret) => {
-        const conversation = ret.conversation;
-        if (!conversation) {
-            onComplete(ret);
-            return;
+    getNode({conversationName, nodeName}, (response) => {
+        const {node} = response;
+
+        if (node) {
+            node.prompts = node.prompts.filter(p => p.name !== promptName);
+            onComplete({prompts: node.prompts});
         }
-        const node = conversation.getNode(nodeName);
-        if (!node) {
-            warn(`Can't find node $(nodeName).`, onComplete, {prompts: []});
-            return;
+        else {
+            onComplete(response);
         }
-        const prompts = node.prompts;
-        const ix = prompts.findIndex(p => p.name === promptName);
-        if (ix == -1) {
-            warn(`No prompt named ${promptName} exists.`, onComplete, {prompts});
-            return;
-        }
-        prompts.splice(ix, 1);
-        onComplete({prompts});
     });
 };
 
@@ -391,6 +471,11 @@ module.exports = {
     getConversationNames,
     updateConversationName,
     addConversationNode,
+    removeConversationNode,
+    addConversationVariable,
+    removeConversationVariable,
+    addConversationTrigger,
+    removeConversationTrigger,
     updateNodeName,
     updateNodeText,
     getNode,

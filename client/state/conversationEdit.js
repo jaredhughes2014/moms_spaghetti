@@ -72,7 +72,7 @@ const setNodes = {
  */
 const addTrigger = {
     type: 'ADD_CONVERSATION_TRIGGER',
-    expectedArgs: ['conversationName', 'word'],
+    expectedArgs: ['conversationName', 'triggerName'],
 };
 
 /**
@@ -80,7 +80,7 @@ const addTrigger = {
  */
 const removeTrigger = {
     type: 'REMOVE_CONVERSATION_TRIGGER',
-    expectedArgs: ['conversationName', 'word'],
+    expectedArgs: ['conversationName', 'triggerName'],
 };
 
 /**
@@ -243,11 +243,11 @@ function* removeNodeHandler(event)
  */
 function* addTriggerHandler(event)
 {
-    const {conversationName, word} = event.args;
+    const {conversationName, triggerName} = event.args;
 
     try {
         yield put({type: setWaiting.type, args: {}});
-        const {triggers} = yield call(api.addConversationTrigger, conversationName, word);
+        const {triggers} = yield call(api.addConversationTrigger, conversationName, triggerName);
         yield put({type: setTriggers.type, args: {triggers}})
     }
     catch (err) {
@@ -260,11 +260,11 @@ function* addTriggerHandler(event)
  */
 function* removeTriggerHandler(event)
 {
-    const {conversationName, word} = event.args;
+    const {conversationName, triggerName} = event.args;
 
     try {
         yield put({type: setWaiting.type, args: {}});
-        const {triggers} = yield call(api.removeConversationTrigger, conversationName, word);
+        const {triggers} = yield call(api.removeConversationTrigger, conversationName, triggerName);
         yield put({type: setTriggers.type, args: {triggers}})
     }
     catch (err) {

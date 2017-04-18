@@ -26,8 +26,6 @@ const ConversationNodeGraph = ({conversationNodes, onMove, onStartMove, onConnec
         graphData = {nodes, connections};
     }
 
-    console.log(graphData);
-
     return (
         <ReactNodeGraph
             data={graphData}

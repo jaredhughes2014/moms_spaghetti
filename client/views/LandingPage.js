@@ -58,7 +58,7 @@ class LandingPage extends React.Component
     renderModal()
     {
         return (
-            <NameModal onSubmit={this.addConversation} onClose={this.closeNewConversationModal}/>
+            <NameModal onSubmit={this.addConversation} onCancel={this.closeNewConversationModal}/>
         )
     }
 

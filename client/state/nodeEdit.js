@@ -134,8 +134,8 @@ function* setNameHandler(event)
     const {conversationName, oldName, newName} = event.args;
 
     try {
-        const response = yield call(api.updateNodeName, conversationName, oldName, newName);
-        yield put({type: setNode.type, args: response})
+        const {node} = yield call(api.updateNodeName, conversationName, oldName, newName);
+        yield put({type: setNode.type, args: node})
     }
     catch (err) {
         console.error(err);
@@ -150,8 +150,8 @@ function* setTextHandler(event)
     const {conversationName, nodeName, text} = event.args;
 
     try {
-        const response = yield call(api.updateNodeText, conversationName, nodeName, text);
-        yield put({type: setNode.type, args: response})
+        const {node} = yield call(api.updateNodeText, conversationName, nodeName, text);
+        yield put({type: setNode.type, args: node})
     }
     catch (err) {
         console.error(err);
@@ -166,8 +166,8 @@ function* loadNodeHandler(event)
     const {conversationName, nodeName} = event.args;
 
     try {
-        const response = yield call(api.getNode, conversationName, nodeName);
-        yield put({type: setNode.type, args: response})
+        const {node} = yield call(api.getNode, conversationName, nodeName);
+        yield put({type: setNode.type, args: node})
     }
     catch (err) {
         console.error(err);

@@ -9,6 +9,7 @@ import AppSkeleton from './views/AppSkeleton';
 
 import LandingPage from './views/LandingPage';
 import ConversationEditView from './views/ConversationEditView';
+import NodeEditView from './views/NodeEditView';
 
 
 /**
@@ -22,6 +23,7 @@ const MomsSpaghettiRouter = () =>
                 <Route path={routes.index} component={AppSkeleton}>
                     <IndexRoute component={LandingPage}/>
                     <Route path={routes.conversation} component={ConversationEditView}/>
+                    <Route path={routes.node} component={NodeEditView}/>
                 </Route>
             </Router>
         </MomsSpaghettiProvider>
