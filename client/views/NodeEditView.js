@@ -8,11 +8,8 @@ import routes from '../routes';
 
 import EditableText from './general/EditableText';
 import NameModal from './general/NameModal';
-
 import ContentSection from './general/ContentSection';
-import KeyWordSelector from './node/KeyWordSelector';
-import PromptSelector from './node/PromptSelector';
-import TargetSelector from './node/TargetSelector';
+import ListItemSelector from './general/ListItemSelector';
 
 /**
  *
@@ -40,10 +37,12 @@ class NodeEditView extends React.Component
         this.openKeyWordModal = this.openKeyWordModal.bind(this);
         this.closeKeyWordModal = this.closeKeyWordModal.bind(this);
         this.addKeyWord = this.addKeyWord.bind(this);
+        this.deleteKeyWord = this.deleteKeyWord.bind(this);
 
         this.openPromptModal = this.openPromptModal.bind(this);
         this.closePromptModal = this.closePromptModal.bind(this);
         this.addPrompt = this.addPrompt.bind(this);
+        this.deletePrompt = this.deletePrompt.bind(this);
     }
 
     /**
@@ -72,16 +71,17 @@ class NodeEditView extends React.Component
             <div>
                 <button onClick={this.goBack}>Go Back</button>
 
+                <EditableText text={this.props.name} onSubmit={this.changeName}/>
+                <EditableText text={this.props.text} onSubmit={this.changeText}/>
+
                 <ContentSection onClick={this.openKeyWordModal} buttonText="Add Key Word">
-                    {this.props.keyWords.map(p => <div key={p}>{p}</div>)}
+                    {this.props.keyWords.map(p => <ListItemSelector name={p} onDelete={(keyWord) => {}}/>)}
                 </ContentSection>
 
                 <ContentSection onClick={this.openPromptModal} buttonText="Add Prompt">
-                    {this.props.prompts.map(p => <div key={p.name}>{p.name}</div>)}
+                    {this.props.prompts.map(p => <ListItemSelector name={p.name} onDelete={(prompt) => {}}/>)}
                 </ContentSection>
 
-                <EditableText text={this.props.name} onSubmit={this.changeName}/>
-                <EditableText text={this.props.text} onSubmit={this.changeText}/>
             </div>
         );
     }
@@ -120,6 +120,11 @@ class NodeEditView extends React.Component
         this.props.addKeyWord(this.props.conversation, this.props.name, keyWord);
     }
 
+    deleteKeyWord(keyWord)
+    {
+
+    }
+
     //Prompts
 
     openPromptModal()
@@ -136,6 +141,11 @@ class NodeEditView extends React.Component
     {
         this.closePromptModal();
         this.props.addPrompt(this.props.conversation, this.props.name, prompt);
+    }
+
+    deletePrompt(prompt)
+    {
+
     }
 }
 
