@@ -1,6 +1,6 @@
 
 import React from 'react';
-import FormControl from 'react-bootstrap/lib/Formcontrol';
+import FormControl from 'react-bootstrap/lib/FormControl';
 import Button from 'react-bootstrap/lib/Button';
 
 
