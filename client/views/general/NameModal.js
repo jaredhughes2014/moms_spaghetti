@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
+
 import Button from 'react-bootstrap/lib/Button';
 import FormControl from 'react-bootstrap/lib/Formcontrol';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
+import Modal from 'react-bootstrap/lib/Modal';
 
 
 /**
@@ -23,11 +25,22 @@ class NameModal extends React.Component
     render()
     {
         return (
-            <div className="name-modal">
-                <ControlLabel>Name</ControlLabel>
-                <FormControl type="text" value={this.state.name} onChange={this.updateText}/>
-                <Button className="name-modal-button" onClick={this.submit}>Submit</Button>
-                <Button className="name-modal-button" onClick={this.cancel}>Cancel</Button>
+            <div className="static-modal">
+                <Modal.Dialog>
+                    <Modal.Header>
+                        <Modal.Title>Enter a name</Modal.Title>
+                    </Modal.Header>
+
+                    <Modal.Body>
+                        <ControlLabel>Name</ControlLabel>
+                        <FormControl type="text" value={this.state.name} onChange={this.updateText}/>
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button className="name-modal-button" onClick={this.submit}>Submit</Button>
+                        <Button className="name-modal-button" onClick={this.cancel}>Cancel</Button>
+                    </Modal.Footer>
+                </Modal.Dialog>
             </div>
         );
     }

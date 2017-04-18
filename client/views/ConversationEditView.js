@@ -63,7 +63,20 @@ class ConversationEditView extends React.Component
                 <div>Loading...</div>
             )
         }
-        else if (this.state.addNodeModalOpen) {
+        const modal = this.getModal();
+        const body = this.getBody();
+
+        return (
+            <div>
+                {modal}
+                {body}
+            </div>
+        )
+    }
+
+    getModal()
+    {
+        if (this.state.addNodeModalOpen) {
             return (
                 <NameModal onSubmit={this.addNode} onCancel={this.closeAddNodeModal}/>
             )
@@ -78,12 +91,9 @@ class ConversationEditView extends React.Component
                 <NameModal onSubmit={this.addVariable} onCancel={this.closeAddVariableModal}/>
             )
         }
-        else {
-            return this.renderNoModal();
-        }
     }
 
-    renderNoModal()
+    getBody()
     {
         return (
             <div>

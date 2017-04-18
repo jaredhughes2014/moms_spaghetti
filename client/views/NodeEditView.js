@@ -61,6 +61,19 @@ class NodeEditView extends React.Component
      */
     render()
     {
+        const prompt = this.getPrompt();
+        const body = this.getBody();
+
+        return (
+            <div>
+                {prompt}
+                {body}
+            </div>
+        )
+    }
+
+    getPrompt()
+    {
         if (this.state.addKeyWordModalOpen) {
             return (
                 <NameModal onSubmit={this.addKeyWord} onCancel={this.closeKeyWordModal}/>
@@ -86,12 +99,9 @@ class NodeEditView extends React.Component
                 />
             )
         }
-        else {
-            return this.renderNoModal();
-        }
     }
 
-    renderNoModal()
+    getBody()
     {
         return (
             <div>
