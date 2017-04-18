@@ -42,7 +42,7 @@ const paths = {
         get: 'getNode',
         addPrompt: 'addPrompt',
         removePrompt: 'removePrompt',
-        updatePrompt: 'updatePrompt',
+        updatePrompt: 'addPrompt',
         addKeyWord: 'addTrigger',
         removeKeyWord: 'removeKeyWord',
         addTarget: 'addTarget',

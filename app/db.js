@@ -38,7 +38,6 @@ const addConversation = (name, onComplete) =>
     }
 
     const response = {conversations: conversations.map(p => p.name)};
-    console.log(response);
 
     if (duplicate) {
         onComplete(response)
@@ -108,7 +107,7 @@ const addConversationNode = (conversationName, nodeName, onComplete) =>
 
         let duplicate = conversation.nodes.find(p => p.name == nodeName) !== undefined;
         if (!duplicate) {
-            conversation.nodes.push(new data.ConversationNode({name: nodeName}));
+            conversation.nodes.push(new data.ConversationNode({name: nodeName, text: 'New Node'}));
         }
         if (duplicate) {
             warn(`Node named ${nodeName} already exists in ${conversationName}`, onComplete, {nodes: conversation.nodes});
@@ -274,7 +273,7 @@ const updateNodePosition = ({conversationName, nodeName, x, y}, onComplete) =>
                 onComplete({nodes: conversation.nodes});
             }
             else {
-                warn(`No node named ${nodeName} in conversation ${conversationName} exists`, onComplete, {nodes: []});
+                warn(`No node named ${nodeName} in conversation ${conversationName} exists`, onComplete, {nodes: conversation.nodes});
             }
         }
         else {

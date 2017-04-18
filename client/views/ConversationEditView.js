@@ -5,7 +5,7 @@ import {browserHistory} from 'react-router';
 import events from '../events';
 import routes from '../routes';
 
-import ContentSection from './conversation/ContentSection';
+import ContentSection from './general/ContentSection';
 import EditableText from './general/EditableText';
 import NameModal from './general/NameModal';
 
@@ -80,22 +80,17 @@ class ConversationEditView extends React.Component
 
     renderNoModal()
     {
-        console.log(this.props);
         return (
             <div>
                 <EditableText text={this.props.name} onSubmit={this.submitConversationName}/>
 
-                <div>
-                    <span>
-                        <ContentSection onClick={this.openAddVariableModal} buttonText="Add Variable">
-                            {this.props.variables.map(p => <div>{p.name}</div>)}
-                        </ContentSection>
+                <ContentSection onClick={this.openAddVariableModal} buttonText="Add Variable">
+                    {this.props.variables.map(p => <div key={p.name}>{p.name}</div>)}
+                </ContentSection>
 
-                        <ContentSection onClick={this.openAddTriggerModal} buttonText="Add Trigger">
-                            {this.props.triggers.map(p => <div>{p}</div>)}
-                        </ContentSection>
-                    </span>
-                </div>
+                <ContentSection onClick={this.openAddTriggerModal} buttonText="Add Trigger">
+                    {this.props.triggers.map(p => <div key={p}>{p}</div>)}
+                </ContentSection>
 
                 <button onClick={this.openAddNodeModal}>Add Node</button>
                 <ConversationNodeGraph

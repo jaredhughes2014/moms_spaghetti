@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-import FlowList from '../general/FlowList'
+import FlowList from './FlowList'
 
 /**
  *

@@ -110,7 +110,7 @@ const api = {
         nodeName,
         promptName,
     }),
-    updateNodePrompt: (conversationName, nodeName, promptName, promptText, variableSet) => formatFetch(paths.node.updatePrompt, http.post, {
+    updateNodePrompt: (conversationName, nodeName, promptName, promptText, variableSet) => formatFetch(paths.node.addPrompt, http.post, {
         conversationName,
         nodeName,
         promptName,
