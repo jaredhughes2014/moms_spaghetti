@@ -73,9 +73,8 @@ const getConversation = (name, onComplete) =>
     }
 };
 
-const getConversationByKeywords = (phrase, onComplete) =>
+const getConversationByKeywords = ({phrase}, onComplete) =>
 {
-    phrase = phrase.toLowerCase();
     let score = 0;
     let ret = null;
     for (let c of conversations)
@@ -83,7 +82,7 @@ const getConversationByKeywords = (phrase, onComplete) =>
         let s = 0;
         for (let kw of c.keyWords)
         {
-            if (phrase.indexOf(kw) != -1) s++;
+            if (phrase.includes(kw)) s++;
         }
         if (s > score)
         {
@@ -91,7 +90,7 @@ const getConversationByKeywords = (phrase, onComplete) =>
             ret = c;
         }
     }
-    return ret;
+    onComplete({conversation: ret});
 }
 
 /**

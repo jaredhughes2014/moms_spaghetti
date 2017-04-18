@@ -93,10 +93,67 @@ function moved_to(tree_index, attrs) {
     return mk_reply('Game', text, retext, false, attrs);
 }
 
+function handle_node(body, attrs) {
+    return db.getConversation(attrs.conv_name, ({conversation}) =>
+    {
+        return db.getNode({conversationName: attrs.conv_name, nodeName: attrs.node_name}, ({node}) =>
+        {
+            let prompts = node.prompts;
+
+            //Handle their reply
+            if (attrs.prompts_given > 0 && attrs.prompts_given <= prompts.length)
+            {
+                let p = prompts[attrs.prompts_given-1];
+                attrs['_'+p.target] = body;
+            }
+            else if (attrs.prompts_given > prompts.length) {
+                //We need to transition to the next node
+                attrs.node_name = 'The next node';
+                attrs.prompts_given = 0;
+                return handle_node(body, attrs);
+            }
+
+            //Give a reply of our own
+            if (attrs.prompts_given < prompts.length)
+            {
+                let text = prompts[attrs.prompts_given++].text;
+                return mk_reply('Conversation', text, text, false, attrs);
+            }
+            else
+            {
+                attrs.prompts_given++;
+                return mk_reply('Conversation', conversation.text, conversation.text, false, attrs);
+            }
+        });
+    });
+}
+
 function handle_conversation(intent, session) {
     body = get_slot(intent, 'HaveConversation').toLowerCase();
     console.log(body);
     attrs = session.attributes || {};
+    if (!attrs.conv_name) {
+        return db.getConversationByKeywords({phrase: body}, ({conversation}) =>
+        {
+            if (!conversation)
+            {
+                return mk_reply('No Conversation', "I'm not sure how to talk about that. Please pick another topic.", "What do you want to talk about?", false);
+            }
+            attrs.conv_name = conversation.name;
+            return db.getNode({conversationName: attrs.conv_name, nodeName: 'Start'}, ({node}) =>
+            {
+                if (!node)
+                {
+                    return mk_reply('Broken Conversation', "The given conversation has no start node. Please pick another topic.", "What do you want to talk about?", false);
+                }
+                attrs.node_name = start;
+                attrs.prompts_given = 0;
+                return handle_node(body, attrs);
+            });
+        });
+    }
+    return handle_node(body, attrs);
+    /*
     if (attrs.game_state !== undefined) {
         place = attrs.game_state;
         node = my_tree[place];
@@ -126,6 +183,7 @@ function handle_conversation(intent, session) {
         );
 
     return mk_reply('Conversation', body, null, false);
+    */
 }
 
 
