@@ -8,6 +8,7 @@ import routes from '../routes';
 import ContentSection from './general/ContentSection';
 import EditableText from './general/EditableText';
 import NameModal from './general/NameModal';
+import TreeNodeModal from './general/TreeNodeModal';
 
 import ConversationNodeGraph from './conversation/ConversationNodeGraph';
 
@@ -51,7 +52,7 @@ class ConversationEditView extends React.Component
     /**
      * Renders this view
      */
-    render()
+    getView()
     {
         if (this.props.loading) {
             return (
@@ -73,17 +74,14 @@ class ConversationEditView extends React.Component
                 <NameModal onSubmit={this.addVariable} onCancel={this.closeAddVariableModal}/>
             )
         }
-        else {
-            return this.renderNoModal();
-        }
     }
 
-    renderNoModal()
-    {
-        return (
-            <div>
-                <EditableText text={this.props.name} onSubmit={this.submitConversationName}/>
+	render() {
 
+		const modalView = this.getView();
+
+		const modal = (
+			<TreeNodeModal node={this.renderNoModal()}>
                 <ContentSection onClick={this.openAddVariableModal} buttonText="Add Variable">
                     {this.props.variables.map(p => <div key={p.name}>{p.name}</div>)}
                 </ContentSection>
@@ -93,6 +91,22 @@ class ConversationEditView extends React.Component
                 </ContentSection>
 
                 <button onClick={this.openAddNodeModal}>Add Node</button>
+				{modalView}
+			</TreeNodeModal>
+		);
+
+		return (
+			<div>
+                <EditableText text={this.props.name} onSubmit={this.submitConversationName}/>
+				{modal}
+			</div>
+		);
+	}
+
+    renderNoModal()
+    {
+        return (
+            <div>
                 <ConversationNodeGraph
                     conversationNodes={this.props.nodes}
                     onMove={this.onNodeMove}
@@ -225,5 +239,3 @@ const mapDispatchToProps = (dispatch) =>
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConversationEditView);
-
-

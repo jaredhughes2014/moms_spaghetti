@@ -8,6 +8,7 @@ import routes from '../routes';
 
 import EditableText from './general/EditableText';
 import NameModal from './general/NameModal';
+import TreeNodeModal from './general/NameModal';
 
 import ContentSection from './general/ContentSection';
 import KeyWordSelector from './node/KeyWordSelector';
@@ -172,5 +173,3 @@ const mapDispatchToProps = (dispatch) =>
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NodeEditView);
-
-
