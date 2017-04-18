@@ -38,6 +38,8 @@ const addConversation = (name, onComplete) =>
     }
 
     const response = {conversations: conversations.map(p => p.name)};
+    console.log(response);
+
     if (duplicate) {
         onComplete(response)
     }
@@ -76,7 +78,7 @@ const getConversation = (name, onComplete) =>
  */
 const getConversationNames = (onComplete) =>
 {
-    onComplete({conversations: conversations.filter(p => p.name)});
+    onComplete({conversations: conversations.map(p => p.name)});
 };
 
 /**
@@ -108,13 +110,11 @@ const addConversationNode = (conversationName, nodeName, onComplete) =>
         if (!duplicate) {
             conversation.nodes.push(new data.ConversationNode({name: nodeName}));
         }
-        let nodes = conversation.nodes.map(p => p.name);
-
         if (duplicate) {
-            warn(`Node named ${nodeName} already exists in ${conversationName}`, onComplete, {nodes});
+            warn(`Node named ${nodeName} already exists in ${conversationName}`, onComplete, {nodes: conversation.nodes});
         }
         else {
-            onComplete({nodes});
+            onComplete({nodes: conversation.nodes});
         }
     }
     else {
@@ -160,6 +160,33 @@ const updateNodeText = ({conversationName, nodeName, text}, onComplete) => {
         node.text = text;
         onComplete({node});
     });
+};
+
+/**
+ * Updates the x and y coordinate of the given nodes. Used by the editor only
+ */
+const updateNodePosition = ({conversationName, nodeName, x, y}, onComplete) =>
+{
+    getConversation(conversationName, (response) => {
+        const {conversation} = response;
+
+        if (conversation) {
+            let node = conversation.nodes.find(p => p.name == nodeName);
+
+            if (node) {
+                node.x = x;
+                node.y = y;
+
+                onComplete({nodes: conversation.nodes});
+            }
+            else {
+                warn(`No node named ${nodeName} in conversation ${conversationName} exists`, onComplete, {nodes: []});
+            }
+        }
+        else {
+            warn(`No conversation named ${conversationName} exists`, onComplete, {nodes: []});
+        }
+    })
 };
 
 /*
@@ -313,24 +340,23 @@ const removeKeyWord = ({conversationName, nodeName, keyWord}, onComplete) => {
  * Adds the given target
  */
 const addTarget = ({conversationName, nodeName, targetName}, onComplete) => {
-    getConversation(conversationName, (ret) => {
-        const conversation = ret.conversation;
-        if (!conversation) {
-            onComplete(ret);
-            return;
+    getConversation(conversationName, (response) => {
+        const {conversation} = response;
+
+        if (conversation) {
+            const node = conversation.nodes.find(p => p.name === nodeName);
+
+            if (node) {
+                node.targets.push(targetName);
+                onComplete({nodes: conversation.nodes});
+            }
+            else {
+                warn(`No node in conversation ${conversationName} found named ${nodeName}`, onComplete, {nodes: conversation.nodes});
+            }
         }
-        const node = conversation.getNode(nodeName);
-        if (!node) {
-            warn(`Can't find node $(nodeName).`, onComplete, {targets: []});
-            return;
+        else {
+            warn(`No conversation found named ${conversationName}`, onComplete, {nodes: []});
         }
-        const targets = node.targets;
-        if (targets.indexOf(targetName) != -1) {
-            warn(`Target ${targetName} already exists.`, onComplete, {targets});
-            return;
-        }
-        targets.push(targetName);
-        onComplete({targets});
     });
 };
 
@@ -338,25 +364,23 @@ const addTarget = ({conversationName, nodeName, targetName}, onComplete) => {
  * Removes the given target
  */
 const removeTarget = ({conversationName, nodeName, targetName}, onComplete) => {
-    getConversation(conversationName, (ret) => {
-        const conversation = ret.conversation;
-        if (!conversation) {
-            onComplete(ret);
-            return;
+    getConversation(conversationName, (response) => {
+        const {conversation} = response;
+
+        if (conversation) {
+            const node = conversation.nodes.find(p => p.name === nodeName);
+
+            if (node) {
+                node.targets = node.targets.filter(p => p !== targetName);
+                onComplete({nodes: conversation.nodes});
+            }
+            else {
+                warn(`No node in conversation ${conversationName} found named ${nodeName}`, onComplete, {nodes: conversation.nodes});
+            }
         }
-        const node = conversation.getNode(nodeName);
-        if (!node) {
-            warn(`Can't find node $(nodeName).`, onComplete, {targets: []});
-            return;
+        else {
+            warn(`No conversation found named ${conversationName}`, onComplete, {nodes: []});
         }
-        const targets = node.targets;
-        const ix = targets.indexOf(targetName);
-        if (ix == -1) {
-            warn(`No target named ${targetName} exists.`, onComplete, {targets});
-            return;
-        }
-        targets.splice(ix, 1);
-        onComplete({targets});
     });
 };
 
@@ -377,4 +401,5 @@ module.exports = {
     removeKeyWord,
     addTarget,
     removeTarget,
+    updateNodePosition,
 };

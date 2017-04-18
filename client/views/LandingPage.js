@@ -2,15 +2,18 @@
 
 import React from 'react';
 import {connect} from 'react-redux';
+import {browserHistory} from 'react-router';
 
 import ev from '../events';
-import paths from '../routes';
+import routes from '../routes';
 
 import ConversationSelector from './landing/ConversationSelector';
+import NameModal from './general/NameModal';
+import FlowList from './general/FlowList';
+
 const evCon = ev.conversations;
 const evConEdit = ev.conversationEdit;
 const evNode = ev.nodeEdit;
-import {Link} from 'react-router';
 
 
 /**
@@ -24,6 +27,14 @@ class LandingPage extends React.Component
     constructor(props)
     {
         super(props);
+        this.props.getConversations();
+        this.state = {modalOpen: false};
+
+        this.addConversation = this.addConversation.bind(this);
+        this.openConversation = this.openConversation.bind(this);
+
+        this.openNewConversationModal = this.openNewConversationModal.bind(this);
+        this.closeNewConversationModal = this.closeNewConversationModal.bind(this);
     }
 
     /**
@@ -31,11 +42,59 @@ class LandingPage extends React.Component
      */
     render()
     {
-        this.props.testAPI();
+        if (this.props.loading) {
+            return (
+                <div>Loading...</div>
+            );
+        }
+        else if (this.state.modalOpen) {
+            return this.renderModal();
+        }
+        else {
+            return this.renderNoModal();
+        }
+    }
 
+    renderModal()
+    {
         return (
-            <Link to={paths.conversation}>Edit</Link>
+            <NameModal onSubmit={this.addConversation} onClose={this.closeNewConversationModal}/>
+        )
+    }
+
+    renderNoModal()
+    {
+        return (
+            <div>
+                <FlowList horizontal={true}>
+                    {this.props.conversations.map(p => <ConversationSelector name={p} key={p} onClick={this.openConversation}/>)}
+                </FlowList>
+
+                <button onClick={this.openNewConversationModal}>New Conversation</button>
+            </div>
         );
+    }
+
+    addConversation(name)
+    {
+        this.props.addConversation(name);
+        this.closeNewConversationModal();
+    }
+
+    openConversation(name)
+    {
+        this.props.loadConversation(name);
+        browserHistory.push(routes.conversation);
+    }
+
+    openNewConversationModal()
+    {
+        this.setState({modalOpen: true});
+    }
+
+    closeNewConversationModal()
+    {
+        this.setState({modalOpen: false});
     }
 }
 
@@ -45,7 +104,8 @@ class LandingPage extends React.Component
 const mapStateToProps = (state) =>
 {
     return {
-
+        conversations: state.conversations.available,
+        loading: state.conversations.loading,
     };
 };
 
@@ -55,42 +115,9 @@ const mapStateToProps = (state) =>
 const mapDispatchToProps = (dispatch) =>
 {
     return {
-        testAPI: () => {
-            console.log('Testing all asynchronous events');
-
-            // Conversations
-            dispatch(evCon.addConversation({name: 'name'}));
-            dispatch(evCon.removeConversation({name: 'name'}));
-            dispatch(evCon.fetchConversations());
-
-            // Conversation Edit
-            dispatch(evConEdit.setName({oldName: 'name1', newName: 'name2'}));
-            dispatch(evConEdit.loadConversation({name: 'name'}));
-
-            dispatch(evConEdit.addNode({conversationName: 'cName', nodeName: 'nName'}));
-            dispatch(evConEdit.removeNode({conversationName: 'cName', nodeName: 'nName'}));
-
-            dispatch(evConEdit.addTrigger({conversationName: 'cName', word: 'tName'}));
-            dispatch(evConEdit.removeTrigger({conversationName: 'cName', word: 'tName'}));
-
-            dispatch(evConEdit.addVariable({conversationName: 'cName', variableName: 'vName'}));
-            dispatch(evConEdit.removeVariable({conversationName: 'cName', variableName: 'vName'}));
-
-            // Node Edit
-            dispatch(evNode.setName({conversationName: 'cName', oldName: 'nName1', newName: 'nName2',}));
-            dispatch(evNode.setText({conversationName: 'cName', nodeName: 'nName', text: 'text',}));
-            dispatch(evNode.loadNode({conversationName: 'cName', nodeName: 'nName',}));
-
-            dispatch(evNode.addPrompt({conversationName: 'cName', nodeName: 'nName', promptName: 'pName'}));
-            dispatch(evNode.removePrompt({conversationName: 'cName', nodeName: 'nName', promptName: 'pName'}));
-            dispatch(evNode.updatePrompt({conversationName: 'cName', nodeName: 'nName', promptName: 'pName', promptText: 'text', variableSet: 'vName'}));
-
-            dispatch(evNode.addKeyWord({conversationName: 'cName', nodeName: 'nName', keyWord: 'pName',}));
-            dispatch(evNode.removeKeyWord({conversationName: 'cName', nodeName: 'nName', keyWord: 'pName',}));
-
-            dispatch(evNode.addTarget({conversationName: 'cName', nodeName: 'nName', targetName: 'pName',}));
-            dispatch(evNode.removeTarget({conversationName: 'cName', nodeName: 'nName', targetName: 'pName',}));
-        }
+        getConversations: () => dispatch(evCon.fetchConversations()),
+        addConversation: name => dispatch(evCon.addConversation({name})),
+        loadConversation: name => dispatch(evConEdit.loadConversation({name})),
     };
 };
 

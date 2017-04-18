@@ -15,7 +15,7 @@ class Conversation
     /**
      * Updates all data in this conversation object
      */
-    update({name, nodes, keyWords, variables})
+    update({name, nodes, keyWords, variables, x, y})
     {
         this.keyWords = keyWords;
         this.name = name;
@@ -65,12 +65,12 @@ class Variable
  */
 class ConversationNode
 {
-    constructor({name, text='', keyWords=[], targets=[], prompts=[], variables=[]})
+    constructor({name, text='', keyWords=[], targets=[], prompts=[], variables=[], x=0, y=0})
     {
-        this.update({name, text, keyWords, targets, prompts, variables});
+        this.update({name, text, keyWords, targets, prompts, variables, x, y});
     }
 
-    update({name, text, keyWords, targets, prompts, variables})
+    update({name, text, keyWords, targets, prompts, variables, x, y})
     {
         this.name = name;
         this.text = text;
@@ -78,6 +78,8 @@ class ConversationNode
         this.targets = targets;
         this.prompts = prompts.map(p => new Prompt(p));
         this.variables = variables.map(p => new Variable(p));
+        this.x = x;
+        this.y = y;
     }
 
     getPrompt(name)

@@ -57,6 +57,7 @@ const waitForConversations = {
 const reducer = (state=defaultState, event) =>
 {
     let args = event.args;
+
     switch (event.type) {
 
         case (setConversations.type):
@@ -79,8 +80,8 @@ function* addConversationHandler(event)
     try {
         if (name) {
             yield put(wait());
-            const {conversation} = yield call(api.addConversation, name);
-            yield put({type: setConversations.type, args: {conversation}});
+            const {conversations} = yield call(api.addConversation, name);
+            yield put({type: setConversations.type, args: {conversations}});
         }
     }
     catch (err) {

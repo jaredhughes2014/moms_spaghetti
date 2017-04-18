@@ -4,12 +4,12 @@ import React from 'react';
 /**
  *
  */
-const ConversationSelector = ({}) =>
+const ConversationSelector = ({name, onClick}) =>
 {
     return (
-        <div>
-            NYI
-        </div>
+        <button onClick={() => onClick(name)}>
+            {name}
+        </button>
     );
 };
 
