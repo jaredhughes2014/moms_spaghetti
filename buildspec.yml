@@ -16,10 +16,9 @@ phases:
       - echo Nothing to do in the post_build phase
 artifacts:
   files:
-    - server/*.js
-    - client/*.js
-    - index.client
+    - app/*.js
     - package.json
     - .ebextensions/*.config
     - public/*.html
-    - public/client/*.client
+    - public/css/*.css
+    - public/js/*.js

@@ -106,7 +106,7 @@ app.post(paths.conversation.removeNode, (req, res) => {
     const {conversationName, nodeName} = req.body;
 
     if (validateBodyParameters(res, conversationName, nodeName)) {
-        res.send({testSuccess: true});
+        db.removeConversationNode(conversationName, nodeName, buildDatabaseResponseHandler(res));
     }
 });
 
@@ -114,10 +114,10 @@ app.post(paths.conversation.removeNode, (req, res) => {
  * TODO: Return the list of triggers this affects
  */
 app.post(paths.conversation.addTrigger, (req, res) => {
-    const {conversationName, word} = req.body;
+    const {conversationName, triggerName} = req.body;
 
-    if (validateBodyParameters(res, conversationName, word)) {
-        res.send({testSuccess: true});
+    if (validateBodyParameters(res, conversationName, triggerName)) {
+        db.addConversationTrigger(conversationName, triggerName, buildDatabaseResponseHandler(res));
     }
 });
 
@@ -125,10 +125,10 @@ app.post(paths.conversation.addTrigger, (req, res) => {
  * TODO: Return the list of triggers this affects
  */
 app.post(paths.conversation.removeTrigger, (req, res) => {
-    const {conversationName, word} = req.body;
+    const {conversationName, triggerName} = req.body;
 
-    if (validateBodyParameters(res, conversationName, word)) {
-        res.send({testSuccess: true});
+    if (validateBodyParameters(res, conversationName, triggerName)) {
+        db.removeConversationTrigger(conversationName, triggerName, buildDatabaseResponseHandler(res));
     }
 });
 
@@ -139,7 +139,7 @@ app.post(paths.conversation.addVariable, (req, res) => {
     const {conversationName, variableName} = req.body;
 
     if (validateBodyParameters(res, conversationName, variableName)) {
-        res.send({testSuccess: true});
+        db.addConversationVariable(conversationName, variableName, buildDatabaseResponseHandler(res));
     }
 });
 
@@ -150,7 +150,7 @@ app.post(paths.conversation.removeVariable, (req, res) => {
     const {conversationName, variableName} = req.body;
 
     if (validateBodyParameters(res, conversationName, variableName)) {
-        res.send({testSuccess: true});
+        db.removeConversationVariable(conversationName, variableName, buildDatabaseResponseHandler(res));
     }
 });
 

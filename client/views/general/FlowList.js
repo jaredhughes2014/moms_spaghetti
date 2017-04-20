@@ -6,11 +6,20 @@ import React from 'react';
  */
 const FlowList = ({horizontal, children}) =>
 {
-    return (
-        <div className={horizontal ? "flow-list-horizontal" : "flow-list-vertical"}>
-            {children}
-        </div>
-    )
+    if (horizontal) {
+        return (
+            <div>
+                {children}
+            </div>
+        )
+    }
+    else {
+        return (
+            <span>
+                {children}
+            </span>
+        )
+    }
 };
 
 export default FlowList;

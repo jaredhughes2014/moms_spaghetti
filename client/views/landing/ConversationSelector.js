@@ -1,5 +1,7 @@
 
 import React from 'react';
+import Button from 'react-bootstrap/lib/Button';
+
 
 /**
  *
@@ -7,9 +9,9 @@ import React from 'react';
 const ConversationSelector = ({name, onClick}) =>
 {
     return (
-        <button onClick={() => onClick(name)}>
+        <Button onClick={() => onClick(name)}>
             {name}
-        </button>
+        </Button>
     );
 };
 

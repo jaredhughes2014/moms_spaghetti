@@ -26,8 +26,6 @@ const ConversationNodeGraph = ({conversationNodes, onMove, onStartMove, onConnec
         graphData = {nodes, connections};
     }
 
-    console.log(graphData);
-
     return (
         <ReactNodeGraph
             data={graphData}
@@ -68,9 +66,9 @@ const buildConnections = (nodes, graphNodes) =>
             let target = node.targets[j];
 
             connections.push({
-                from_node: graphNodes.find(p => p.type === node.name).nid,
+                from_node: graphNodes.find(p => p.nid === node.name).nid,
                 from: node.name,
-                to_node: graphNodes.find(p => p.type === target).nid,
+                to_node: graphNodes.find(p => p.nid === target).nid,
                 to: target,
             });
         }

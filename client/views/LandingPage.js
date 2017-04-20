@@ -14,6 +14,7 @@ import FlowList from './general/FlowList';
 const evCon = ev.conversations;
 const evConEdit = ev.conversationEdit;
 const evNode = ev.nodeEdit;
+import Button from 'react-bootstrap/lib/Button';
 
 
 /**
@@ -44,25 +45,33 @@ class LandingPage extends React.Component
     {
         if (this.props.loading) {
             return (
-                <div>Loading...</div>
+                <h1>Loading...</h1>
             );
         }
-        else if (this.state.modalOpen) {
-            return this.renderModal();
-        }
         else {
-            return this.renderNoModal();
+
+            const body = this.getBody();
+            const modal = this.getModal();
+
+            return (
+                <div>
+                    {modal}
+                    {body}
+                </div>
+            )
         }
     }
 
-    renderModal()
+    getModal()
     {
-        return (
-            <NameModal onSubmit={this.addConversation} onClose={this.closeNewConversationModal}/>
-        )
+        if (this.state.modalOpen) {
+            return (
+                <NameModal onSubmit={this.addConversation} onCancel={this.closeNewConversationModal}/>
+            )
+        }
     }
 
-    renderNoModal()
+    getBody()
     {
         return (
             <div>
@@ -70,7 +79,7 @@ class LandingPage extends React.Component
                     {this.props.conversations.map(p => <ConversationSelector name={p} key={p} onClick={this.openConversation}/>)}
                 </FlowList>
 
-                <button onClick={this.openNewConversationModal}>New Conversation</button>
+                <Button onClick={this.openNewConversationModal}>New Conversation</Button>
             </div>
         );
     }
