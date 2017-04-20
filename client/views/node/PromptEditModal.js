@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Button from 'react-bootstrap/lib/Button';
-import FormControl from 'react-bootstrap/lib/Formcontrol';
+import FormControl from 'react-bootstrap/lib/FormControl';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import Modal from 'react-bootstrap/lib/Modal';
 
