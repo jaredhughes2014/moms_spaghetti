@@ -1,4 +1,6 @@
-
+.treenode {
+	background-color: red;
+}
 .toggle {
 	/*float: right;*/
 	margin-left: 5px;
@@ -9,10 +11,6 @@
 }
 .child-list {
 	margin-top: 5px;
-}
-.input-node {
-	width: 200px;
-	display: inline-block;
 }
 
 #app-header {
@@ -69,6 +67,7 @@
 	display: flex;
 	justify-content: space-between;
 	align-content: center;
+	margin-bottom: 10px;
 
 	background: #4c76ff;
 	color: #fefefe;
@@ -76,6 +75,18 @@
 
 .conversation-selector :hover {
 	background: #40c5ff;
+}
+
+.modal-form {
+	margin-left: 10px;
+}
+
+.list-item {
+	margin-top: 10px;
+}
+
+.delete-button {
+	margin-left: 10px;
 }
 
 #app-title-image {
