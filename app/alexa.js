@@ -60,6 +60,28 @@ function get_slot(intent, slot_name) {
 
 // Define all functions here
 
+function set_str_vars(string, attrs) {
+    if (null==string) {
+        return string;
+    }
+    pieces = string.split(/[\[\]]/);
+    if (pieces.length%2 == 0) {
+        return "error: unmatched brackets in template response";
+        //This actually only checks to make sure there are an even number of brackets.
+        //It treats 'hi [name]' just like 'hi ]name]'
+    }
+    string = pieces[0];
+    ix = 1;
+    while (ix < pieces.length) {
+        s = '_'+pieces[ix];
+        if (attrs[s]) s = attrs[s];
+        else s = "unknown";
+        string += s + pieces[ix+1];
+        ix += 2;
+    }
+    return string;
+}
+
 function handle_node(body, attrs) {
     let ret;
     db.getConversation(attrs.conv_name, ({conversation}) =>
@@ -84,7 +106,8 @@ function handle_node(body, attrs) {
                         if (!node2)
                         {
                             //I'd like to be more helpful, but repeating the prompt isn't so terrible
-                            ret = mk_reply('Conversation', node.text, node.text, false, attrs);
+                            const text = set_str_vars(node.text, attrs);
+                            ret = mk_reply('Conversation', text, text, false, attrs);
                             return;
                         }
                         attrs.node_name = node2.name;
@@ -101,14 +124,15 @@ function handle_node(body, attrs) {
                 //Give a reply of our own
                 if (attrs.prompts_given < prompts.length)
                 {
-                    let text = prompts[attrs.prompts_given++].text;
+                    let text = set_str_vars(prompts[attrs.prompts_given++].text, attrs);
                     ret = mk_reply('Conversation', text, text, false, attrs);
                     return;
                 }
                 else
                 {
                     attrs.prompts_given++;
-                    ret = mk_reply('Conversation', node.text, node.text, false, attrs);
+                    const text = set_str_vars(node.text, attrs);
+                    ret = mk_reply('Conversation', text, text, false, attrs);
                     return;
                 }
             }
