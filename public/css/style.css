@@ -1,6 +1,4 @@
-.treenode {
-	background-color: red;
-}
+
 .toggle {
 	/*float: right;*/
 	margin-left: 5px;
@@ -19,7 +17,7 @@
 
 #app-header {
 	width: 100%;
-	height: 60px;
+	height: 80px;
 
 	display: inline-flex;
 	justify-content: space-between;
@@ -43,7 +41,7 @@
 }
 
 #app-content {
-	padding-top: 50px;
+	padding-top: 70px;
 }
 
 .flow-list-vertical {
@@ -78,4 +76,9 @@
 
 .conversation-selector :hover {
 	background: #40c5ff;
+}
+
+#app-title-image {
+	width: 60px;
+	height: 60px;
 }
