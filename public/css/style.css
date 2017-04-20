@@ -12,10 +12,6 @@
 .child-list {
 	margin-top: 5px;
 }
-.input-node {
-	width: 200px;
-	display: inline-block;
-}
 
 #app-header {
 	width: 100%;
@@ -71,6 +67,7 @@
 	display: flex;
 	justify-content: space-between;
 	align-content: center;
+	margin-bottom: 10px;
 
 	background: #4c76ff;
 	color: #fefefe;
@@ -78,4 +75,16 @@
 
 .conversation-selector :hover {
 	background: #40c5ff;
+}
+
+.modal-form {
+	margin-left: 10px;
+}
+
+.list-item {
+	margin-top: 10px;
+}
+
+.delete-button {
+	margin-left: 10px;
 }

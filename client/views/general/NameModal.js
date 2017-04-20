@@ -33,7 +33,7 @@ class NameModal extends React.Component
 
                     <Modal.Body>
                         <ControlLabel>Name</ControlLabel>
-                        <FormControl type="text" value={this.state.name} onChange={this.updateText}/>
+                        <FormControl type="text" className="modal-form" value={this.state.name} onChange={this.updateText}/>
                     </Modal.Body>
 
                     <Modal.Footer>

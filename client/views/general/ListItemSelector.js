@@ -9,9 +9,9 @@ import Button from 'react-bootstrap/lib/Button';
 const ListItemSelector = ({name, onDelete}) =>
 {
     return (
-        <div>
+        <div className="list-item">
             <span>{name}</span>
-            <Button onClick={() => onDelete(name)}>Delete</Button>
+            <Button className="delete-button" onClick={() => onDelete(name)}>Delete</Button>
         </div>
     );
 };
