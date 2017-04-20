@@ -49,5 +49,7 @@ const paths = {
         removeTarget: 'removeTarget',
         updatePosition: 'updatePosition',
     }),
+
+    alexa: '/speak',
 };
 module.exports = paths;
