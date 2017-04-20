@@ -75,11 +75,13 @@ class LandingPage extends React.Component
     {
         return (
             <div>
-                <FlowList horizontal={true}>
+                <FlowList horizontal={true} id="landing-conversations">
                     {this.props.conversations.map(p => <ConversationSelector name={p} key={p} onClick={this.openConversation}/>)}
                 </FlowList>
 
-                <Button onClick={this.openNewConversationModal}>New Conversation</Button>
+                <div>
+                    <Button onClick={this.openNewConversationModal}>New Conversation</Button>
+                </div>
             </div>
         );
     }
