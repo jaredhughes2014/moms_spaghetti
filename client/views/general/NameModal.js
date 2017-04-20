@@ -58,7 +58,13 @@ class NameModal extends React.Component
      */
     submit()
     {
-        this.props.onSubmit(this.state.name);
+        if (this.state.name.length > 0) {
+            this.props.onSubmit(this.state.name);
+        }
+        else {
+            console.warn('Cannot submit empty strings');
+            this.cancel();
+        }
     }
 
     /**
