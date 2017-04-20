@@ -118,8 +118,13 @@ function handle_node(body, attrs) {
 }
 
 function handle_conversation(intent, session) {
-    body = get_slot(intent, 'HaveConversation').toLowerCase();
+    const body = get_slot(intent, 'HaveConversation').toLowerCase();
     console.log(body);
+    for (let phrase of exit_phrases) {
+        if (body.includes(phrase)) {
+            return mk_reply('Goodbye!', 'Okay, ' + (phrase.endsWith('e') ? phrase : phrase+'ing'), null, true);
+        }
+    }
     attrs = session.attributes || {};
     if (!attrs.conv_name) {
         let ret;
