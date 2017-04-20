@@ -22,3 +22,5 @@ artifacts:
     - public/*.html
     - public/css/*.css
     - public/js/*.js
+    - public/img/*.ico
+    - public/img/*.png
