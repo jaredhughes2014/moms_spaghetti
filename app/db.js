@@ -64,7 +64,7 @@ const removeConversation = (name, onComplete) =>
  */
 const getConversation = (name, onComplete) =>
 {
-    let conversation = conversations.find(p => p.name === name);
+    let conversation = conversations.find(p => p.name.toLowerCase() === name.toLowerCase());
 
     if (!conversation) {
         warn(`No conversation named ${name} exists`, onComplete, {conversation: null});
@@ -341,7 +341,7 @@ const getNode = ({conversationName, nodeName}, onComplete) => {
             warn(`Can't find conversation $(conversationName).`, onComplete, {node: null});
             return;
         }
-        const node = conversation.getNode(nodeName);
+        const node = conversation.nodes.find(p => p.name.toLowerCase() === nodeName.toLowerCase());
         if (!node) {
             warn(`Can't find node $(nodeName).`, onComplete, {node: null});
             return;
