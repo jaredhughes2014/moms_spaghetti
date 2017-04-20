@@ -87,7 +87,7 @@ const getConversationByKeywords = ({phrase}, onComplete) =>
     for (let c of conversations)
     {
         let s = 0;
-        for (let kw of c.keyWords)
+        for (let kw of c.triggers)
         {
             if (phrase.includes(kw)) s++;
         }

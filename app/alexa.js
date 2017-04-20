@@ -77,15 +77,18 @@ function handle_node(body, attrs) {
                     attrs['_'+p.target] = body;
                 }
                 else if (attrs.prompts_given > prompts.length) {
-                    db.getNodeByKeywords({conversationName: attrs.conv_name, nodeName: attrs.node_name, phrase: body}, ({node2}) =>
+                    db.getNodeByKeywords({conversationName: attrs.conv_name, nodeName: attrs.node_name, phrase: body}, (arg) =>
                     {
+                        //We can't expand the arguments, because we need to keep the old meaning of identifier 'node'
+                        const node2 = arg.node;
                         if (!node2)
                         {
                             //I'd like to be more helpful, but repeating the prompt isn't so terrible
-                            ret = mk_reply('Conversation', conversation.text, conversation.text, false, attrs);
+                            ret = mk_reply('Conversation', node.text, node.text, false, attrs);
                             return;
                         }
                         attrs.node_name = node2.name;
+                        console.log("=== Jumping to " + node2.name);
                         attrs.prompts_given = 0;
                         node = node2;
                         ret = null;
@@ -105,7 +108,7 @@ function handle_node(body, attrs) {
                 else
                 {
                     attrs.prompts_given++;
-                    ret = mk_reply('Conversation', conversation.text, conversation.text, false, attrs);
+                    ret = mk_reply('Conversation', node.text, node.text, false, attrs);
                     return;
                 }
             }
@@ -135,7 +138,7 @@ function handle_conversation(intent, session) {
                     ret = mk_reply('Broken Conversation', "The given conversation has no start node. Please pick another topic.", "What do you want to talk about?", false);
                     return;
                 }
-                attrs.node_name = start;
+                attrs.node_name = 'Start';
                 attrs.prompts_given = 0;
                 ret = handle_node(body, attrs);
                 return;

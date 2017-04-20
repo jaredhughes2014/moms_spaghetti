@@ -68,7 +68,7 @@ class Variable
  */
 class ConversationNode
 {
-    constructor({name, text='', keyWords=[], targets=[], prompts=[], variables=[], x=0, y=0})
+    constructor({name, text='New node', keyWords=[], targets=[], prompts=[], variables=[], x=0, y=0})
     {
         this.update({name, text, keyWords, targets, prompts, variables, x, y});
     }
