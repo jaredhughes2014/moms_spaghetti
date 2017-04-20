@@ -135,7 +135,7 @@ function handle_conversation(intent, session) {
                     ret = mk_reply('Broken Conversation', "The given conversation has no start node. Please pick another topic.", "What do you want to talk about?", false);
                     return;
                 }
-                attrs.node_name = start;
+                attrs.node_name = node.name;
                 attrs.prompts_given = 0;
                 ret = handle_node(body, attrs);
                 return;
