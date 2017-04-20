@@ -33,7 +33,7 @@ class NameModal extends React.Component
 
                     <Modal.Body>
                         <ControlLabel>Name</ControlLabel>
-                        <FormControl type="text" value={this.state.name} onChange={this.updateText}/>
+                        <FormControl type="text" className="modal-form" value={this.state.name} onChange={this.updateText}/>
                     </Modal.Body>
 
                     <Modal.Footer>
@@ -58,7 +58,13 @@ class NameModal extends React.Component
      */
     submit()
     {
-        this.props.onSubmit(this.state.name);
+        if (this.state.name.length > 0) {
+            this.props.onSubmit(this.state.name);
+        }
+        else {
+            console.warn('Cannot submit empty strings');
+            this.cancel();
+        }
     }
 
     /**
