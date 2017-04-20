@@ -42,9 +42,11 @@ const addConversation = (name, onComplete) =>
 
     if (duplicate) {
         onComplete(response)
+        return;
     }
     else {
         warn("Conversation already exists", onComplete, response);
+        return;
     }
 };
 
@@ -67,12 +69,18 @@ const getConversation = (name, onComplete) =>
 
     if (!conversation) {
         warn(`No conversation named ${name} exists`, onComplete, {conversation: null});
+        return;
     }
     else {
         onComplete({conversation});
+        return;
     }
 };
 
+/**
+ * Returns the conversation that has the highest number of keywords matched,
+ * or null if no keywords are matched
+ */
 const getConversationByKeywords = ({phrase}, onComplete) =>
 {
     let score = 0;
@@ -90,7 +98,13 @@ const getConversationByKeywords = ({phrase}, onComplete) =>
             ret = c;
         }
     }
+    if (!ret)
+    {
+        warn('No converation matching given keywords found', onComplete, {conversation: null});
+        return;
+    }
     onComplete({conversation: ret});
+    return;
 }
 
 /**
@@ -111,9 +125,11 @@ const updateConversationName = (oldName, newName, onComplete) =>
     if (conversation) {
         conversation.name = newName;
         onComplete({conversation});
+        return;
     }
     else {
         warn(`No conversation named ${oldName} exists`, onComplete, {conversation: null});
+        return;
     }
 };
 
@@ -132,13 +148,16 @@ const addConversationNode = (conversationName, nodeName, onComplete) =>
         }
         if (duplicate) {
             warn(`Node named ${nodeName} already exists in ${conversationName}`, onComplete, {nodes: conversation.nodes});
+            return;
         }
         else {
             onComplete({nodes: conversation.nodes});
+            return;
         }
     }
     else {
         warn(`No conversation named ${conversationName} exists`, onComplete, {nodes: []});
+        return;
     }
 };
 
@@ -159,6 +178,7 @@ const updateNodeName = ({conversationName, nodeName, newName}, onComplete) => {
         }
         node.name = newName;
         onComplete({node});
+        return;
     });
 };
 
@@ -179,6 +199,7 @@ const updateNodeText = ({conversationName, nodeName, text}, onComplete) => {
         }
         node.text = text;
         onComplete({node});
+        return;
     });
 };
 
@@ -198,13 +219,16 @@ const updateNodePosition = ({conversationName, nodeName, x, y}, onComplete) =>
                 node.y = y;
 
                 onComplete({nodes: conversation.nodes});
+                return;
             }
             else {
                 warn(`No node named ${nodeName} in conversation ${conversationName} exists`, onComplete, {nodes: []});
+                return;
             }
         }
         else {
             warn(`No conversation named ${conversationName} exists`, onComplete, {nodes: []});
+            return;
         }
     })
 };
@@ -213,10 +237,9 @@ const updateNodePosition = ({conversationName, nodeName, x, y}, onComplete) =>
  * Gets the requested node
  */
 const getNode = ({conversationName, nodeName}, onComplete) => {
-    getConversation(conversationName, (ret) => {
-        const conversation = ret.conversation;
+    getConversation(conversationName, ({conversation}) => {
         if (!conversation) {
-            onComplete(ret);
+            warn(`Can't find conversation $(conversationName).`, onComplete, {node: null});
             return;
         }
         const node = conversation.getNode(nodeName);
@@ -225,8 +248,52 @@ const getNode = ({conversationName, nodeName}, onComplete) => {
             return;
         }
         onComplete({node});
+        return;
     });
 };
+
+/**
+ * Gets a node given the parent and the phrase.
+ * Returns null if none of the keywords of any of the children are matched.
+ */
+const getNodeByKeywords = ({conversationName, nodeName, phrase}, onComplete) =>
+{
+    getConversation(conversationName, ({conversation}) =>
+    {
+        if (!conversation) {
+            warn(`Can't find conversation $(conversationName).`, onComplete, {node: null});
+            return;
+        }
+        const node = conversation.getNode(nodeName);
+        if (!node) {
+            warn(`Can't find node $(nodeName).`, onComplete, {node: null});
+            return;
+        }
+        let score = 0;
+        let ret = null;
+        for (let n of conversation.nodes)
+        {
+            if (!node.targets.includes(n.name)) continue;
+            let s = 0;
+            for (let kw of n.keyWords)
+            {
+                if (phrase.includes(kw)) s++;
+            }
+            if (s > score)
+            {
+                score = s;
+                ret = n;
+            }
+        }
+        if (!ret)
+        {
+            warn('No children matching given keywords found', onComplete, {node: null});
+            return;
+        }
+        onComplete({node: ret});
+        return;
+    });
+}
 
 /*
  * Adds the given prompt
@@ -250,6 +317,7 @@ const addPrompt = ({conversationName, nodeName, promptName}, onComplete) => {
         }
         prompts.push(new Prompt(promptName));
         onComplete({prompts});
+        return;
     });
 };
 
@@ -276,6 +344,7 @@ const removePrompt = ({conversationName, nodeName, promptName}, onComplete) => {
         }
         prompts.splice(ix, 1);
         onComplete({prompts});
+        return;
     });
 };
 
@@ -302,6 +371,7 @@ const updatePrompt = ({conversationName, nodeName, promptName, promptText, varia
         }
         p.update({name: promptName, text: promptText, target: variableSet});
         onComplete({prompts});
+        return;
     });
 };
 
@@ -327,6 +397,7 @@ const addKeyWord = ({conversationName, nodeName, keyWord}, onComplete) => {
         }
         keyWords.push(keyWord);
         onComplete({keyWords});
+        return;
     });
 };
 
@@ -353,6 +424,7 @@ const removeKeyWord = ({conversationName, nodeName, keyWord}, onComplete) => {
         }
         keyWords.splice(ix, 1);
         onComplete({keyWords});
+        return;
     });
 };
 
@@ -369,13 +441,16 @@ const addTarget = ({conversationName, nodeName, targetName}, onComplete) => {
             if (node) {
                 node.targets.push(targetName);
                 onComplete({nodes: conversation.nodes});
+                return;
             }
             else {
                 warn(`No node in conversation ${conversationName} found named ${nodeName}`, onComplete, {nodes: conversation.nodes});
+                return;
             }
         }
         else {
             warn(`No conversation found named ${conversationName}`, onComplete, {nodes: []});
+            return;
         }
     });
 };
@@ -393,13 +468,16 @@ const removeTarget = ({conversationName, nodeName, targetName}, onComplete) => {
             if (node) {
                 node.targets = node.targets.filter(p => p !== targetName);
                 onComplete({nodes: conversation.nodes});
+                return;
             }
             else {
                 warn(`No node in conversation ${conversationName} found named ${nodeName}`, onComplete, {nodes: conversation.nodes});
+                return;
             }
         }
         else {
             warn(`No conversation found named ${conversationName}`, onComplete, {nodes: []});
+            return;
         }
     });
 };
@@ -415,6 +493,7 @@ module.exports = {
     updateNodeName,
     updateNodeText,
     getNode,
+    getNodeByKeywords,
     addPrompt,
     removePrompt,
     updatePrompt,
