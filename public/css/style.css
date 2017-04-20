@@ -33,6 +33,10 @@
 	font-size: 20pt;
 }
 
+#app-title a {
+	margin-right: 15px;
+}
+
 #app-subtitle {
 	padding-top: 5px;
 	font-size: 12pt;
