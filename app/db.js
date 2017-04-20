@@ -229,7 +229,14 @@ const updateNodeName = ({conversationName, nodeName, newName}, onComplete) => {
             warn(`Can't find node $(nodeName).`, onComplete, {node: null});
             return;
         }
+
         node.name = newName;
+
+        // Rename all targets so they are pointing to the correct node
+        for (let i = 0; i < conversation.nodes.length; ++i) {
+            let n = conversation.nodes[i];
+            n.targets = n.targets.map(p => (p === nodeName) ? newName : p);
+        }
         onComplete({node});
     });
 };
