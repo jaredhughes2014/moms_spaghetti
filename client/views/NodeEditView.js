@@ -15,6 +15,8 @@ import ListItemSelector from './general/ListItemSelector';
 
 import PromptEditModal from './node/PromptEditModal';
 import PromptListSelector from './node/PromptListSelector';
+import Button from 'react-bootstrap/lib/Button';
+
 
 /**
  *
@@ -105,7 +107,7 @@ class NodeEditView extends React.Component
     {
         return (
             <div>
-                <button onClick={this.goBack}>Go Back</button>
+                <Button onClick={this.goBack}>Go Back</Button>
 
                 <EditableHeader text={this.props.name} onSubmit={this.changeName}/>
                 <EditableText text={this.props.text} onSubmit={this.changeText}/>
