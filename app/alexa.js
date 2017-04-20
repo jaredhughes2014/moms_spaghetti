@@ -60,6 +60,28 @@ function get_slot(intent, slot_name) {
 
 // Define all functions here
 
+function set_str_vars(string, attrs) {
+    if (null==string) {
+        return string;
+    }
+    pieces = string.split(/[\[\]]/);
+    if (pieces.length%2 == 0) {
+        return "error: unmatched brackets in template response";
+        //This actually only checks to make sure there are an even number of brackets.
+        //It treats 'hi [name]' just like 'hi ]name]'
+    }
+    string = pieces[0];
+    ix = 1;
+    while (ix < pieces.length) {
+        s = '_'+pieces[ix];
+        if (attrs[s]) s = attrs[s];
+        else s = "unknown";
+        string += s + pieces[ix+1];
+        ix += 2;
+    }
+    return string;
+}
+
 function handle_node(body, attrs) {
     let ret;
     db.getConversation(attrs.conv_name, ({conversation}) =>
@@ -77,15 +99,19 @@ function handle_node(body, attrs) {
                     attrs['_'+p.target] = body;
                 }
                 else if (attrs.prompts_given > prompts.length) {
-                    db.getNodeByKeywords({conversationName: attrs.conv_name, nodeName: attrs.node_name, phrase: body}, ({node2}) =>
+                    db.getNodeByKeywords({conversationName: attrs.conv_name, nodeName: attrs.node_name, phrase: body}, (arg) =>
                     {
+                        //We can't expand the arguments, because we need to keep the old meaning of identifier 'node'
+                        const node2 = arg.node;
                         if (!node2)
                         {
                             //I'd like to be more helpful, but repeating the prompt isn't so terrible
-                            ret = mk_reply('Conversation', conversation.text, conversation.text, false, attrs);
+                            const text = set_str_vars(node.text, attrs);
+                            ret = mk_reply('Conversation', text, text, false, attrs);
                             return;
                         }
                         attrs.node_name = node2.name;
+                        console.log("=== Jumping to " + node2.name);
                         attrs.prompts_given = 0;
                         node = node2;
                         ret = null;
@@ -98,14 +124,15 @@ function handle_node(body, attrs) {
                 //Give a reply of our own
                 if (attrs.prompts_given < prompts.length)
                 {
-                    let text = prompts[attrs.prompts_given++].text;
+                    let text = set_str_vars(prompts[attrs.prompts_given++].text, attrs);
                     ret = mk_reply('Conversation', text, text, false, attrs);
                     return;
                 }
                 else
                 {
                     attrs.prompts_given++;
-                    ret = mk_reply('Conversation', conversation.text, conversation.text, false, attrs);
+                    const text = set_str_vars(node.text, attrs);
+                    ret = mk_reply('Conversation', text, text, false, attrs);
                     return;
                 }
             }
@@ -115,8 +142,13 @@ function handle_node(body, attrs) {
 }
 
 function handle_conversation(intent, session) {
-    body = get_slot(intent, 'HaveConversation').toLowerCase();
+    const body = get_slot(intent, 'HaveConversation').toLowerCase();
     console.log(body);
+    for (let phrase of exit_phrases) {
+        if (body.includes(phrase)) {
+            return mk_reply('Goodbye!', 'Okay, ' + (phrase.endsWith('e') ? phrase : phrase+'ing'), null, true);
+        }
+    }
     attrs = session.attributes || {};
     if (!attrs.conv_name) {
         let ret;
@@ -135,7 +167,7 @@ function handle_conversation(intent, session) {
                     ret = mk_reply('Broken Conversation', "The given conversation has no start node. Please pick another topic.", "What do you want to talk about?", false);
                     return;
                 }
-                attrs.node_name = node.name;
+                attrs.node_name = 'Start';
                 attrs.prompts_given = 0;
                 ret = handle_node(body, attrs);
                 return;
