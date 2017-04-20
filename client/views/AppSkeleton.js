@@ -14,10 +14,11 @@ const AppSkeleton = ({children}) =>
         <div id="app-root">
             <div id="app-header">
                 <div id="app-title">
+                    <Link to={routes.index}>
+                        <img src="./img/icon.png" id="app-title-image"/>
+                    </Link>
+
                     Mom's Spaghetti
-                    <div id="app-subtitle">
-                        It's ready
-                    </div>
                 </div>
                 <Link to={routes.index}>Home</Link>
             </div>
