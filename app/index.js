@@ -36,13 +36,26 @@ app.post(paths.alexa, (req, res) => {
 // Conversations
 
 /**
+ * Exports the given conversation
+ */
+app.post(paths.conversations._export, (req, res) => {
+    const {name} = req.body;
+
+    if (validateBodyParameters(res, name)) {
+        db.getConversation(name, ({conversation}) => {
+		res.send(JSON.stringify(conversation));
+	});
+    }
+});
+
+/**
  * TODO: Return the names of all conversations in the database
  */
 app.post(paths.conversations.add, (req, res) => {
     const {name} = req.body;
 
     if (validateBodyParameters(res, name)) {
-        db.addConversation(name, buildDatabaseResponseHandler(res));
+        db.addConversation(req.body, buildDatabaseResponseHandler(res));
     }
 });
 

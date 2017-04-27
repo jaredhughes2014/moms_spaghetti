@@ -24,6 +24,7 @@ const paths = {
         add: 'add',
         remove: 'remove',
         get: 'get',
+	_export: 'export',
     }),
 
     conversation: extendPaths('/conversation/edit/', {

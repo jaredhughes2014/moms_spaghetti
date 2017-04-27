@@ -29,11 +29,11 @@ const err = (message, onComplete) =>
  * Adds a conversation to the database. Returns the names of all conversations
  * currently in the database
  */
-const addConversation = (name, onComplete) =>
+const addConversation = (req, onComplete) =>
 {
     let duplicate = false;
-    if (!conversations.find(p => p.name == name)) {
-        conversations.push(new data.Conversation({name}));
+    if (!conversations.find(p => p.name == req.name)) {
+        conversations.push(new data.Conversation(req));
         duplicate = true;
     }
 
